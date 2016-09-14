@@ -69,6 +69,9 @@ public class Tile : MonoBehaviour {
             bc.center = Vector3.zero;
             bc.size = Vector3.one;
             break;
+        case 'P':   // Pushable
+                    // have to handle this case
+                break;
         default:
             bc.enabled = false;
             break;
