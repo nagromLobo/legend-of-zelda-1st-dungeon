@@ -8,6 +8,15 @@ public class PlayerControl : MonoBehaviour {
 
     public float walkingVelocity = 1.0f;
     public int rupee_count = 0;
+    public int bomb_count = 0;
+    public int max_half_heart_count = 6;
+    public float half_heart_count = 6;
+    public int small_key_count = 0;
+    public bool map_retrieved = false;
+    public bool compass_retrieved = false;
+    public bool triforce_retrieved = false;
+    public bool bow_retrieved = false;
+    public bool boomerang_retrieved = false;
 
     public Sprite[] link_run_down;
 	public Sprite[] link_run_up;
@@ -32,10 +41,11 @@ public class PlayerControl : MonoBehaviour {
             Debug.LogError("Mutiple Link objects detected:");
         }
         instance = this;
+        half_heart_count = max_half_heart_count;
 
         // Launch Idle State
         animation_state_machine = new StateMachine();
-        animation_state_machine.ChangeState(new StateIdleWithSprite(this, GetComponent<SpriteRenderer>(), link_run_down[0]));
+        // animation_state_machine.ChangeState(new StateIdleWithSprite(this, GetComponent<SpriteRenderer>(), link_run_down[0]));
     }
 
     // Update is called once per frame
@@ -51,11 +61,61 @@ public class PlayerControl : MonoBehaviour {
     }
 
     void OnTriggerEnter(Collider coll) {
-        if (coll.gameObject.tag == "Rupee") {
-            Destroy(coll.gameObject);
-            rupee_count++;
-        } else if (coll.gameObject.tag == "heart") {
-            // Whateva
+        switch (coll.gameObject.tag) {
+            // General Collectables
+            case "Rupee":
+                Destroy(coll.gameObject);
+                rupee_count++;
+                break;
+            case "Heart":
+                Destroy(coll.gameObject);
+                if(half_heart_count < max_half_heart_count) {
+                    half_heart_count += 2;
+                }
+                break;
+            case "Fairy":
+                Destroy(coll.gameObject);
+                half_heart_count = max_half_heart_count;
+                break;
+            case "SmallKey":
+                Destroy(coll.gameObject);
+                small_key_count++;
+                break;
+            // Weapon Collectables
+            case "Bow":
+                Destroy(coll.gameObject);
+                bow_retrieved = true;
+                break;
+            case "Boomerang":
+                Destroy(coll.gameObject);
+                boomerang_retrieved = true;
+                break;
+            case "Bomb":
+                Destroy(coll.gameObject);
+                bomb_count++;
+                break;
+            // Dungeon State Collectables
+            case "Map":
+                Destroy(coll.gameObject);
+                map_retrieved = true;
+                break;
+            case "Compass":
+                Destroy(coll.gameObject);
+                compass_retrieved = true;
+                break;
+            // HUD State Collectables
+            case "Triforce":
+                // FIXME need animation here
+                Destroy(coll.gameObject);
+                triforce_retrieved = true;
+                break;
+            case "HeartContianer":
+                Destroy(coll.gameObject);
+                max_half_heart_count += 2;
+                half_heart_count = max_half_heart_count;
+                break;
+            default:
+                break;
         }
     }
 }
