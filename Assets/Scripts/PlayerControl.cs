@@ -109,7 +109,7 @@ public class PlayerControl : MonoBehaviour {
                 Destroy(coll.gameObject);
                 triforce_retrieved = true;
                 break;
-            case "HeartContianer":
+            case "HeartContainer":
                 Destroy(coll.gameObject);
                 max_half_heart_count += 2;
                 half_heart_count = max_half_heart_count;
