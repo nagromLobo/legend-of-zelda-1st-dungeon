@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
-
+using System.Collections;
 // State Machines are responsible for processing states, notifying them when they're about to begin or conclude, etc.
+using System;
+
+
 public class StateMachine
 {
 	private State _current_state;
@@ -11,10 +14,11 @@ public class StateMachine
 		{
 			_current_state.OnFinish();
 		}
-		
+
 		_current_state = new_state;
 		// States sometimes need to reset their machine. 
 		// This reference makes that possible.
+		MonoBehaviour.print ("I am in the change state");
 		_current_state.state_machine = this;
 		_current_state.OnStart();
 	}
@@ -66,33 +70,37 @@ public class StateIdleWithSprite : State
 	PlayerControl pc;
 	SpriteRenderer renderer;
 	Sprite sprite;
-	
+
 	public StateIdleWithSprite(PlayerControl pc, SpriteRenderer renderer, Sprite sprite)
 	{
 		this.pc = pc;
 		this.renderer = renderer;
 		this.sprite = sprite;
+		MonoBehaviour.print ("idle make");
 	}
 	
 	public override void OnStart()
 	{
+		MonoBehaviour.print ("idle now");
 		renderer.sprite = sprite;
 	}
 	
 	public override void OnUpdate(float time_delta_fraction)
 	{
+		MonoBehaviour.print ("before I do anything");
 		if(pc.current_state == EntityState.ATTACKING)
 			return;
 
 		// Transition to walking animations on key press.
-		if(Input.GetKeyDown(KeyCode.DownArrow))
-			state_machine.ChangeState(new StatePlayAnimationForHeldKey(pc, renderer, pc.link_run_down, 6, KeyCode.DownArrow));
-		if(Input.GetKeyDown(KeyCode.UpArrow))
-			state_machine.ChangeState(new StatePlayAnimationForHeldKey(pc, renderer, pc.link_run_up, 6, KeyCode.UpArrow));
-		if(Input.GetKeyDown(KeyCode.RightArrow))
-			state_machine.ChangeState(new StatePlayAnimationForHeldKey(pc, renderer, pc.link_run_right, 6, KeyCode.RightArrow));
-		if(Input.GetKeyDown(KeyCode.LeftArrow))
-			state_machine.ChangeState(new StatePlayAnimationForHeldKey(pc, renderer, pc.link_run_left, 6, KeyCode.LeftArrow));
+//		if (Input.GetKeyDown (KeyCode.DownArrow))
+//			state_machine.ChangeState (new StatePlayAnimationForHeldKey (pc, renderer, pc.link_run_down, 6, KeyCode.DownArrow));
+//		else if (Input.GetKeyDown (KeyCode.UpArrow) && !Input.GetKeyDown (KeyCode.DownArrow))
+//			state_machine.ChangeState (new StatePlayAnimationForHeldKey (pc, renderer, pc.link_run_up, 6, KeyCode.UpArrow));
+//		else if (Input.GetKeyDown (KeyCode.RightArrow))
+//			state_machine.ChangeState (new StatePlayAnimationForHeldKey (pc, renderer, pc.link_run_right, 6, KeyCode.RightArrow));
+//		else if (Input.GetKeyDown (KeyCode.LeftArrow))
+//			state_machine.ChangeState (new StatePlayAnimationForHeldKey (pc, renderer, pc.link_run_left, 6, KeyCode.LeftArrow));
+		//don't do anything if 2 arrow keys are pressed
 	}
 }
 
@@ -117,6 +125,7 @@ public class StatePlayAnimationForHeldKey : State
 		this.animation = animation;
 		this.animation_length = animation.Length;
 		this.fps = fps;
+		MonoBehaviour.print ("Play animation created!");
 		
 		if(this.animation_length <= 0)
 			Debug.LogError("Empty animation submitted to state machine!");
@@ -129,6 +138,7 @@ public class StatePlayAnimationForHeldKey : State
 	
 	public override void OnUpdate(float time_delta_fraction)
 	{
+		MonoBehaviour.print ("attempting to move");
 		if(pc.current_state == EntityState.ATTACKING)
 			return;
 
@@ -143,18 +153,20 @@ public class StatePlayAnimationForHeldKey : State
 		renderer.sprite = animation[current_frame_index];
 		
 		// If another key is pressed, we need to transition to a different walking animation.
-		if(Input.GetKeyDown(KeyCode.DownArrow))
-			state_machine.ChangeState(new StatePlayAnimationForHeldKey(pc, renderer, pc.link_run_down, 6, KeyCode.DownArrow));
-		else if(Input.GetKeyDown(KeyCode.UpArrow))
-			state_machine.ChangeState(new StatePlayAnimationForHeldKey(pc, renderer, pc.link_run_up, 6, KeyCode.UpArrow));
-		else if(Input.GetKeyDown(KeyCode.RightArrow))
-			state_machine.ChangeState(new StatePlayAnimationForHeldKey(pc, renderer, pc.link_run_right, 6, KeyCode.RightArrow));
-		else if(Input.GetKeyDown(KeyCode.LeftArrow))
-			state_machine.ChangeState(new StatePlayAnimationForHeldKey(pc, renderer, pc.link_run_left, 6, KeyCode.LeftArrow));
-		
-		// If we detect the specified key has been released, return to the idle state.
-		else if(!Input.GetKey(key))
-			state_machine.ChangeState(new StateIdleWithSprite(pc, renderer, animation[1]));
+//		if (Input.GetKeyDown (KeyCode.DownArrow) && !Input.GetKeyDown (KeyCode.UpArrow) && !Input.GetKeyDown (KeyCode.RightArrow) && !Input.GetKeyDown (KeyCode.LeftArrow))
+//			state_machine.ChangeState (new StatePlayAnimationForHeldKey (pc, renderer, pc.link_run_down, 6, KeyCode.DownArrow));
+//		else if (Input.GetKeyDown (KeyCode.UpArrow) && !Input.GetKeyDown (KeyCode.DownArrow)  && !Input.GetKeyDown (KeyCode.RightArrow) && !Input.GetKeyDown (KeyCode.LeftArrow))
+//			state_machine.ChangeState (new StatePlayAnimationForHeldKey (pc, renderer, pc.link_run_up, 6, KeyCode.UpArrow));
+//		else if (Input.GetKeyDown (KeyCode.RightArrow) && !Input.GetKeyDown (KeyCode.DownArrow)  && !Input.GetKeyDown (KeyCode.UpArrow) && !Input.GetKeyDown (KeyCode.LeftArrow))
+//			state_machine.ChangeState (new StatePlayAnimationForHeldKey (pc, renderer, pc.link_run_right, 6, KeyCode.RightArrow));
+//		else if (Input.GetKeyDown (KeyCode.LeftArrow))
+//			state_machine.ChangeState (new StatePlayAnimationForHeldKey (pc, renderer, pc.link_run_left, 6, KeyCode.LeftArrow));
+//		// If we detect the specified key has been released, return to the idle state.
+//		else if(!Input.GetKey(key))
+//			state_machine.ChangeState(new StateIdleWithSprite(pc, renderer, animation[1]));
+//		else {
+//			//run in current direction but don't move don't know how to do that
+//		}
 	}
 }
 
@@ -163,7 +175,41 @@ public class StatePlayAnimationForHeldKey : State
 // StateDamaged
 // StateWeaponSwing
 // StateVictory
-
+//
 // Additional control states:
 // LinkNormalMovement.
 // LinkStunnedState.
+
+
+public class StateLinkNormalMovement : State {
+	PlayerControl pc;
+
+	public StateLinkNormalMovement(PlayerControl pc) {
+		this.pc = pc;
+	}
+
+	public override void OnUpdate(float time_delta_fraction){
+		float horizontal_input = Input.GetAxis("Horizontal");
+		float vertical_input = Input.GetAxis("Vertical");
+		if (horizontal_input != 0.0f) {
+			vertical_input = 0.0f;
+		}
+
+		pc.GetComponent<Rigidbody> ().velocity = new Vector3 (horizontal_input, -vertical_input, 0)
+																				* pc.walkingVelocity
+																				* time_delta_fraction;
+		//Decide the current direction
+		if (horizontal_input > 0.0f)
+			pc.current_direction = Direction.EAST;
+		else if (horizontal_input < 0.0f)
+			pc.current_direction = Direction.WEST;
+		else if (vertical_input > 0.0f)
+			pc.current_direction = Direction.NORTH;
+		else if (vertical_input < 0.0f)
+			pc.current_direction = Direction.SOUTH;
+
+		//link attack
+		//if(Input.GetKeyDown(KeyCode.S) 
+
+	}
+}
