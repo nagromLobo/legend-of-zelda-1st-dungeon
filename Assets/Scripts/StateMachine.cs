@@ -91,6 +91,8 @@ public class StateIdleWithSprite : State
 		if(pc.current_state == EntityState.ATTACKING)
 			return;
 
+		if(
+
 		// Transition to walking animations on key press.
 //		if (Input.GetKeyDown (KeyCode.DownArrow))
 //			state_machine.ChangeState (new StatePlayAnimationForHeldKey (pc, renderer, pc.link_run_down, 6, KeyCode.DownArrow));
