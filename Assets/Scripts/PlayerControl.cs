@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 public enum Direction {NORTH, EAST, SOUTH, WEST};
 public enum EntityState {NORMAL, ATTACKING};
@@ -41,26 +42,34 @@ public class PlayerControl : MonoBehaviour {
             Debug.LogError("Mutiple Link objects detected:");
         }
         instance = this;
-        half_heart_count = max_half_heart_count;
+		print("in start"); 
 
         // Launch Idle State
         animation_state_machine = new StateMachine();
-        // animation_state_machine.ChangeState(new StateIdleWithSprite(this, GetComponent<SpriteRenderer>(), link_run_down[0]));
+		print ("hello");
+        animation_state_machine.ChangeState(new StateIdleWithSprite(this, GetComponent<SpriteRenderer>(), link_run_down[0]));
+        half_heart_count = max_half_heart_count;
+
     }
 
     // Update is called once per frame
     void Update() {
+		
+		//print ("horizontal "+ Input.GetAxis("Horizontal")); 
         float horizontal_input = Input.GetAxis("Horizontal");
+		//print ("vertical "+ Input.GetAxis("Vertical")); 
         float vertical_input = Input.GetAxis("Vertical");
         if (horizontal_input != 0.0f) {
             vertical_input = 0.0f;
         }
+		animation_state_machine.Update ();
 
-        GetComponent<Rigidbody>().velocity = new Vector3(horizontal_input, -vertical_input, 0) * walkingVelocity;
+		GetComponent<Rigidbody> ().velocity = new Vector3 (horizontal_input, -vertical_input, 0) * walkingVelocity;;
 
     }
 
     void OnTriggerEnter(Collider coll) {
+
         switch (coll.gameObject.tag) {
             // General Collectables
             case "Rupee":

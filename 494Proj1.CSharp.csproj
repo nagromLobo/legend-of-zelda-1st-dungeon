@@ -74,7 +74,6 @@
     <Compile Include="Assets\Scripts\StateMachine.cs" />
     <Compile Include="Assets\Scripts\Tile.cs" />
     <Compile Include="Assets\Scripts\hud.cs" />
-    <Compile Include="Assets\Scripts\player_control.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Resources\Collision.txt" />
