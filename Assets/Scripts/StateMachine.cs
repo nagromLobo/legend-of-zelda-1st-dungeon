@@ -198,6 +198,7 @@ public class StateLinkNormalMovement : State {
 		pc.GetComponent<Rigidbody> ().velocity = new Vector3 (horizontal_input, -vertical_input, 0)
 																				* pc.walkingVelocity
 																				* time_delta_fraction;
+        Direction prevDirection = pc.current_direction;
 		//Decide the current direction
 		if (horizontal_input > 0.0f)
 			pc.current_direction = Direction.EAST;
@@ -208,8 +209,48 @@ public class StateLinkNormalMovement : State {
 		else if (vertical_input < 0.0f)
 			pc.current_direction = Direction.SOUTH;
 
-		//link attack
-		//if(Input.GetKeyDown(KeyCode.S) 
+        // if the direction has changed, have to snap him to the grid
+        if(prevDirection != pc.current_direction) {
+            if ((prevDirection == Direction.NORTH || prevDirection == Direction.SOUTH)
+                && (pc.current_direction == Direction.EAST || pc.current_direction == Direction.WEST)) {
+                // if axis is changed from vertical to horizontial
+                // we have to fix his postion on the vertical axis
+                Vector3 linkPosition = pc.transform.position;
+                float posY = linkPosition.y;
+                float nonFractionY = Mathf.Floor(posY);
+                float fractionY = posY - nonFractionY;
+                if(fractionY < 0.25) {
+                    posY = nonFractionY;
+                } else if(fractionY >= 0.25 && fractionY < 0.75) {
+                    posY = nonFractionY + 0.5f;
+                } else {
+                    posY = nonFractionY + 1.0f;
+                }
+                linkPosition.Set(linkPosition.x, posY, linkPosition.z);
+                pc.transform.position = linkPosition;
 
-	}
+            } else if ((prevDirection == Direction.EAST || prevDirection == Direction.WEST)
+                && (pc.current_direction == Direction.NORTH || pc.current_direction == Direction.SOUTH)) {
+                // If axis is changed from horizontial to 
+                // we have to fix his postion on the horizontial axis
+                Vector3 linkPosition = pc.transform.position;
+                float posX = linkPosition.x;
+                float nonFractionX = Mathf.Floor(posX);
+                float fractionX = posX - nonFractionX;
+                if (fractionX < 0.25) {
+                    posX = nonFractionX;
+                } else if (fractionX >= 0.25 && fractionX < 0.75) {
+                    posX = nonFractionX + 0.5f;
+                } else {
+                    posX = nonFractionX + 1.0f;
+                }
+                linkPosition.Set(posX, linkPosition.y, linkPosition.z);
+                pc.transform.position = linkPosition;
+            }
+        }
+
+        //link attack
+        //if(Input.GetKeyDown(KeyCode.S) 
+
+    }
 }
