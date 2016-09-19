@@ -174,6 +174,11 @@ public class StatePlayAnimationForHeldKey : State
 // StateDeath
 // StateDamaged
 
+// To snap link back up to the grid
+//public class StateLinkSnapToGrid : StatePlayAnimationForHeldKey {
+//    StateLinkSnapToGrid(PlayerControl pc, Renderer renderer, )
+//}
+
 // StateWeaponSwing
 // StateVictory
 //
