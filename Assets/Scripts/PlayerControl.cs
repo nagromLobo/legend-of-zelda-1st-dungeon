@@ -48,6 +48,9 @@ public class PlayerControl : MonoBehaviour {
         animation_state_machine = new StateMachine();
 		print ("hello");
         animation_state_machine.ChangeState(new StateIdleWithSprite(this, GetComponent<SpriteRenderer>(), link_run_down[0]));
+
+        control_state_machine = new StateMachine();
+        control_state_machine.ChangeState(new StateLinkNormalMovement(this));
         half_heart_count = max_half_heart_count;
 
     }
@@ -55,16 +58,17 @@ public class PlayerControl : MonoBehaviour {
     // Update is called once per frame
     void Update() {
 		
-		//print ("horizontal "+ Input.GetAxis("Horizontal")); 
-        float horizontal_input = Input.GetAxis("Horizontal");
-		//print ("vertical "+ Input.GetAxis("Vertical")); 
-        float vertical_input = Input.GetAxis("Vertical");
-        if (horizontal_input != 0.0f) {
-            vertical_input = 0.0f;
-        }
+		////print ("horizontal "+ Input.GetAxis("Horizontal")); 
+  //      float horizontal_input = Input.GetAxis("Horizontal");
+		////print ("vertical "+ Input.GetAxis("Vertical")); 
+  //      float vertical_input = Input.GetAxis("Vertical");
+  //      if (horizontal_input != 0.0f) {
+  //          vertical_input = 0.0f;
+  //      }
 		animation_state_machine.Update ();
+        control_state_machine.Update();
 
-		GetComponent<Rigidbody> ().velocity = new Vector3 (horizontal_input, -vertical_input, 0) * walkingVelocity;;
+		//GetComponent<Rigidbody> ().velocity = new Vector3 (horizontal_input, -vertical_input, 0) * walkingVelocity;;
 
     }
 
