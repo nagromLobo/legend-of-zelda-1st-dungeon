@@ -46,6 +46,9 @@ public class PlayerControl : MonoBehaviour {
 
         // Launch Idle State
         animation_state_machine = new StateMachine();
+        control_state_machine = new StateMachine();
+        control_state_machine.ChangeState(new StateLinkNormalMovement(this));
+
 		print ("hello");
         animation_state_machine.ChangeState(new StateIdleWithSprite(this, GetComponent<SpriteRenderer>(), link_run_down[0]));
         half_heart_count = max_half_heart_count;
@@ -63,8 +66,12 @@ public class PlayerControl : MonoBehaviour {
             vertical_input = 0.0f;
         }
 		animation_state_machine.Update ();
+        control_state_machine.Update();
 
-		GetComponent<Rigidbody> ().velocity = new Vector3 (horizontal_input, -vertical_input, 0) * walkingVelocity;;
+        if (control_state_machine.IsFinished()) {
+            control_state_machine.ChangeState(new StateLinkNormalMovement(this));
+        }
+		//GetComponent<Rigidbody> ().velocity = new Vector3 (horizontal_input, -vertical_input, 0) * walkingVelocity;
 
     }
 

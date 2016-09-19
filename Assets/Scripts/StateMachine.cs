@@ -180,36 +180,92 @@ public class StatePlayAnimationForHeldKey : State
 // LinkNormalMovement.
 // LinkStunnedState.
 
+public class StateLinkAttack : State {
+    PlayerControl pc;
+    GameObject weapon_prefab;
+    GameObject weapon_instance;
+    float coolDown = 0.0f;
+
+    public StateLinkAttack(PlayerControl pc, GameObject weapon_prefab, float coolDown) {
+        this.pc = pc;
+        this.weapon_prefab = weapon_prefab;
+        this.coolDown = coolDown;
+    }
+
+    public override void OnStart() {
+        pc.current_state = EntityState.ATTACKING;
+        pc.GetComponent<Rigidbody>().velocity = Vector3.zero;
+        weapon_instance = MonoBehaviour.Instantiate(weapon_prefab, pc.transform.position, Quaternion.identity) as GameObject;
+
+        Vector3 direction_offset = Vector3.zero;
+        Vector3 direction_eulerangle = Vector3.zero;
+
+        if (pc.current_direction == Direction.NORTH) {
+            direction_offset = new Vector3(0, 1, 0);
+            direction_eulerangle = new Vector3(0, 0, 90);
+        } else if (pc.current_direction == Direction.EAST) {
+            direction_offset = new Vector3(1, 0, 0);
+            direction_eulerangle = new Vector3(0, 0, 0);
+        } else if (pc.current_direction == Direction.SOUTH) {
+            direction_offset = new Vector3(0, -1, 0);
+            direction_eulerangle = new Vector3(0, 0, 270);
+        } else if (pc.current_direction == Direction.WEST) {
+            direction_offset = new Vector3(-1, 0, 0);
+            direction_eulerangle = new Vector3(0, 0, 180);
+        }
+
+        // move and rotate weapon
+        weapon_instance.transform.position += direction_offset;
+        Quaternion new_weapon_rotation = new Quaternion();
+        new_weapon_rotation.eulerAngles = direction_eulerangle;
+        weapon_instance.transform.rotation = new_weapon_rotation;
+    }
+
+    public override void OnUpdate(float time_delta_fraction) {
+        coolDown -= time_delta_fraction;
+        if (coolDown <= 0) {
+            ConcludeState();
+        }
+    }
+
+    public override void OnFinish() {
+        pc.current_state = EntityState.NORMAL;
+        MonoBehaviour.Destroy(weapon_instance);
+    }
+}
+
 
 public class StateLinkNormalMovement : State {
-	PlayerControl pc;
+    PlayerControl pc;
 
-	public StateLinkNormalMovement(PlayerControl pc) {
-		this.pc = pc;
-	}
+    public StateLinkNormalMovement(PlayerControl pc) {
+	    this.pc = pc;
+    }
 
-	public override void OnUpdate(float time_delta_fraction){
-		float horizontal_input = Input.GetAxis("Horizontal");
-		float vertical_input = Input.GetAxis("Vertical");
-		if (horizontal_input != 0.0f) {
-			vertical_input = 0.0f;
-		}
+    public override void OnUpdate(float time_delta_fraction){
+	    float horizontal_input = Input.GetAxis("Horizontal");
+	    float vertical_input = Input.GetAxis("Vertical");
+	    if (horizontal_input != 0.0f) {
+		    vertical_input = 0.0f;
+	    }
 
-		pc.GetComponent<Rigidbody> ().velocity = new Vector3 (horizontal_input, -vertical_input, 0)
-																				* pc.walkingVelocity
-																				* time_delta_fraction;
-		//Decide the current direction
-		if (horizontal_input > 0.0f)
-			pc.current_direction = Direction.EAST;
-		else if (horizontal_input < 0.0f)
-			pc.current_direction = Direction.WEST;
-		else if (vertical_input > 0.0f)
-			pc.current_direction = Direction.NORTH;
-		else if (vertical_input < 0.0f)
-			pc.current_direction = Direction.SOUTH;
+	    pc.GetComponent<Rigidbody> ().velocity = new Vector3 (horizontal_input, -vertical_input, 0)
+																			    * pc.walkingVelocity
+																			    * time_delta_fraction;
+	    //Decide the current direction
+	    if (horizontal_input > 0.0f)
+		    pc.current_direction = Direction.EAST;
+	    else if (horizontal_input < 0.0f)
+		    pc.current_direction = Direction.WEST;
+	    else if (vertical_input > 0.0f)
+		    pc.current_direction = Direction.NORTH;
+	    else if (vertical_input < 0.0f)
+		    pc.current_direction = Direction.SOUTH;
 
-		//link attack
-		//if(Input.GetKeyDown(KeyCode.S) 
+        //link attack
+        if (Input.GetKeyDown(KeyCode.A)) {
+            state_machine.ChangeState(new StateLinkAttack(pc, pc.selected_weapon_prefab, 15));
+        }
 
-	}
+    }
 }
