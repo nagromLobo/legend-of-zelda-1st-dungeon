@@ -4,7 +4,7 @@ REM eecs-494-unity-turnin.bat Version 1.3
 
 SET DP0=%~dp0%
 SET TURNIN=%1
-SET UNITY=C:\Program Files\Unity\Editor\Unity.exe
+SET UNITY=D:\Program Files\Unity\Editor\Unity.exe
 SET ZIP=C:\Program Files\7-Zip\7z.exe
 
 SET ZIPFILE=%DP0%\%TURNIN%.7z
