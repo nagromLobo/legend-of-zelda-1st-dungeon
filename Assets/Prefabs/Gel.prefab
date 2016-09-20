@@ -21,7 +21,7 @@ GameObject:
   - 4: {fileID: 4000011007805394}
   - 212: {fileID: 212000013056107036}
   - 65: {fileID: 65000014144922862}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Gel
   m_TagString: Untagged
   m_Icon: {fileID: 0}

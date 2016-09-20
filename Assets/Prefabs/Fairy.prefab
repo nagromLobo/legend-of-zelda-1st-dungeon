@@ -21,7 +21,7 @@ GameObject:
   - 4: {fileID: 4000013735774836}
   - 212: {fileID: 212000013420731856}
   - 65: {fileID: 65000013681187840}
-  m_Layer: 11
+  m_Layer: 8
   m_Name: Fairy
   m_TagString: Fairy
   m_Icon: {fileID: 0}

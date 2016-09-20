@@ -21,7 +21,7 @@ GameObject:
   - 4: {fileID: 4000014289965892}
   - 212: {fileID: 212000010725858102}
   - 65: {fileID: 65000011452837408}
-  m_Layer: 8
+  m_Layer: 9
   m_Name: Keese
   m_TagString: Enemy
   m_Icon: {fileID: 0}

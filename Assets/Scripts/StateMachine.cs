@@ -266,14 +266,14 @@ public class StateEnemyMovementAnimation : State {
 
     public StateEnemyMovementAnimation(Enemy enemy, SpriteRenderer renderer, Sprite[] animation, int fps) {
         this.enemy = enemy;
-	    this.renderer = renderer;
-	    this.animation = animation;
-	    this.animation_length = animation.Length;
-	    this.fps = fps;
-	    MonoBehaviour.print ("Play animation created!");
-		
-	    if(this.animation_length <= 0)
-		    Debug.LogError("Empty animation submitted to state machine!");
+        this.renderer = renderer;
+        this.animation = animation;
+        this.animation_length = animation.Length;
+        this.fps = fps;
+        MonoBehaviour.print("Play animation created!");
+
+        if (this.animation_length <= 0)
+            Debug.LogError("Empty animation submitted to state machine!");
     }
 
     public override void OnStart() {
@@ -290,5 +290,38 @@ public class StateEnemyMovementAnimation : State {
         int current_frame_index = ((int)((Time.time - animation_start_time) / (1.0 / fps)) % animation_length);
         renderer.sprite = animation[current_frame_index];
 
+    }
+}
+
+public class StateEnemyMovement : State {
+    Enemy enemy;
+    Direction direction;
+    float velocity;
+    float turnProbability;
+    public StateEnemyMovement(Enemy enemy, float velocity, Direction direction, float turnProbability) {
+        this.enemy = enemy;
+        this.direction = direction;
+        this.velocity = velocity;
+        this.turnProbability = turnProbability;
+    }
+
+    public override void OnUpdate(float time_delta_fraction) {
+        Vector3 movementVector = Vector3.zero;
+        switch (direction) {
+            case Direction.NORTH:
+                movementVector.Set(0, 1, 0);
+                break;
+            case Direction.EAST:
+                movementVector.Set(1, 0, 0);
+                break;
+            case Direction.SOUTH:
+                movementVector.Set(0, -1, 0);
+                break;
+            case Direction.WEST:
+                movementVector.Set(1, 0, 0);
+                break;
+        }
+
+        enemy.GetComponent<Rigidbody>().velocity = movementVector * velocity * time_delta_fraction;
     }
 }

@@ -5,6 +5,18 @@ TagManager:
   serializedVersion: 2
   tags:
   - Rupee
+  - Map
+  - Enemy
+  - Link
+  - Bomb
+  - Boomerang
+  - Bow
+  - Compass
+  - Fairy
+  - Heart
+  - HeartContainer
+  - SmallKey
+  - Triforce
   layers:
   - Default
   - TransparentFX
@@ -14,8 +26,8 @@ TagManager:
   - UI
   - 
   - 
-  - 
-  - 
+  - Item
+  - Enemies
   - 
   - 
   - 
