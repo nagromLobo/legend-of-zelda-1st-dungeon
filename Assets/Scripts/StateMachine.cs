@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 // State Machines are responsible for processing states, notifying them when they're about to begin or conclude, etc.
-using System;
 
 
 public class StateMachine
@@ -307,6 +306,9 @@ public class StateEnemyMovement : State {
 
     public override void OnUpdate(float time_delta_fraction) {
         Vector3 movementVector = Vector3.zero;
+        if(Random.value < turnProbability) {
+            state_machine.ChangeState(new StateEnemyMovement(enemy, velocity, UtilityFunctions.randomDirection(), turnProbability));
+        }
         switch (direction) {
             case Direction.NORTH:
                 movementVector.Set(0, 1, 0);

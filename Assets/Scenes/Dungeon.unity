@@ -684,28 +684,6 @@ Prefab:
       propertyPath: m_RootOrder
       value: 7
       objectReference: {fileID: 0}
-    - target: {fileID: 114000012973918760, guid: e3ff8794e4ad4e6478f49c107f63a31c,
-        type: 2}
-      propertyPath: animation.Array.data[0]
-      value: 
-      objectReference: {fileID: 21300148, guid: 8e8a9669d1c0c6943a69f3bf099f7b4b,
-        type: 3}
-    - target: {fileID: 114000012973918760, guid: e3ff8794e4ad4e6478f49c107f63a31c,
-        type: 2}
-      propertyPath: animation.Array.data[1]
-      value: 
-      objectReference: {fileID: 21300178, guid: 8e8a9669d1c0c6943a69f3bf099f7b4b,
-        type: 3}
-    - target: {fileID: 114000012973918760, guid: e3ff8794e4ad4e6478f49c107f63a31c,
-        type: 2}
-      propertyPath: speed
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 114000012973918760, guid: e3ff8794e4ad4e6478f49c107f63a31c,
-        type: 2}
-      propertyPath: movementFramesPerSecond
-      value: 6
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e3ff8794e4ad4e6478f49c107f63a31c, type: 2}
   m_IsPrefabParent: 0

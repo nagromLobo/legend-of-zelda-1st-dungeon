@@ -22,6 +22,7 @@ GameObject:
   - 212: {fileID: 212000010675581394}
   - 65: {fileID: 65000013351257676}
   - 114: {fileID: 114000012973918760}
+  - 54: {fileID: 54000013873286968}
   m_Layer: 9
   m_Name: Stalfos
   m_TagString: Enemy
@@ -42,6 +43,21 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
+--- !u!54 &54000013873286968
+Rigidbody:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000013893029978}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 120
+  m_CollisionDetection: 0
 --- !u!65 &65000013351257676
 BoxCollider:
   m_ObjectHideFlags: 1
@@ -65,10 +81,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f398dd629b5dc9b4ab0b200d61dc79b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementFramesPerSecond: 4
-  animation:
-  - {fileID: 0}
-  - {fileID: 0}
+  movementFramesPerSecond: 6
+  velocity: 2
+  turnProbability: 0.08
+  spriteAnimation:
+  - {fileID: 21300148, guid: 8e8a9669d1c0c6943a69f3bf099f7b4b, type: 3}
+  - {fileID: 21300178, guid: 8e8a9669d1c0c6943a69f3bf099f7b4b, type: 3}
 --- !u!212 &212000010675581394
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -98,7 +116,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 21300148, guid: 8e8a9669d1c0c6943a69f3bf099f7b4b, type: 3}
+  m_Sprite: {fileID: 21300178, guid: 8e8a9669d1c0c6943a69f3bf099f7b4b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
