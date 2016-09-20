@@ -257,9 +257,9 @@ public class StateLinkNormalMovement : State {
 		    pc.current_direction = Direction.EAST;
 	    else if (horizontal_input < 0.0f)
 		    pc.current_direction = Direction.WEST;
-	    else if (vertical_input > 0.0f)
-		    pc.current_direction = Direction.NORTH;
 	    else if (vertical_input < 0.0f)
+		    pc.current_direction = Direction.NORTH;
+	    else if (vertical_input > 0.0f)
 		    pc.current_direction = Direction.SOUTH;
 
         //link attack
