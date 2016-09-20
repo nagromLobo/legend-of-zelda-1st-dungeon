@@ -37,7 +37,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000013893029978}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 35.23413, y: 8.300402, z: 0}
+  m_LocalPosition: {x: 35.5, y: 8.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
@@ -68,7 +68,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.9375, y: 1, z: 0.2}
+  m_Size: {x: 0.9, y: 0.9, z: 0.2}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &114000012973918760
 MonoBehaviour:
@@ -83,10 +83,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementFramesPerSecond: 6
   velocity: 2
-  turnProbability: 0.08
+  turnProbability: 0.05
   spriteAnimation:
   - {fileID: 21300148, guid: 8e8a9669d1c0c6943a69f3bf099f7b4b, type: 3}
   - {fileID: 21300178, guid: 8e8a9669d1c0c6943a69f3bf099f7b4b, type: 3}
+  currDirection: 2
 --- !u!212 &212000010675581394
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -115,7 +116,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 2
   m_Sprite: {fileID: 21300178, guid: 8e8a9669d1c0c6943a69f3bf099f7b4b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

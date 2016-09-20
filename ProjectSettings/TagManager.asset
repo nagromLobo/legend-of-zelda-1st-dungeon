@@ -17,6 +17,7 @@ TagManager:
   - HeartContainer
   - SmallKey
   - Triforce
+  - Tile
   layers:
   - Default
   - TransparentFX

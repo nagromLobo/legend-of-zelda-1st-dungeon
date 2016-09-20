@@ -296,19 +296,30 @@ public class StateEnemyMovement : State {
     Enemy enemy;
     Direction direction;
     float velocity;
-    float turnProbability;
+    float turnProbability; // probability of turning for each tile reached
+    Vector3 lastTilePosition;
+    float lastRoundPos = -1.0f; // so we don't check for turning multiple times for the same tile
     public StateEnemyMovement(Enemy enemy, float velocity, Direction direction, float turnProbability) {
         this.enemy = enemy;
         this.direction = direction;
         this.velocity = velocity;
         this.turnProbability = turnProbability;
+        this.lastTilePosition = enemy.transform.position;
     }
+
+    public override void OnStart() {
+        enemy.currDirection = direction;
+    }
+
+
 
     public override void OnUpdate(float time_delta_fraction) {
         Vector3 movementVector = Vector3.zero;
+        
         if(Random.value < turnProbability) {
             state_machine.ChangeState(new StateEnemyMovement(enemy, velocity, UtilityFunctions.randomDirection(), turnProbability));
         }
+        // move in the specified direction
         switch (direction) {
             case Direction.NORTH:
                 movementVector.Set(0, 1, 0);
@@ -324,6 +335,37 @@ public class StateEnemyMovement : State {
                 break;
         }
 
+        // check to see if it is time to turn
+        if(direction == Direction.NORTH || direction == Direction.SOUTH) {
+            float posY = enemy.transform.position.y;
+            float roundPosY = Mathf.Round(posY);
+            float fractionPosY = posY - roundPosY;
+            if (fractionPosY > -0.02f && fractionPosY < 0.02f && roundPosY != lastRoundPos) {
+                lastRoundPos = roundPosY;
+                if (Random.value < turnProbability) {
+                    enemy.transform.position = new Vector3(enemy.transform.position.x, roundPosY, 0.0f);
+                    state_machine.ChangeState(new StateEnemyMovement(enemy, velocity, UtilityFunctions.randomDirection(direction), turnProbability));
+                }
+            }
+            // else the direction is EAST or WEST
+        } else {
+            float posX = enemy.transform.position.x;
+            float roundPosX = Mathf.Floor(posX);
+            float fractionPosX = posX - roundPosX;
+            if (fractionPosX > -0.02f && fractionPosX < 0.02f && roundPosX != lastRoundPos) {
+                lastRoundPos = roundPosX;
+                if (Random.value < turnProbability) {
+                    enemy.transform.position = new Vector3(roundPosX, enemy.transform.position.y, 0.0f);
+                    state_machine.ChangeState(new StateEnemyMovement(enemy, velocity, UtilityFunctions.randomDirection(direction), turnProbability));
+                }
+            }
+        }
+     
+
         enemy.GetComponent<Rigidbody>().velocity = movementVector * velocity * time_delta_fraction;
+    }
+
+    public override void OnFinish() {
+        enemy.GetComponent<Rigidbody>().velocity = Vector3.zero;
     }
 }

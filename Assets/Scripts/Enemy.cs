@@ -8,6 +8,7 @@ public class Enemy : MonoBehaviour {
     public Sprite[] spriteAnimation;
     private StateMachine animation_statemachine;
     private StateMachine control_statemachine;
+    public Direction currDirection = Direction.SOUTH;
 
     void Awake() {
         animation_statemachine = new StateMachine();
@@ -24,6 +25,12 @@ public class Enemy : MonoBehaviour {
         animation_statemachine.Update();
         control_statemachine.Update();
 	}
+
+    void OnCollisionEnter(Collision coll) {
+        if(coll.gameObject.tag == "Tile") {
+            control_statemachine.ChangeState(new StateEnemyMovement(this, velocity, UtilityFunctions.randomDirection(currDirection), turnProbability));
+        }
+    }
 
     void OnTriggerEnter() {
 
