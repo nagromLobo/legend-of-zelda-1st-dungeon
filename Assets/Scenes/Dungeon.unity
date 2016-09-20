@@ -569,7 +569,7 @@ MonoBehaviour:
   - {fileID: 21300026, guid: 45afd34443b96473598b76e2b1778b4e, type: 3}
   current_state: 0
   current_direction: 2
-  selected_weapon_prefab: {fileID: 1000012381036068, guid: a21135a55d08a4ff08fac577a630857a,
+  selected_weapon_prefab: {fileID: 1000012755623840, guid: dde012012b86747cabe96058f1e2424d,
     type: 2}
 --- !u!65 &1026231735
 BoxCollider:

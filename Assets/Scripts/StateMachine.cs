@@ -18,7 +18,7 @@ public class StateMachine
 		_current_state = new_state;
 		// States sometimes need to reset their machine. 
 		// This reference makes that possible.
-		MonoBehaviour.print ("I am in the change state");
+		//MonoBehaviour.print ("I am in the change state");
 		_current_state.state_machine = this;
 		_current_state.OnStart();
 	}
