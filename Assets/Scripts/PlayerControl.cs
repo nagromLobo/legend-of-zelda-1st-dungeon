@@ -11,7 +11,7 @@ public class PlayerControl : MonoBehaviour {
     public int rupee_count = 0;
     public int bomb_count = 0;
     public int max_half_heart_count = 6;
-    public float half_heart_count = 6;
+    public int half_heart_count = 6;
     public int small_key_count = 0;
     public bool map_retrieved = false;
     public bool compass_retrieved = false;
@@ -26,7 +26,7 @@ public class PlayerControl : MonoBehaviour {
 
 	StateMachine animation_state_machine;
 	StateMachine control_state_machine;
-	
+
 	public EntityState current_state = EntityState.NORMAL;
 	public Direction current_direction = Direction.SOUTH;
 
@@ -42,14 +42,14 @@ public class PlayerControl : MonoBehaviour {
             Debug.LogError("Mutiple Link objects detected:");
         }
         instance = this;
-		print("in start"); 
+		//print("in start"); 
 
         // Launch Idle State
         animation_state_machine = new StateMachine();
         control_state_machine = new StateMachine();
         control_state_machine.ChangeState(new StateLinkNormalMovement(this));
 
-		print ("hello");
+		//print ("hello");
         animation_state_machine.ChangeState(new StateIdleWithSprite(this, GetComponent<SpriteRenderer>(), link_run_down[0]));
         half_heart_count = max_half_heart_count;
 
@@ -58,13 +58,13 @@ public class PlayerControl : MonoBehaviour {
     // Update is called once per frame
     void Update() {
 		
-		//print ("horizontal "+ Input.GetAxis("Horizontal")); 
-        float horizontal_input = Input.GetAxis("Horizontal");
-		//print ("vertical "+ Input.GetAxis("Vertical")); 
-        float vertical_input = Input.GetAxis("Vertical");
-        if (horizontal_input != 0.0f) {
-            vertical_input = 0.0f;
-        }
+//		//print ("horizontal "+ Input.GetAxis("Horizontal")); 
+//        float horizontal_input = Input.GetAxis("Horizontal");
+//		//print ("vertical "+ Input.GetAxis("Vertical")); 
+//        float vertical_input = Input.GetAxis("Vertical");
+//        if (horizontal_input != 0.0f) {
+//            vertical_input = 0.0f;
+//        }
 		animation_state_machine.Update ();
         control_state_machine.Update();
 
@@ -82,6 +82,7 @@ public class PlayerControl : MonoBehaviour {
             case "Rupee":
                 Destroy(coll.gameObject);
                 rupee_count++;
+				Hud.RefreshDisplay ();
                 break;
             case "Heart":
                 Destroy(coll.gameObject);

@@ -2,6 +2,7 @@
 using System.Collections;
 // State Machines are responsible for processing states, notifying them when they're about to begin or conclude, etc.
 using System;
+using System.Runtime.InteropServices;
 
 
 public class StateMachine
@@ -18,7 +19,7 @@ public class StateMachine
 		_current_state = new_state;
 		// States sometimes need to reset their machine. 
 		// This reference makes that possible.
-		MonoBehaviour.print ("I am in the change state");
+		//MonoBehaviour.print ("I am in the change state");
 		_current_state.state_machine = this;
 		_current_state.OnStart();
 	}
@@ -76,18 +77,18 @@ public class StateIdleWithSprite : State
 		this.pc = pc;
 		this.renderer = renderer;
 		this.sprite = sprite;
-		MonoBehaviour.print ("idle make");
+		//MonoBehaviour.print ("idle make");
 	}
 	
 	public override void OnStart()
 	{
-		MonoBehaviour.print ("idle now");
+		//MonoBehaviour.print ("idle now");
 		renderer.sprite = sprite;
 	}
 	
 	public override void OnUpdate(float time_delta_fraction)
 	{
-		MonoBehaviour.print ("before I do anything");
+		//MonoBehaviour.print ("before I do anything");
 		if(pc.current_state == EntityState.ATTACKING)
 			return;
 
@@ -125,7 +126,7 @@ public class StatePlayAnimationForHeldKey : State
 		this.animation = animation;
 		this.animation_length = animation.Length;
 		this.fps = fps;
-		MonoBehaviour.print ("Play animation created!");
+		//MonoBehaviour.print ("Play animation created!");
 		
 		if(this.animation_length <= 0)
 			Debug.LogError("Empty animation submitted to state machine!");
@@ -138,7 +139,7 @@ public class StatePlayAnimationForHeldKey : State
 	
 	public override void OnUpdate(float time_delta_fraction)
 	{
-		MonoBehaviour.print ("attempting to move");
+		//MonoBehaviour.print ("attempting to move");
 		if(pc.current_state == EntityState.ATTACKING)
 			return;
 
@@ -249,18 +250,25 @@ public class StateLinkNormalMovement : State {
 		    vertical_input = 0.0f;
 	    }
 
+		MonoBehaviour.print (vertical_input); 
+
+
+		//Decide the current direction
+		if (horizontal_input > 0.0f)
+			pc.current_direction = Direction.EAST;
+		else if (horizontal_input < 0.0f)
+			pc.current_direction = Direction.WEST;
+		else if (vertical_input < 0.0f)
+			pc.current_direction = Direction.NORTH;
+		else if (vertical_input > 0.0f)
+			pc.current_direction = Direction.SOUTH;
+
+
+
 	    pc.GetComponent<Rigidbody> ().velocity = new Vector3 (horizontal_input, -vertical_input, 0)
 																			    * pc.walkingVelocity
 																			    * time_delta_fraction;
-	    //Decide the current direction
-	    if (horizontal_input > 0.0f)
-		    pc.current_direction = Direction.EAST;
-	    else if (horizontal_input < 0.0f)
-		    pc.current_direction = Direction.WEST;
-	    else if (vertical_input > 0.0f)
-		    pc.current_direction = Direction.NORTH;
-	    else if (vertical_input < 0.0f)
-		    pc.current_direction = Direction.SOUTH;
+
 
         //link attack
         if (Input.GetKeyDown(KeyCode.A)) {
