@@ -182,35 +182,35 @@ public class StatePlayAnimationForHeldKey : State
 
 
 public class StateLinkNormalMovement : State {
-	PlayerControl pc;
+    PlayerControl pc;
 
-	public StateLinkNormalMovement(PlayerControl pc) {
-		this.pc = pc;
-	}
+    public StateLinkNormalMovement(PlayerControl pc) {
+        this.pc = pc;
+    }
 
-	public override void OnUpdate(float time_delta_fraction){
-		float horizontal_input = Input.GetAxis("Horizontal");
-		float vertical_input = Input.GetAxis("Vertical");
-		if (horizontal_input != 0.0f) {
-			vertical_input = 0.0f;
-		}
+    public override void OnUpdate(float time_delta_fraction) {
+        float horizontal_input = Input.GetAxis("Horizontal");
+        float vertical_input = Input.GetAxis("Vertical");
+        if (horizontal_input != 0.0f) {
+            vertical_input = 0.0f;
+        }
 
-		pc.GetComponent<Rigidbody> ().velocity = new Vector3 (horizontal_input, -vertical_input, 0)
-																				* pc.walkingVelocity
-																				* time_delta_fraction;
+        pc.GetComponent<Rigidbody>().velocity = new Vector3(horizontal_input, -vertical_input, 0)
+                                                                                * pc.walkingVelocity
+                                                                                * time_delta_fraction;
         Direction prevDirection = pc.current_direction;
-		//Decide the current direction
-		if (horizontal_input > 0.0f)
-			pc.current_direction = Direction.EAST;
-		else if (horizontal_input < 0.0f)
-			pc.current_direction = Direction.WEST;
-		else if (vertical_input > 0.0f)
-			pc.current_direction = Direction.NORTH;
-		else if (vertical_input < 0.0f)
-			pc.current_direction = Direction.SOUTH;
+        //Decide the current direction
+        if (horizontal_input > 0.0f)
+            pc.current_direction = Direction.EAST;
+        else if (horizontal_input < 0.0f)
+            pc.current_direction = Direction.WEST;
+        else if (vertical_input > 0.0f)
+            pc.current_direction = Direction.NORTH;
+        else if (vertical_input < 0.0f)
+            pc.current_direction = Direction.SOUTH;
 
         // if the direction has changed, have to snap him to the grid
-        if(prevDirection != pc.current_direction) {
+        if (prevDirection != pc.current_direction) {
             if ((prevDirection == Direction.NORTH || prevDirection == Direction.SOUTH)
                 && (pc.current_direction == Direction.EAST || pc.current_direction == Direction.WEST)) {
                 // if axis is changed from vertical to horizontial
@@ -219,9 +219,9 @@ public class StateLinkNormalMovement : State {
                 float posY = linkPosition.y;
                 float nonFractionY = Mathf.Floor(posY);
                 float fractionY = posY - nonFractionY;
-                if(fractionY < 0.25) {
+                if (fractionY < 0.25) {
                     posY = nonFractionY;
-                } else if(fractionY >= 0.25 && fractionY < 0.75) {
+                } else if (fractionY >= 0.25 && fractionY < 0.75) {
                     posY = nonFractionY + 0.5f;
                 } else {
                     posY = nonFractionY + 1.0f;
@@ -251,6 +251,44 @@ public class StateLinkNormalMovement : State {
 
         //link attack
         //if(Input.GetKeyDown(KeyCode.S) 
+
+    }
+}
+
+public class StateEnemyMovementAnimation : State {
+    private Enemy enemy;
+    private SpriteRenderer renderer;
+    private Sprite[] animation;
+    private int fps;
+    private int animation_length;
+    float animation_progression;
+    float animation_start_time;
+
+    public StateEnemyMovementAnimation(Enemy enemy, SpriteRenderer renderer, Sprite[] animation, int fps) {
+        this.enemy = enemy;
+	    this.renderer = renderer;
+	    this.animation = animation;
+	    this.animation_length = animation.Length;
+	    this.fps = fps;
+	    MonoBehaviour.print ("Play animation created!");
+		
+	    if(this.animation_length <= 0)
+		    Debug.LogError("Empty animation submitted to state machine!");
+    }
+
+    public override void OnStart() {
+        animation_start_time = Time.time;
+    }
+
+    public override void OnUpdate(float time_delta_fraction) {
+        if (this.animation_length <= 0) {
+            Debug.LogError("Empty animation submitted to state machine!");
+            return;
+        }
+
+        // Modulus is necessary so we don't overshoot the length of the animation.
+        int current_frame_index = ((int)((Time.time - animation_start_time) / (1.0 / fps)) % animation_length);
+        renderer.sprite = animation[current_frame_index];
 
     }
 }
