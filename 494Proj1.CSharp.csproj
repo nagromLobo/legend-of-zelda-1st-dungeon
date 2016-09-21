@@ -75,8 +75,8 @@
     <Compile Include="Assets\Scripts\StateMachine.cs" />
     <Compile Include="Assets\Scripts\Tile.cs" />
     <Compile Include="Assets\Scripts\UtilityFunctions.cs" />
+    <Compile Include="Assets\Scripts\cameraControl.cs" />
     <Compile Include="Assets\Scripts\hud.cs" />
-    <Compile Include="Assets\cameraControl.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Resources\Collision.txt" />
