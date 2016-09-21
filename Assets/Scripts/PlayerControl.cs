@@ -20,17 +20,17 @@ public class PlayerControl : MonoBehaviour {
     public bool boomerang_retrieved = false;
 
     public Sprite[] link_run_down;
-	public Sprite[] link_run_up;
-	public Sprite[] link_run_right;
-	public Sprite[] link_run_left;
+    public Sprite[] link_run_up;
+    public Sprite[] link_run_right;
+    public Sprite[] link_run_left;
 
-	StateMachine animation_state_machine;
-	StateMachine control_state_machine;
-	
-	public EntityState current_state = EntityState.NORMAL;
-	public Direction current_direction = Direction.SOUTH;
+    StateMachine animation_state_machine;
+    StateMachine control_state_machine;
 
-	public GameObject selected_weapon_prefab;
+    public EntityState current_state = EntityState.NORMAL;
+    public Direction current_direction = Direction.SOUTH;
+
+    public GameObject selected_weapon_prefab;
 
     public static PlayerControl instance;
 
@@ -42,11 +42,11 @@ public class PlayerControl : MonoBehaviour {
             Debug.LogError("Mutiple Link objects detected:");
         }
         instance = this;
-		print("in start"); 
+        print("in start");
 
         // Launch Idle State
         animation_state_machine = new StateMachine();
-		print ("hello");
+        print("hello");
         animation_state_machine.ChangeState(new StateIdleWithSprite(this, GetComponent<SpriteRenderer>(), link_run_down[0]));
 
         control_state_machine = new StateMachine();
@@ -57,18 +57,18 @@ public class PlayerControl : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
-		
-		////print ("horizontal "+ Input.GetAxis("Horizontal")); 
-  //      float horizontal_input = Input.GetAxis("Horizontal");
-		////print ("vertical "+ Input.GetAxis("Vertical")); 
-  //      float vertical_input = Input.GetAxis("Vertical");
-  //      if (horizontal_input != 0.0f) {
-  //          vertical_input = 0.0f;
-  //      }
-		animation_state_machine.Update ();
+
+        ////print ("horizontal "+ Input.GetAxis("Horizontal")); 
+        //      float horizontal_input = Input.GetAxis("Horizontal");
+        ////print ("vertical "+ Input.GetAxis("Vertical")); 
+        //      float vertical_input = Input.GetAxis("Vertical");
+        //      if (horizontal_input != 0.0f) {
+        //          vertical_input = 0.0f;
+        //      }
+        animation_state_machine.Update();
         control_state_machine.Update();
 
-		//GetComponent<Rigidbody> ().velocity = new Vector3 (horizontal_input, -vertical_input, 0) * walkingVelocity;;
+        //GetComponent<Rigidbody> ().velocity = new Vector3 (horizontal_input, -vertical_input, 0) * walkingVelocity;;
 
     }
 
@@ -82,7 +82,7 @@ public class PlayerControl : MonoBehaviour {
                 break;
             case "Heart":
                 Destroy(coll.gameObject);
-                if(half_heart_count < max_half_heart_count) {
+                if (half_heart_count < max_half_heart_count) {
                     half_heart_count += 2;
                 }
                 break;
@@ -129,10 +129,13 @@ public class PlayerControl : MonoBehaviour {
                 break;
             // Other game actions
             case "Door":
-                cameraControl.MoveCamera(this);
+                CameraControl.S.MoveCamera(current_direction);
                 break;
             default:
                 break;
         }
     }
 }
+
+//    void OnCollisionEnter(Collision coll) { }
+//}

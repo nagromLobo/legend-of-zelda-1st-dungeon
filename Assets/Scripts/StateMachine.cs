@@ -334,7 +334,7 @@ public class StateEnemyMovement : State {
     protected bool MoveEnemy() {
         Vector3 currEnemyPosition = enemy.transform.position;
         float u = (Time.time - timeLastTile) / timeToCrossTile;
-        if(u >= 1.0f) {
+        if(u > 1.0f) {
             return true;
         }
         // if horizontial

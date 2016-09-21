@@ -27,7 +27,7 @@ public class Enemy : MonoBehaviour {
         control_statemachine.Update();
 	}
 
-    void OnTriggerEnter(Collider other) {
+    void OnTriggerStay(Collider other) {
         MonoBehaviour.print("OnTrigger Skeleton");
         if (other.gameObject.tag == "Tile") {
             // adjust enemy position back to the subgrid
