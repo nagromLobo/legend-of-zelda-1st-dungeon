@@ -2,6 +2,7 @@
 using System.Collections;
 
 public class Enemy : MonoBehaviour {
+    public int damage { get; private set;}
     public int movementFramesPerSecond = 4;
     public float timeToCrossTile = 0.0f;
     public float turnProbability = 0.02f;
@@ -10,6 +11,13 @@ public class Enemy : MonoBehaviour {
     protected StateMachine animation_statemachine;
     protected StateMachine control_statemachine;
     public Direction currDirection = Direction.SOUTH;
+
+    public Enemy() {
+        return;
+    }
+    public Enemy(int damage) {
+        this.damage = damage;
+    }
 
     void Awake() {
         animation_statemachine = new StateMachine();
