@@ -68,27 +68,32 @@ public class Tile : MonoBehaviour {
         char c = ShowMapOnCamera.S.collisionS[tileNum];
         switch (c) {
         case 'S': // Solid
+            bc.enabled = true;
             rend.sortingOrder = 0;
             bc.center = Vector3.zero;
             bc.size = Vector3.one;
+            bc.isTrigger = false;
+            bc.tag = "Tile";
             break;
         case 'P':   // Pushable
                     // have to handle this case
             rend.sortingOrder = 0;
+            bc.tag = "Tile";
+            bc.enabled = true;
+            bc.isTrigger = false;
             break;
         case 'D': // Doorway
             rend.sortingOrder = 0;
             bc.enabled = true;
             bc.isTrigger = true;
             bc.tag = "Door";
-            break;
-        case 'A': // Doorarch
             rend.sortingOrder = 3;
-            bc.enabled = false;
             break;
         default:
+            bc.tag = "Tile";
             rend.sortingOrder = 0;
             bc.enabled = false;
+            bc.isTrigger = false;
             break;
         }
 	}	
