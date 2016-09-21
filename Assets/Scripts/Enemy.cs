@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Enemy : MonoBehaviour {
     public int movementFramesPerSecond = 4;
-    public float velocity = 0.0f;
+    public float timeToCrossTile = 0.0f;
     public float turnProbability = 0.02f;
     public Sprite[] spriteAnimation;
     private StateMachine animation_statemachine;
@@ -17,7 +17,7 @@ public class Enemy : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         animation_statemachine.ChangeState(new StateEnemyMovementAnimation(this, GetComponent<SpriteRenderer>(), spriteAnimation, movementFramesPerSecond));
-        control_statemachine.ChangeState(new StateEnemyMovement(this, velocity, UtilityFunctions.randomDirection(), turnProbability));
+        control_statemachine.ChangeState(new StateEnemyMovement(this, timeToCrossTile, UtilityFunctions.randomDirection(), turnProbability));
 	}
 	
 	// Update is called once per frame
@@ -26,14 +26,14 @@ public class Enemy : MonoBehaviour {
         control_statemachine.Update();
 	}
 
-    void OnCollisionEnter(Collision coll) {
-        if(coll.gameObject.tag == "Tile") {
-            control_statemachine.ChangeState(new StateEnemyMovement(this, velocity, UtilityFunctions.randomDirection(currDirection), turnProbability));
+    void OnTriggerEnter(Collider other) {
+        MonoBehaviour.print("OnTrigger Skeleton");
+        if (other.gameObject.tag == "Tile") {
+            // adjust enemy position back to the subgrid
+            Vector3 currPos = this.gameObject.transform.position;
+            this.gameObject.transform.position.Set(Mathf.Round(currPos.x), Mathf.Round(currPos.y), currPos.z);
+            control_statemachine.ChangeState(new StateEnemyMovement(this, timeToCrossTile, UtilityFunctions.randomDirection(currDirection), turnProbability));
         }
-    }
-
-    void OnTriggerEnter() {
-
-    }
+      }
 
 }

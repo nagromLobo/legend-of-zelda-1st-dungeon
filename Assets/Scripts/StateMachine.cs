@@ -292,77 +292,138 @@ public class StateEnemyMovementAnimation : State {
     }
 }
 
+// assumes enemy starts on grid
 public class StateEnemyMovement : State {
     Enemy enemy;
     Direction direction;
-    float velocity;
+    float timeToCrossTile;
     float turnProbability; // probability of turning for each tile reached
-    Vector3 lastTilePosition;
-    float lastRoundPos = -1.0f; // so we don't check for turning multiple times for the same tile
-    public StateEnemyMovement(Enemy enemy, float velocity, Direction direction, float turnProbability) {
+    //Vector3 lastTilePosition;
+    //float lastRoundPos = -1.0f; // so we don't check for turning multiple times for the same tile
+    float timeLastTile;
+    Vector3 posLastTile;
+    Vector3 posNextTile;
+
+    public StateEnemyMovement(Enemy enemy, float timeToCrossTile, Direction direction, float turnProbability) {
         this.enemy = enemy;
         this.direction = direction;
-        this.velocity = velocity;
+        this.timeToCrossTile = timeToCrossTile;
         this.turnProbability = turnProbability;
-        this.lastTilePosition = enemy.transform.position;
     }
 
     public override void OnStart() {
         enemy.currDirection = direction;
+        setTileLastAndNext();
+        return;
     }
 
 
 
     public override void OnUpdate(float time_delta_fraction) {
-        Vector3 movementVector = Vector3.zero;
-        
-        if(Random.value < turnProbability) {
-            state_machine.ChangeState(new StateEnemyMovement(enemy, velocity, UtilityFunctions.randomDirection(), turnProbability));
-        }
-        // move in the specified direction
-        switch (direction) {
-            case Direction.NORTH:
-                movementVector.Set(0, 1, 0);
-                break;
-            case Direction.EAST:
-                movementVector.Set(1, 0, 0);
-                break;
-            case Direction.SOUTH:
-                movementVector.Set(0, -1, 0);
-                break;
-            case Direction.WEST:
-                movementVector.Set(1, 0, 0);
-                break;
-        }
-
-        // check to see if it is time to turn
-        if(direction == Direction.NORTH || direction == Direction.SOUTH) {
-            float posY = enemy.transform.position.y;
-            float roundPosY = Mathf.Round(posY);
-            float fractionPosY = posY - roundPosY;
-            if (fractionPosY > -0.02f && fractionPosY < 0.02f && roundPosY != lastRoundPos) {
-                lastRoundPos = roundPosY;
-                if (Random.value < turnProbability) {
-                    enemy.transform.position = new Vector3(enemy.transform.position.x, roundPosY, 0.0f);
-                    state_machine.ChangeState(new StateEnemyMovement(enemy, velocity, UtilityFunctions.randomDirection(direction), turnProbability));
-                }
-            }
-            // else the direction is EAST or WEST
+        Vector3 currEnemyPosition = enemy.transform.position;
+        bool onMainGrid = MoveEnemy();
+        if (onMainGrid && shouldEnemyTurn()) {
+            state_machine.ChangeState(new StateEnemyMovement(enemy, timeToCrossTile, UtilityFunctions.randomDirection(direction), turnProbability));
         } else {
-            float posX = enemy.transform.position.x;
-            float roundPosX = Mathf.Floor(posX);
-            float fractionPosX = posX - roundPosX;
-            if (fractionPosX > -0.02f && fractionPosX < 0.02f && roundPosX != lastRoundPos) {
-                lastRoundPos = roundPosX;
-                if (Random.value < turnProbability) {
-                    enemy.transform.position = new Vector3(roundPosX, enemy.transform.position.y, 0.0f);
-                    state_machine.ChangeState(new StateEnemyMovement(enemy, velocity, UtilityFunctions.randomDirection(direction), turnProbability));
-                }
-            }
+            setTileLastAndNext();
         }
+        return;
+        // linear interpolate enemy until it reaches the next tile
+        
+        //Vector3 movementVector = Vector3.zero;
+        
+        //if(Random.value < turnProbability) {
+        //    state_machine.ChangeState(new StateEnemyMovement(enemy, velocity, UtilityFunctions.randomDirection(), turnProbability));
+        //}
+        //// move in the specified direction
+        //switch (direction) {
+        //    case Direction.NORTH:
+        //        movementVector.Set(0, 1, 0);
+        //        break;
+        //    case Direction.EAST:
+        //        movementVector.Set(1, 0, 0);
+        //        break;
+        //    case Direction.SOUTH:
+        //        movementVector.Set(0, -1, 0);
+        //        break;
+        //    case Direction.WEST:
+        //        movementVector.Set(1, 0, 0);
+        //        break;
+        //}
+
+        //// check to see if it is time to turn
+        //if(direction == Direction.NORTH || direction == Direction.SOUTH) {
+        //    float posY = enemy.transform.position.y;
+        //    float roundPosY = Mathf.Round(posY);
+        //    float fractionPosY = posY - roundPosY;
+        //    if (fractionPosY > -0.02f && fractionPosY < 0.02f && roundPosY != lastRoundPos) {
+        //        lastRoundPos = roundPosY;
+        //        if (Random.value < turnProbability) {
+        //            enemy.transform.position = new Vector3(enemy.transform.position.x, roundPosY, 0.0f);
+        //            state_machine.ChangeState(new StateEnemyMovement(enemy, velocity, UtilityFunctions.randomDirection(direction), turnProbability));
+        //        }
+        //    }
+        //    // else the direction is EAST or WEST
+        //} else {
+        //    float posX = enemy.transform.position.x;
+        //    float roundPosX = Mathf.Floor(posX);
+        //    float fractionPosX = posX - roundPosX;
+        //    if (fractionPosX > -0.02f && fractionPosX < 0.02f && roundPosX != lastRoundPos) {
+        //        lastRoundPos = roundPosX;
+        //        if (Random.value < turnProbability) {
+        //            enemy.transform.position = new Vector3(roundPosX, enemy.transform.position.y, 0.0f);
+        //            state_machine.ChangeState(new StateEnemyMovement(enemy, velocity, UtilityFunctions.randomDirection(direction), turnProbability));
+        //        }
+        //    }
+        //}
      
 
-        enemy.GetComponent<Rigidbody>().velocity = movementVector * velocity * time_delta_fraction;
+        //enemy.GetComponent<Rigidbody>().velocity = movementVector * velocity * time_delta_fraction;
+    }
+
+    // returns true if we are back on the main grid
+    protected bool MoveEnemy() {
+        Vector3 currEnemyPosition = enemy.transform.position;
+        float u = (Time.time - timeLastTile) / timeToCrossTile;
+        if(u >= 1.0f) {
+            return true;
+        }
+        // if horizontial
+        if (direction == Direction.NORTH || direction == Direction.SOUTH) {
+            float newYValue = Mathf.Lerp(posLastTile.y, posNextTile.y, u);
+            currEnemyPosition.Set(currEnemyPosition.x, newYValue, currEnemyPosition.z);
+          // else is vertical
+        } else {
+            float newXValue = Mathf.Lerp(posLastTile.x, posNextTile.x, u);
+            currEnemyPosition.Set(newXValue, currEnemyPosition.y, currEnemyPosition.z);
+        }
+        enemy.transform.position = currEnemyPosition;
+        return false;
+    }
+
+    protected bool shouldEnemyTurn() {
+        return (Random.value < turnProbability);
+    }
+
+    // sets the last tile to the current position and the next tiel
+    // to the correct value relevant to the current position and direction
+    protected void setTileLastAndNext() {
+        posLastTile = enemy.transform.position;
+        switch (direction) {
+            case Direction.NORTH:
+                posNextTile = new Vector3(posLastTile.x, posLastTile.y + 1.0f, posLastTile.z);
+                break;
+            case Direction.EAST:
+                posNextTile = new Vector3(posLastTile.x + 1.0f, posLastTile.y, posLastTile.z);
+                break;
+            case Direction.SOUTH:
+                posNextTile = new Vector3(posLastTile.x, posLastTile.y - 1.0f, posLastTile.z);
+                break;
+            case Direction.WEST:
+                posNextTile = new Vector3(posLastTile.x - 1.0f, posLastTile.y, posLastTile.z);
+                break;
+        }
+        timeLastTile = Time.time;
     }
 
     public override void OnFinish() {
