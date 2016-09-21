@@ -127,6 +127,10 @@ public class PlayerControl : MonoBehaviour {
                 max_half_heart_count += 2;
                 half_heart_count = max_half_heart_count;
                 break;
+            // Other game actions
+            case "Door":
+                cameraControl.MoveCamera(this);
+                break;
             default:
                 break;
         }

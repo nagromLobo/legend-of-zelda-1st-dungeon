@@ -71,7 +71,12 @@ public class Tile : MonoBehaviour {
             break;
         case 'P':   // Pushable
                     // have to handle this case
-                break;
+            break;
+        case 'D':
+            bc.enabled = true;
+            bc.isTrigger = true;
+            bc.tag = "Door";
+            break;
         default:
             bc.enabled = false;
             break;

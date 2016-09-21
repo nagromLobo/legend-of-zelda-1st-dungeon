@@ -18,6 +18,7 @@ TagManager:
   - SmallKey
   - Triforce
   - Tile
+  - Door
   layers:
   - Default
   - TransparentFX
