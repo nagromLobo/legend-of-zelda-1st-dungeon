@@ -3,13 +3,17 @@ using System.Collections;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using System;
+using UnityEditor;
 
 public class Hud : MonoBehaviour {
 
 
 	public GameObject heartPrefab;
-	public static List<GameObject> heartImages = new List<GameObject>();
+	public List<GameObject> heartImages = new List<GameObject>();
     public Text rupee_text;
+	public Text heart_text;
+	public Text key_text;
+	public Text bomb_text;
 
 	private static Hud instance;
 
@@ -17,32 +21,37 @@ public class Hud : MonoBehaviour {
 		instance = this;
 	}
 
-	public static void RefreshDisplay() {
-		int diff = 2*PlayerControl.instance.half_heart_count - heartImages.Count;
-		int absVal = Mathf.Abs(diff);
+//	static void Start() {
+//		int half_heart_count = PlayerControl.instance.half_heart_count;
+//		double full_heart_num = Math.Floor(PlayerControl.instance.half_heart_count/2.0f);
+//		Vector3 heart_pos = PlayerControl.instance.transform.position;
+//		heart_pos.x += 2;
+//		heart_pos.y += 4;
+//		GameObject newHeart = Instantiate(instance.heartPrefab, heart_pos, Quaternion.identity) as GameObject;
+//	}
 
+	public static void UpdateRupees() {
 		int num_player_rupees = PlayerControl.instance.rupee_count;
+		//print ("rupees: " + num_player_rupees);
+
 		instance.rupee_text.text = "Rupees: " + num_player_rupees.ToString();
-
-		for(int i = 0; i < absVal; i++)
-		{
-			// Add hearts.
-			if(diff > 0)
-			{
-				GameObject newHeart = Instantiate(instance.heartPrefab, Vector3.zero, Quaternion.identity) as GameObject;
-				newHeart.transform.SetParent(instance.gameObject.transform);
-				newHeart.GetComponent<RectTransform>().anchoredPosition = new Vector3(heartImages.Count * 30, 0, 0);
-				heartImages.Add(newHeart);
-			}
-
-			// Remove hearts.
-			else if (diff < 0)
-			{
-				GameObject heartToRemove = heartImages[heartImages.Count-1];
-				heartImages.Remove(heartToRemove);
-				Destroy(heartToRemove);
-			}
-		}
-			
 	}
+	public static void UpdateLives() {
+		int half_heart_count = PlayerControl.instance.half_heart_count;
+		double full_heart_num = half_heart_count / 2.0f;
+		instance.heart_text.text = "Lives: " + full_heart_num.ToString ();
+	}
+	public static void UpdateKeys() {
+		int num_keys = PlayerControl.instance.small_key_count;
+		instance.key_text.text = "Keys: " + num_keys.ToString ();
+	}
+
+	public static void UpdateBombs() {
+		int num_bombs = PlayerControl.instance.bomb_count;
+		instance.bomb_text.text = "Bombs: " + num_bombs.ToString ();
+	}
+
+//	public static void UpdateAddWeapon() {
+//		
+//	}
 }
