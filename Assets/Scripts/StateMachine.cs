@@ -328,57 +328,6 @@ public class StateEnemyMovement : State {
             setTileLastAndNext();
         }
         return;
-        // linear interpolate enemy until it reaches the next tile
-        
-        //Vector3 movementVector = Vector3.zero;
-        
-        //if(Random.value < turnProbability) {
-        //    state_machine.ChangeState(new StateEnemyMovement(enemy, velocity, UtilityFunctions.randomDirection(), turnProbability));
-        //}
-        //// move in the specified direction
-        //switch (direction) {
-        //    case Direction.NORTH:
-        //        movementVector.Set(0, 1, 0);
-        //        break;
-        //    case Direction.EAST:
-        //        movementVector.Set(1, 0, 0);
-        //        break;
-        //    case Direction.SOUTH:
-        //        movementVector.Set(0, -1, 0);
-        //        break;
-        //    case Direction.WEST:
-        //        movementVector.Set(1, 0, 0);
-        //        break;
-        //}
-
-        //// check to see if it is time to turn
-        //if(direction == Direction.NORTH || direction == Direction.SOUTH) {
-        //    float posY = enemy.transform.position.y;
-        //    float roundPosY = Mathf.Round(posY);
-        //    float fractionPosY = posY - roundPosY;
-        //    if (fractionPosY > -0.02f && fractionPosY < 0.02f && roundPosY != lastRoundPos) {
-        //        lastRoundPos = roundPosY;
-        //        if (Random.value < turnProbability) {
-        //            enemy.transform.position = new Vector3(enemy.transform.position.x, roundPosY, 0.0f);
-        //            state_machine.ChangeState(new StateEnemyMovement(enemy, velocity, UtilityFunctions.randomDirection(direction), turnProbability));
-        //        }
-        //    }
-        //    // else the direction is EAST or WEST
-        //} else {
-        //    float posX = enemy.transform.position.x;
-        //    float roundPosX = Mathf.Floor(posX);
-        //    float fractionPosX = posX - roundPosX;
-        //    if (fractionPosX > -0.02f && fractionPosX < 0.02f && roundPosX != lastRoundPos) {
-        //        lastRoundPos = roundPosX;
-        //        if (Random.value < turnProbability) {
-        //            enemy.transform.position = new Vector3(roundPosX, enemy.transform.position.y, 0.0f);
-        //            state_machine.ChangeState(new StateEnemyMovement(enemy, velocity, UtilityFunctions.randomDirection(direction), turnProbability));
-        //        }
-        //    }
-        //}
-     
-
-        //enemy.GetComponent<Rigidbody>().velocity = movementVector * velocity * time_delta_fraction;
     }
 
     // returns true if we are back on the main grid

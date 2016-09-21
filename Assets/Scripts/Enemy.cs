@@ -5,6 +5,7 @@ public class Enemy : MonoBehaviour {
     public int movementFramesPerSecond = 4;
     public float timeToCrossTile = 0.0f;
     public float turnProbability = 0.02f;
+    public int heartCount = 1;
     public Sprite[] spriteAnimation;
     private StateMachine animation_statemachine;
     private StateMachine control_statemachine;
