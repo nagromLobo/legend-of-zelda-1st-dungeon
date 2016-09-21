@@ -169,18 +169,111 @@ public class StatePlayAnimationForHeldKey : State
 	}
 }
 
-// Additional recommended states:
-// StateDeath
-// StateDamaged
-// StateWeaponSwing
-// StateVictory
-//
-// Additional control states:
-// LinkNormalMovement.
-// LinkStunnedState.
+public class StateLinkDoorMovementAnimation : State {
+    private PlayerControl pc;
+    private SpriteRenderer renderer;
+    private Sprite[] animation;
+    private int fps;
+    private int animation_length;
+    private float animation_progression;
+    private float animation_start_time;
+    private float length;
+    private Sprite idleSprite;
+
+    public StateLinkDoorMovementAnimation(PlayerControl pc, SpriteRenderer renderer, Sprite[] animation, int fps, float length) {
+        this.pc = pc;
+        this.renderer = renderer;
+        this.animation = animation;
+        this.animation_length = animation.Length;
+        this.fps = fps;
+        this.length = length;
+        MonoBehaviour.print("Play animation created!");
+
+        if (this.animation_length <= 0)
+            Debug.LogError("Empty animation submitted to state machine!");
+    }
+
+    public override void OnStart() {
+        animation_start_time = Time.time;
+    }
+
+    public override void OnUpdate(float time_delta_fraction) {
+        if (this.animation_length <= 0) {
+            Debug.LogError("Empty animation submitted to state machine!");
+            return;
+        }
+        if (Time.time >= animation_start_time + length) {
+            state_machine.ChangeState(new StateIdleWithSprite(pc, renderer, animation[0]));
+        }
+
+        // Modulus is necessary so we don't overshoot the length of the animation.
+        int current_frame_index = ((int)((Time.time - animation_start_time) / (1.0 / fps)) % animation_length);
+        renderer.sprite = animation[current_frame_index];
+
+    }
+}
+
+public class StateLinkStunnedMovement : State {
+    private PlayerControl pc;
+    private float coolDown;
+    private float startTime;
+
+    public StateLinkStunnedMovement(PlayerControl pc, float coolDown) {
+        this.pc = pc;
+        this.coolDown = coolDown;
+    }
+
+    public override void OnStart() {
+        startTime = Time.time;
+    }
+
+    public override void OnUpdate(float time_delta_fraction) {
+        if(Time.time - startTime > coolDown) {
+            state_machine.ChangeState(new StateLinkNormalMovement(pc));
+        }
+    }
+}
+
+public class StateLinkStunnedSprite : State {
+    PlayerControl pc;
+    SpriteRenderer renderer;
+    Sprite sprite;
+    float coolDown;
+    float startTime;
+
+    public StateLinkStunnedSprite(PlayerControl pc, SpriteRenderer renderer, Sprite sprite, float coolDown) {
+        this.pc = pc;
+        this.renderer = renderer;
+        this.sprite = sprite;
+        this.coolDown = coolDown;
+        MonoBehaviour.print("idle make");
+    }
+
+    public override void OnStart() {
+        MonoBehaviour.print("idle now");
+        renderer.sprite = sprite;
+        startTime = Time.time;
+    }
+
+    public override void OnUpdate(float time_delta_fraction) {
+       if((Time.time - startTime) >= coolDown) {
+            state_machine.ChangeState(new StateIdleWithSprite(pc, renderer, sprite));
+        }
+    }
+}
+
+    // Additional recommended states:
+    // StateDeath
+    // StateDamaged
+    // StateWeaponSwing
+    // StateVictory
+    //
+    // Additional control states:
+    // LinkNormalMovement.
+    // LinkStunnedState.
 
 
-public class StateLinkNormalMovement : State {
+    public class StateLinkNormalMovement : State {
     PlayerControl pc;
 
     public StateLinkNormalMovement(PlayerControl pc) {

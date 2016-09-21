@@ -308,7 +308,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ecf316ddb1a2bf54995ddcb042744264, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  roomWidth: 15
+  roomWidth: 13
   roomHeight: 11
   transitionTime: 3
 --- !u!1 &382210853
@@ -633,6 +633,8 @@ MonoBehaviour:
   triforce_retrieved: 0
   bow_retrieved: 0
   boomerang_retrieved: 0
+  time_to_cross_threshold: 2
+  threshold_width: 2
   link_run_down:
   - {fileID: 21300000, guid: 45afd34443b96473598b76e2b1778b4e, type: 3}
   - {fileID: 21300024, guid: 45afd34443b96473598b76e2b1778b4e, type: 3}

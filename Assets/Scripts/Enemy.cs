@@ -7,8 +7,8 @@ public class Enemy : MonoBehaviour {
     public float turnProbability = 0.02f;
     public int heartCount = 1;
     public Sprite[] spriteAnimation;
-    private StateMachine animation_statemachine;
-    private StateMachine control_statemachine;
+    protected StateMachine animation_statemachine;
+    protected StateMachine control_statemachine;
     public Direction currDirection = Direction.SOUTH;
 
     void Awake() {
@@ -19,7 +19,8 @@ public class Enemy : MonoBehaviour {
 	void Start () {
         animation_statemachine.ChangeState(new StateEnemyMovementAnimation(this, GetComponent<SpriteRenderer>(), spriteAnimation, movementFramesPerSecond));
         control_statemachine.ChangeState(new StateEnemyMovement(this, timeToCrossTile, UtilityFunctions.randomDirection(), turnProbability));
-	}
+        CameraControl.S.cameraMovedDelegate += CameraMoved;
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -36,5 +37,13 @@ public class Enemy : MonoBehaviour {
             control_statemachine.ChangeState(new StateEnemyMovement(this, timeToCrossTile, UtilityFunctions.randomDirection(currDirection), turnProbability));
         }
       }
+
+    void CameraMoved(Direction d, float transitionTime) {
+        Invoke("DestroyEnemy", transitionTime);
+    }
+
+    void DestroyEnemy() {
+        Destroy(gameObject);
+    }
 
 }

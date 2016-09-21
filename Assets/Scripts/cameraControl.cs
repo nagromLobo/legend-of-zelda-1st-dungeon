@@ -12,8 +12,13 @@ public class CameraControl : MonoBehaviour {
     private Vector3 cameraEndPos;
     private float cameraMoveStart;
     private Direction transitionDir;
-	// Use this for initialization
-	void Start () {
+
+
+    public delegate void CameraMoved(Direction d, float transitionTime);
+    public CameraMoved cameraMovedDelegate;
+    
+
+    void Awake () {
         if (S != null) {
             Debug.LogError("Mutiple Link objects detected:");
         }
@@ -50,18 +55,19 @@ public class CameraControl : MonoBehaviour {
         cameraMoveStart = Time.time;
         changeCameraPos = true;
         switch (d) {
-            case Direction.NORTH:
+            case Direction.SOUTH:
                 cameraEndPos = new Vector3(cameraStartPos.x, cameraStartPos.y + roomHeight, cameraStartPos.z);
                 break;
             case Direction.EAST:
                 cameraEndPos = new Vector3(cameraStartPos.x + roomWidth, cameraStartPos.y, cameraStartPos.z);
                 break;
-            case Direction.SOUTH:
+            case Direction.NORTH:
                 cameraEndPos = new Vector3(cameraStartPos.x, cameraStartPos.y - roomHeight, cameraStartPos.z);
                 break;
             case Direction.WEST:
                 cameraEndPos = new Vector3(cameraStartPos.x - roomWidth, cameraStartPos.y, cameraStartPos.z);
                 break;
         }
+        cameraMovedDelegate(d, transitionTime);
     }
 }
