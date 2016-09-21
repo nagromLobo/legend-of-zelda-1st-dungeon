@@ -4,25 +4,14 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Rupee
-<<<<<<< HEAD
-  - Compass
-  - Heart
-  - HeartContainer
+  - Door
   - Map
-  - SmallKey
-  - Triforce
-  - Bow
-  - Bomb
-  - Enemy
-  - Fairy
-  - Boomerang
-=======
-  - Heart
-  - Bow
+  - Tile
   - Bomb
   - BombReleased
->>>>>>> forgot_hud_branch
+  - Fairy
+  - Boomerang
+  - Bow
   layers:
   - Default
   - TransparentFX
@@ -32,10 +21,10 @@ TagManager:
   - UI
   - 
   - 
-  - Enemies
-  - Link
-  - Map
-  - Items
+  - 
+  - 
+  - 
+  - 
   - 
   - 
   - 

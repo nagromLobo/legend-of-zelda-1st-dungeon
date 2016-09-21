@@ -46,7 +46,9 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Scripts\BombBehavior.cs" />
+     <Compile Include="Assets\Scripts\CameraControl.cs" />
      <Compile Include="Assets\Scripts\CameraFollow.cs" />
+     <Compile Include="Assets\Scripts\Enemy.cs" />
      <Compile Include="Assets\Scripts\Hud.cs" />
      <Compile Include="Assets\Scripts\ParseZeldaMap.cs" />
      <Compile Include="Assets\Scripts\PlayerControl.cs" />
@@ -54,6 +56,7 @@
      <Compile Include="Assets\Scripts\ShowMapOnCamera.cs" />
      <Compile Include="Assets\Scripts\StateMachine.cs" />
      <Compile Include="Assets\Scripts\Tile.cs" />
+     <Compile Include="Assets\Scripts\UtilityFunctions.cs" />
      <None Include="Assets\Resources\Collision.txt" />
      <None Include="Assets\Resources\Destructible.txt" />
      <None Include="Assets\Resources\map_sprites_data.txt" />

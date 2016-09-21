@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 Base path: D:/Program Files/Unity/Editor/Data
 Cmd: getPlatforms
@@ -835,3 +836,7 @@ Cmd: compileSnippet
 Cmd: compileSnippet
   api=1 type=1 insize=1031 outsize=600 kw= pd=UNITY_ENABLE_REFLECTION_BUFFERS UNITY_PBS_USE_BRDF1 UNITY_SPECCUBE_BOX_PROJECTION UNITY_SPECCUBE_BLENDING ok=1
 >>>>>>> forgot_hud_branch
+=======
+Base path: C:/Program Files/Unity/Editor/Data
+Cmd: getPlatforms
+>>>>>>> origin/master

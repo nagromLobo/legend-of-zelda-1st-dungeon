@@ -21,7 +21,7 @@ GameObject:
   - 4: {fileID: 4000010283188546}
   - 212: {fileID: 212000011502317782}
   - 65: {fileID: 65000011790903992}
-  m_Layer: 11
+  m_Layer: 8
   m_Name: Boomerang
   m_TagString: Boomerang
   m_Icon: {fileID: 0}
