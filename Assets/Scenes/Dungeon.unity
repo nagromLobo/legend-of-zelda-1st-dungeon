@@ -305,11 +305,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 215100842}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ecf316ddb1a2bf54995ddcb042744264, type: 3}
+  m_Script: {fileID: 11500000, guid: 8de095470418a4744b2f8b5cd17dc7db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   roomWidth: 16
-  roomHeight: 11
+  roomHeight: 13
   transitionTime: 3
 --- !u!1 &382210853
 GameObject:
@@ -648,7 +648,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4000014293936254, guid: e3ff8794e4ad4e6478f49c107f63a31c, type: 2}
       propertyPath: m_RootOrder
-      value: 7
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e3ff8794e4ad4e6478f49c107f63a31c, type: 2}
