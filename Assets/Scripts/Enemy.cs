@@ -39,7 +39,7 @@ public class Enemy : MonoBehaviour {
       }
 
     void CameraMoved(Direction d, float transitionTime) {
-        Invoke("DestroyEnemy", transitionTime);
+        //Invoke("DestroyEnemy", transitionTime);
     }
 
     void DestroyEnemy() {

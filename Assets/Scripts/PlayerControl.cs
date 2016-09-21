@@ -18,7 +18,6 @@ public class PlayerControl : MonoBehaviour {
     public bool triforce_retrieved = false;
     public bool bow_retrieved = false;
     public bool boomerang_retrieved = false;
-    public float time_to_cross_threshold = 2.0f;
     public int threshold_width = 2;
 
     public Sprite[] link_run_down;
@@ -29,6 +28,7 @@ public class PlayerControl : MonoBehaviour {
     private bool link_moving_through_doorway = false;
     private Direction link_doorway_direction;
     private float timeStartCrossThreshold;
+    private float timeToCrossThreshold;
     private Vector3 linkPosDoorwayThreshold;
 
 
@@ -75,20 +75,23 @@ public class PlayerControl : MonoBehaviour {
         //      if (horizontal_input != 0.0f) {
         //          vertical_input = 0.0f;
         //      }
-        //if (link_moving_through_doorway) {
-        //    // Linearly interpolate 
-        //    float u = Time.time - timeStartCrossThreshold / time_to_cross_threshold;
-        //    Vector3 currPos = gameObject.transform.position;
-        //    // vertical
-        //    if(link_doorway_direction == Direction.NORTH || link_doorway_direction == Direction.SOUTH) {
-        //        float newPosY = Mathf.Lerp(linkPosDoorwayThreshold.y, linkPosDoorwayThreshold.y + threshold_width, u);
-        //        gameObject.transform.position.Set(currPos.x, newPosY, currPos.z);
-        //      // horizontial
-        //    } else {
-        //        float newPosX = Mathf.Lerp(linkPosDoorwayThreshold.x, linkPosDoorwayThreshold.x + threshold_width, u);
-        //        gameObject.transform.position.Set(newPosX, currPos.y, currPos.z);
-        //    }
-        //}
+        if (link_moving_through_doorway) {
+            // Linearly interpolate 
+            float u = (Time.time - timeStartCrossThreshold) / timeToCrossThreshold;
+            Vector3 currPos = gameObject.transform.position;
+            // vertical
+            if (link_doorway_direction == Direction.NORTH || link_doorway_direction == Direction.SOUTH) {
+                float newPosY = Mathf.Lerp(linkPosDoorwayThreshold.y, linkPosDoorwayThreshold.y + threshold_width, u);
+                gameObject.transform.position.Set(currPos.x, newPosY, currPos.z);
+                // horizontial
+            } else {
+                float newPosX = Mathf.Lerp(linkPosDoorwayThreshold.x, linkPosDoorwayThreshold.x + threshold_width, u);
+                gameObject.transform.position.Set(newPosX, currPos.y, currPos.z);
+            }
+            if(u > 1) {
+                link_moving_through_doorway = false;
+            }
+        }
         animation_state_machine.Update();
         control_state_machine.Update();
 
@@ -153,7 +156,9 @@ public class PlayerControl : MonoBehaviour {
                 break;
             // Other game actions
             case "Door":
-                CameraControl.S.MoveCamera(current_direction);
+                if (!link_moving_through_doorway) {
+                    CameraControl.S.MoveCamera(current_direction);
+                }
                 break;
             default:
                 break;
@@ -161,10 +166,13 @@ public class PlayerControl : MonoBehaviour {
     }
 
     public void CameraMoved(Direction d, float transitionTime) {
-        Invoke("MoveLinkThroughDoorway", transitionTime);
+        link_moving_through_doorway = true;
+        timeStartCrossThreshold = Time.time;
+        timeToCrossThreshold = transitionTime;
+        linkPosDoorwayThreshold = gameObject.transform.position;
         link_doorway_direction = d;
         Sprite[] animationSprites;
-        control_state_machine.ChangeState(new StateLinkStunnedMovement(this, time_to_cross_threshold + transitionTime));
+        control_state_machine.ChangeState(new StateLinkStunnedMovement(this, transitionTime));
         switch (d) {
             case Direction.SOUTH:
                 animationSprites = link_run_up;
@@ -182,14 +190,8 @@ public class PlayerControl : MonoBehaviour {
                 animationSprites = link_run_up;
                 break;
         }
-        animation_state_machine.ChangeState(new StateLinkDoorMovementAnimation(this, GetComponent<SpriteRenderer>(), animationSprites, 6, time_to_cross_threshold + transitionTime));
+        animation_state_machine.ChangeState(new StateLinkDoorMovementAnimation(this, GetComponent<SpriteRenderer>(), animationSprites, 6, transitionTime));
         //kanimation_state_machine.ChangeState(new StateLinkStunnedSprite(this, gameObject.GetComponent<SpriteRenderer>(), sprite, transitionTime + time_to_cross_threshold));
-    }
-
-    private void MoveLinkThroughDoorway() {
-        link_moving_through_doorway = true;
-        timeStartCrossThreshold = Time.time;
-        linkPosDoorwayThreshold = gameObject.transform.position;
     }
 }
 

@@ -9,6 +9,7 @@ public class Tile : MonoBehaviour {
 	public int				tileNum;
 	private BoxCollider		bc;
     private Material        mat;
+    private SpriteRenderer rend;
 
     private SpriteRenderer  sprend;
 
@@ -18,6 +19,7 @@ public class Tile : MonoBehaviour {
         }
 
 		bc = GetComponent<BoxCollider>();
+        rend = GetComponent<SpriteRenderer>();
 
         sprend = GetComponent<SpriteRenderer>();
         //Renderer rend = gameObject.GetComponent<Renderer>();
@@ -66,18 +68,26 @@ public class Tile : MonoBehaviour {
         char c = ShowMapOnCamera.S.collisionS[tileNum];
         switch (c) {
         case 'S': // Solid
+            rend.sortingOrder = 0;
             bc.center = Vector3.zero;
             bc.size = Vector3.one;
             break;
         case 'P':   // Pushable
                     // have to handle this case
+            rend.sortingOrder = 0;
             break;
-        case 'D':
+        case 'D': // Doorway
+            rend.sortingOrder = 0;
             bc.enabled = true;
             bc.isTrigger = true;
             bc.tag = "Door";
             break;
+        case 'A': // Doorarch
+            rend.sortingOrder = 3;
+            bc.enabled = false;
+            break;
         default:
+            rend.sortingOrder = 0;
             bc.enabled = false;
             break;
         }

@@ -50,6 +50,7 @@ public class CameraControl : MonoBehaviour {
 	}
 
     public void MoveCamera(Direction d) {
+        cameraMovedDelegate(d, transitionTime);
         cameraStartPos = this.gameObject.transform.position;
         transitionDir = d;
         cameraMoveStart = Time.time;
@@ -68,6 +69,5 @@ public class CameraControl : MonoBehaviour {
                 cameraEndPos = new Vector3(cameraStartPos.x - roomWidth, cameraStartPos.y, cameraStartPos.z);
                 break;
         }
-        cameraMovedDelegate(d, transitionTime);
     }
 }
