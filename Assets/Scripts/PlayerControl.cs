@@ -3,11 +3,15 @@ using System.Collections;
 using System;
 
 public enum Direction {NORTH, EAST, SOUTH, WEST};
-public enum EntityState {NORMAL, ATTACKING};
+public enum EntityState {NORMAL, ATTACKING, DAMAGED, DOOR, GAME_OVER};
 
 public class PlayerControl : MonoBehaviour {
 
     public float walkingVelocity = 1.0f;
+    public Color LinkDamageColor;
+    public float damageCooldown = 1;
+    public float damageFlashLength = 0.2f;
+
     public int rupee_count = 0;
     public int bomb_count = 0;
     public int max_half_heart_count = 6;
@@ -18,6 +22,7 @@ public class PlayerControl : MonoBehaviour {
     public bool triforce_retrieved = false;
     public bool bow_retrieved = false;
     public bool boomerang_retrieved = false;
+
     public int threshold_width = 2;
 
     public Sprite[] link_run_down;
@@ -25,11 +30,17 @@ public class PlayerControl : MonoBehaviour {
     public Sprite[] link_run_right;
     public Sprite[] link_run_left;
 
+
+
     private bool link_moving_through_doorway = false;
     private Direction link_doorway_direction;
     private float timeStartCrossThreshold;
     private float timeToCrossThreshold;
     private Vector3 linkPosDoorwayThreshold;
+    private float damageStartTime;
+    private float lastDamageFlashTime;
+    private SpriteRenderer spriteRenderer;
+    private Color normalColor;
 
 
     StateMachine animation_state_machine;
@@ -61,44 +72,66 @@ public class PlayerControl : MonoBehaviour {
         control_state_machine = new StateMachine();
         control_state_machine.ChangeState(new StateLinkNormalMovement(this));
         half_heart_count = max_half_heart_count;
+        spriteRenderer = GetComponent<SpriteRenderer>();
+
 
     }
 
     // Update is called once per frame
     void Update() {
-
-        ////print ("horizontal "+ Input.GetAxis("Horizontal")); 
-        //      float horizontal_input = Input.GetAxis("Horizontal");
-        ////print ("vertical "+ Input.GetAxis("Vertical")); 
-        //      float vertical_input = Input.GetAxis("Vertical");
-        //      if (horizontal_input != 0.0f) {
-        //          vertical_input = 0.0f;
-        //      }
-        if (link_moving_through_doorway) {
-            // Linearly interpolate 
-            float u = (Time.time - timeStartCrossThreshold) / timeToCrossThreshold;
-            Vector3 currPos = gameObject.transform.position;
-            // vertical
-            if (link_doorway_direction == Direction.NORTH || link_doorway_direction == Direction.SOUTH) {
-                float newPosY = Mathf.Lerp(linkPosDoorwayThreshold.y, linkPosDoorwayThreshold.y + threshold_width, u);
-                gameObject.transform.position.Set(currPos.x, newPosY, currPos.z);
-                // horizontial
-            } else {
-                float newPosX = Mathf.Lerp(linkPosDoorwayThreshold.x, linkPosDoorwayThreshold.x + threshold_width, u);
-                gameObject.transform.position.Set(newPosX, currPos.y, currPos.z);
-            }
-            if(u > 1) {
-                link_moving_through_doorway = false;
-            }
+        switch (current_state) {
+            case EntityState.DOOR:
+                handleEnterDoor();
+                break;
+            case EntityState.DAMAGED:
+                handleDamaged();
+                break;
         }
+        
 		animation_state_machine.Update ();
         control_state_machine.Update();
 
         if (control_state_machine.IsFinished()) {
             control_state_machine.ChangeState(new StateLinkNormalMovement(this));
         }
-		//GetComponent<Rigidbody> ().velocity = new Vector3 (horizontal_input, -vertical_input, 0) * walkingVelocity;
 
+    }
+
+    private void handleEnterDoor() {
+        // Linearly interpolate 
+        float u = (Time.time - timeStartCrossThreshold) / timeToCrossThreshold;
+        Vector3 currPos = gameObject.transform.position;
+        // vertical
+        if (link_doorway_direction == Direction.NORTH || link_doorway_direction == Direction.SOUTH) {
+            float newPosY = Mathf.Lerp(linkPosDoorwayThreshold.y, linkPosDoorwayThreshold.y + threshold_width, u);
+            gameObject.transform.position.Set(currPos.x, newPosY, currPos.z);
+            // horizontial
+        } else {
+            float newPosX = Mathf.Lerp(linkPosDoorwayThreshold.x, linkPosDoorwayThreshold.x + threshold_width, u);
+            gameObject.transform.position.Set(newPosX, currPos.y, currPos.z);
+        }
+        if (u > 1) {
+            current_state = EntityState.NORMAL;
+        }
+    }
+
+    private void handleDamaged() {
+        // then we should show damaged color in the flash
+        if((Time.time - lastDamageFlashTime) < (damageFlashLength)) {
+            spriteRenderer.color = LinkDamageColor;
+          // else if the amount of time passed is less than 2 times the flash rate, stay normal
+        } else if((Time.time - lastDamageFlashTime) < (2* damageFlashLength)) {
+            spriteRenderer.color = normalColor;
+        // else start the cycle over
+        } else {
+            lastDamageFlashTime = Time.time;
+            spriteRenderer.color = LinkDamageColor;
+        }
+        if((Time.time - damageStartTime) > damageCooldown) {
+            current_state = EntityState.NORMAL;
+            spriteRenderer.color = normalColor;
+        }
+        
     }
 
     void OnTriggerEnter(Collider coll) {
@@ -156,6 +189,13 @@ public class PlayerControl : MonoBehaviour {
                 max_half_heart_count += 2;
                 half_heart_count = max_half_heart_count;
                 break;
+            // Enemys
+            case "Enemy":
+                if(current_state != EntityState.DAMAGED) {
+                    Enemy enemy = coll.GetComponent<Enemy>();
+                    linkDamaged(enemy.damage);
+                }
+                break;
             // Other game actions
             case "Door":
                 if (!link_moving_through_doorway) {
@@ -167,8 +207,23 @@ public class PlayerControl : MonoBehaviour {
         }
     }
 
+    public void linkDamaged(int damage) {
+        // turns off player control
+        control_state_machine.ChangeState(new StateLinkStunnedMovement(this, damageCooldown));
+        current_state = EntityState.DAMAGED;
+        half_heart_count -= damage;
+        if(half_heart_count <= 0) {
+            current_state = EntityState.GAME_OVER;
+        }
+
+        damageStartTime = Time.time;
+        lastDamageFlashTime = damageStartTime;
+        normalColor = GetComponent<SpriteRenderer>().color;
+        
+    }
+
     public void CameraMoved(Direction d, float transitionTime) {
-        link_moving_through_doorway = true;
+        current_state = EntityState.DOOR;
         timeStartCrossThreshold = Time.time;
         timeToCrossThreshold = transitionTime;
         linkPosDoorwayThreshold = gameObject.transform.position;

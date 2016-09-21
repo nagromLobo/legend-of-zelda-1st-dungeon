@@ -468,7 +468,6 @@ public class StateEnemyMovement : State {
 
 
     public override void OnUpdate(float time_delta_fraction) {
-        Vector3 currEnemyPosition = enemy.transform.position;
         bool onMainGrid = MoveEnemy();
         if (onMainGrid && shouldEnemyTurn()) {
             state_machine.ChangeState(new StateEnemyMovement(enemy, timeToCrossTile, UtilityFunctions.randomDirection(direction), turnProbability));

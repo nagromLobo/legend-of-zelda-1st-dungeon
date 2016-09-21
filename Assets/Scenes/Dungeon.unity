@@ -492,7 +492,7 @@ GameObject:
   - 54: {fileID: 1026231733}
   - 65: {fileID: 1026231735}
   - 114: {fileID: 1026231734}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Link
   m_TagString: Link
   m_Icon: {fileID: 0}
@@ -539,7 +539,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1026231730}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 38.953, y: 9, z: 0}
+  m_LocalPosition: {x: 33.97, y: 5.07, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
@@ -572,6 +572,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   walkingVelocity: 4
+  LinkDamageColor: {r: 0.9117647, g: 0.23464532, b: 0.23464532, a: 1}
+  damageCooldown: 1.5
+  damageFlashLength: 0.1
   rupee_count: 0
   bomb_count: 0
   max_half_heart_count: 6
@@ -649,6 +652,19 @@ Prefab:
     - target: {fileID: 4000014293936254, guid: e3ff8794e4ad4e6478f49c107f63a31c, type: 2}
       propertyPath: m_RootOrder
       value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 65000013351257676, guid: e3ff8794e4ad4e6478f49c107f63a31c,
+        type: 2}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4000014293936254, guid: e3ff8794e4ad4e6478f49c107f63a31c, type: 2}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4000014293936254, guid: e3ff8794e4ad4e6478f49c107f63a31c, type: 2}
+      propertyPath: m_LocalScale.y
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e3ff8794e4ad4e6478f49c107f63a31c, type: 2}
