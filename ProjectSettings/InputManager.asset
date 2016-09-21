@@ -11,11 +11,11 @@ InputManager:
     descriptiveNegativeName: 
     negativeButton: left
     positiveButton: right
-    altNegativeButton: a
-    altPositiveButton: d
+    altNegativeButton: 
+    altPositiveButton: 
     gravity: 100000
     dead: 0.001
-    sensitivity: 10000000
+    sensitivity: 100000
     snap: 1
     invert: 0
     type: 0
@@ -27,15 +27,15 @@ InputManager:
     descriptiveNegativeName: 
     negativeButton: down
     positiveButton: up
-    altNegativeButton: s
-    altPositiveButton: w
-    gravity: 10000000
+    altNegativeButton: 
+    altPositiveButton: 
+    gravity: 1000000
     dead: 0.001
     sensitivity: 1000000
     snap: 1
     invert: 1
     type: 0
-    axis: 0
+    axis: 1
     joyNum: 0
   - serializedVersion: 3
     m_Name: Fire1
@@ -177,7 +177,7 @@ InputManager:
     dead: 0.19
     sensitivity: 1
     snap: 0
-    invert: 1
+    invert: 0
     type: 2
     axis: 1
     joyNum: 0

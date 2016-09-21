@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
+using System.Collections.Generic;
 
 public enum Direction {NORTH, EAST, SOUTH, WEST};
 public enum EntityState {NORMAL, ATTACKING};
@@ -11,7 +12,7 @@ public class PlayerControl : MonoBehaviour {
     public int rupee_count = 0;
     public int bomb_count = 0;
     public int max_half_heart_count = 6;
-    public float half_heart_count = 6;
+    public int half_heart_count = 6;
     public int small_key_count = 0;
     public bool map_retrieved = false;
     public bool compass_retrieved = false;
@@ -26,9 +27,13 @@ public class PlayerControl : MonoBehaviour {
 
 	StateMachine animation_state_machine;
 	StateMachine control_state_machine;
-	
+
 	public EntityState current_state = EntityState.NORMAL;
 	public Direction current_direction = Direction.SOUTH;
+
+	public GameObject[] Inventory; // 0 Boomerang, 2 Bomb, 3 Bow
+
+	public GameObject Sword_prefab;
 
 	public GameObject selected_weapon_prefab;
 
@@ -42,11 +47,14 @@ public class PlayerControl : MonoBehaviour {
             Debug.LogError("Mutiple Link objects detected:");
         }
         instance = this;
-		print("in start"); 
+		//print("in start"); 
 
         // Launch Idle State
         animation_state_machine = new StateMachine();
-		print ("hello");
+        control_state_machine = new StateMachine();
+        control_state_machine.ChangeState(new StateLinkNormalMovement(this));
+
+		//print ("hello");
         animation_state_machine.ChangeState(new StateIdleWithSprite(this, GetComponent<SpriteRenderer>(), link_run_down[0]));
 
         control_state_machine = new StateMachine();
@@ -57,45 +65,55 @@ public class PlayerControl : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
-		
-		////print ("horizontal "+ Input.GetAxis("Horizontal")); 
-  //      float horizontal_input = Input.GetAxis("Horizontal");
-		////print ("vertical "+ Input.GetAxis("Vertical")); 
-  //      float vertical_input = Input.GetAxis("Vertical");
-  //      if (horizontal_input != 0.0f) {
-  //          vertical_input = 0.0f;
-  //      }
+
+//		//print ("horizontal "+ Input.GetAxis("Horizontal")); 
+//        float horizontal_input = Input.GetAxis("Horizontal");
+//		//print ("vertical "+ Input.GetAxis("Vertical")); 
+//        float vertical_input = Input.GetAxis("Vertical");
+//        if (horizontal_input != 0.0f) {
+//            vertical_input = 0.0f;
+//        }
 		animation_state_machine.Update ();
         control_state_machine.Update();
 
-		//GetComponent<Rigidbody> ().velocity = new Vector3 (horizontal_input, -vertical_input, 0) * walkingVelocity;;
-
+        if (control_state_machine.IsFinished()) {
+            control_state_machine.ChangeState(new StateLinkNormalMovement(this));
+        }
+		//GetComponent<Rigidbody> ().velocity = new Vector3 (horizontal_input, -vertical_input, 0) * walkingVelocity;
     }
 
     void OnTriggerEnter(Collider coll) {
+
+		//add arrows to this list
 
         switch (coll.gameObject.tag) {
             // General Collectables
             case "Rupee":
                 Destroy(coll.gameObject);
                 rupee_count++;
+				//print ("rupees: "+ rupee_count); 
+				Hud.UpdateRupees();
                 break;
             case "Heart":
                 Destroy(coll.gameObject);
                 if(half_heart_count < max_half_heart_count) {
                     half_heart_count += 2;
                 }
+				Hud.UpdateLives ();
                 break;
             case "Fairy":
                 Destroy(coll.gameObject);
                 half_heart_count = max_half_heart_count;
+				Hud.UpdateLives ();
                 break;
-            case "SmallKey":
-                Destroy(coll.gameObject);
-                small_key_count++;
-                break;
+			case "SmallKey":
+				Destroy (coll.gameObject);
+				small_key_count++;
+				Hud.UpdateKeys ();
+				break;
             // Weapon Collectables
             case "Bow":
+				//cannot use bow unless you have arrows 
                 Destroy(coll.gameObject);
                 bow_retrieved = true;
                 break;
@@ -106,6 +124,9 @@ public class PlayerControl : MonoBehaviour {
             case "Bomb":
                 Destroy(coll.gameObject);
                 bomb_count++;
+				//update weapon selection
+				//if(bomb_count>=1) ; //add to weapons list
+				Hud.UpdateBombs ();
                 break;
             // Dungeon State Collectables
             case "Map":

@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - Rupee
+<<<<<<< HEAD
   - Compass
   - Heart
   - HeartContainer
@@ -16,6 +17,12 @@ TagManager:
   - Enemy
   - Fairy
   - Boomerang
+=======
+  - Heart
+  - Bow
+  - Bomb
+  - BombReleased
+>>>>>>> forgot_hud_branch
   layers:
   - Default
   - TransparentFX
