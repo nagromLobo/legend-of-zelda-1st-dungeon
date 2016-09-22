@@ -270,20 +270,49 @@ public class StateLinkStunnedMovement : State {
     private PlayerControl pc;
     private float coolDown;
     private float startTime;
+    private bool pushBack; // should link be thrown back on stun
 
-    public StateLinkStunnedMovement(PlayerControl pc, float coolDown) {
+    public StateLinkStunnedMovement(PlayerControl pc, float coolDown, bool pushBack) {
         this.pc = pc;
         this.coolDown = coolDown;
     }
 
     public override void OnStart() {
         startTime = Time.time;
+        if (pushBack) {
+            Vector3 velocityVector;
+            // set links rigid body in the other direction
+            switch (pc.current_direction) {
+                case (Direction.NORTH):
+                    velocityVector = new Vector3(0, 1, 0);
+                    break;
+                case (Direction.EAST):
+                    velocityVector = new Vector3(-1, 0, 0);
+                    break;
+                case (Direction.SOUTH):
+                    velocityVector = new Vector3(0, -1, 0);
+                    break;
+                case (Direction.WEST):
+                    velocityVector = new Vector3(1, 0, 0);
+                    break;
+                default:
+                    velocityVector = Vector3.zero;
+                    break;
+            }
+            pc.GetComponent<Rigidbody>().velocity =
+                pc.GetComponent<Rigidbody>().velocity = velocityVector * pc.walkingVelocity;
+
+        }
     }
 
     public override void OnUpdate(float time_delta_fraction) {
         if(Time.time - startTime > coolDown) {
             state_machine.ChangeState(new StateLinkNormalMovement(pc));
         }
+    }
+
+    public override void OnFinish() {
+        pc.GetComponent<Rigidbody>().velocity = Vector3.zero;
     }
 }
 
@@ -349,9 +378,9 @@ public class StateLinkStunnedSprite : State {
             pc.current_direction = Direction.EAST;
         else if (horizontal_input < 0.0f)
             pc.current_direction = Direction.WEST;
-        else if (vertical_input > 0.0f)
-            pc.current_direction = Direction.NORTH;
         else if (vertical_input < 0.0f)
+            pc.current_direction = Direction.NORTH;
+        else if (vertical_input > 0.0f)
             pc.current_direction = Direction.SOUTH;
 
         pc.transform.position = UtilityFunctions.fixToGrid(pc.transform.position, pc.current_direction, prevDirection);

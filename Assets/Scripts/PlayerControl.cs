@@ -3,7 +3,7 @@ using System.Collections;
 using System;
 
 public enum Direction {NORTH, EAST, SOUTH, WEST};
-public enum EntityState {NORMAL, ATTACKING, DAMAGED, DOOR, GAME_OVER};
+public enum EntityState {NORMAL, ATTACKING, DAMAGED, DOOR_TRANSITION, ENTERING_DOOR, GAME_OVER};
 
 public class PlayerControl : MonoBehaviour {
 
@@ -80,8 +80,11 @@ public class PlayerControl : MonoBehaviour {
     // Update is called once per frame
     void Update() {
         switch (current_state) {
-            case EntityState.DOOR:
-                handleEnterDoor();
+            case EntityState.DOOR_TRANSITION:
+                handleDoorTransition();
+                break;
+            case EntityState.ENTERING_DOOR:
+                handleDoorTransition();
                 break;
             case EntityState.DAMAGED:
                 handleDamaged();
@@ -97,7 +100,7 @@ public class PlayerControl : MonoBehaviour {
 
     }
 
-    private void handleEnterDoor() {
+    private void handleDoorTransition() {
         // Linearly interpolate 
         float u = (Time.time - timeStartCrossThreshold) / timeToCrossThreshold;
         Vector3 currPos = gameObject.transform.position;
@@ -110,8 +113,14 @@ public class PlayerControl : MonoBehaviour {
             float newPosX = Mathf.Lerp(linkPosDoorwayThreshold.x, linkPosDoorwayThreshold.x + threshold_width, u);
             gameObject.transform.position.Set(newPosX, currPos.y, currPos.z);
         }
-        if (u > 1) {
-            current_state = EntityState.NORMAL;
+        if(u > 1) {
+            if(current_state == EntityState.DOOR_TRANSITION) {
+                timeStartCrossThreshold = Time.time;
+                linkPosDoorwayThreshold = transform.position;
+                current_state = EntityState.ENTERING_DOOR;
+            } else if(current_state == EntityState.ENTERING_DOOR) {
+                current_state = EntityState.NORMAL;
+            }
         }
     }
 
@@ -209,7 +218,24 @@ public class PlayerControl : MonoBehaviour {
 
     public void linkDamaged(int damage) {
         // turns off player control
-        control_state_machine.ChangeState(new StateLinkStunnedMovement(this, damageCooldown));
+        control_state_machine.ChangeState(new StateLinkStunnedMovement(this, damageCooldown / 2, true));
+        Sprite[] animation = new Sprite[2];
+        switch (current_direction) {
+            case Direction.NORTH:
+                animation = link_run_up;
+                break;
+            case Direction.EAST:
+                animation = link_run_right;
+                break;
+            case Direction.SOUTH:
+                animation = link_run_down;
+                break;
+            case Direction.WEST:
+                animation = link_run_left;
+                break;
+        }
+        animation_state_machine.ChangeState(new StateLinkDoorMovementAnimation(this, spriteRenderer, animation, 6, damageCooldown / 2));
+
         current_state = EntityState.DAMAGED;
         half_heart_count -= damage;
         if(half_heart_count <= 0) {
@@ -223,13 +249,13 @@ public class PlayerControl : MonoBehaviour {
     }
 
     public void CameraMoved(Direction d, float transitionTime) {
-        current_state = EntityState.DOOR;
+        current_state = EntityState.DOOR_TRANSITION;
         timeStartCrossThreshold = Time.time;
         timeToCrossThreshold = transitionTime;
         linkPosDoorwayThreshold = gameObject.transform.position;
         link_doorway_direction = d;
         Sprite[] animationSprites;
-        control_state_machine.ChangeState(new StateLinkStunnedMovement(this, transitionTime));
+        control_state_machine.ChangeState(new StateLinkStunnedMovement(this, transitionTime, false));
         switch (d) {
             case Direction.SOUTH:
                 animationSprites = link_run_up;
@@ -247,7 +273,7 @@ public class PlayerControl : MonoBehaviour {
                 animationSprites = link_run_up;
                 break;
         }
-        animation_state_machine.ChangeState(new StateLinkDoorMovementAnimation(this, GetComponent<SpriteRenderer>(), animationSprites, 6, transitionTime));
+        animation_state_machine.ChangeState(new StateLinkDoorMovementAnimation(this, GetComponent<SpriteRenderer>(), animationSprites, 6, transitionTime * 2));
         //kanimation_state_machine.ChangeState(new StateLinkStunnedSprite(this, gameObject.GetComponent<SpriteRenderer>(), sprite, transitionTime + time_to_cross_threshold));
     }
 
