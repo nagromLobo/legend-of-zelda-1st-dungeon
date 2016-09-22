@@ -681,6 +681,11 @@ Prefab:
       propertyPath: m_Size.z
       value: 0.8
       objectReference: {fileID: 0}
+    - target: {fileID: 54000013873286968, guid: e3ff8794e4ad4e6478f49c107f63a31c,
+        type: 2}
+      propertyPath: m_IsKinematic
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e3ff8794e4ad4e6478f49c107f63a31c, type: 2}
   m_IsPrefabParent: 0
