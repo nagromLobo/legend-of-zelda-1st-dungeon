@@ -19,6 +19,7 @@ TagManager:
   - Triforce
   - Tile
   - Door
+  - LockedDoor
   layers:
   - Default
   - TransparentFX

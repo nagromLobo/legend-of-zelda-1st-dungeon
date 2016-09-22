@@ -1,15 +1,27 @@
 using UnityEngine;
 using System.Collections;
 
+enum TileType { DOOR, LOCKED, PUSHABLE, NORMAL, SOLID };
+
 public class Tile : MonoBehaviour {
     static Sprite[]         spriteArray;
-
+    TileType type;
     public Texture2D        spriteTexture;
 	public int				x, y;
 	public int				tileNum;
 	private BoxCollider		bc;
     private Material        mat;
     private SpriteRenderer rend;
+
+    // tile numvalues in order of increasing x coordinate
+    private static int northDoorTileNumLeft = 92;
+    private static int northDoorTileNumRight = 93;
+    private static int westDoorTileNum = 51;
+    private static int eastDoorTileNum = 48;
+    private static int northDoorLockedTileNumLeft = 80;
+    private static int northDoorLockedTileNumRight = 81;
+    private static int westDoorLockedTileNum = 101;
+    private static int eastDoorLockedTileNum = 106;
 
     private SpriteRenderer  sprend;
 
@@ -20,6 +32,7 @@ public class Tile : MonoBehaviour {
 
 		bc = GetComponent<BoxCollider>();
         rend = GetComponent<SpriteRenderer>();
+        type = TileType.NORMAL;
 
         sprend = GetComponent<SpriteRenderer>();
         //Renderer rend = gameObject.GetComponent<Renderer>();
@@ -68,6 +81,7 @@ public class Tile : MonoBehaviour {
         char c = ShowMapOnCamera.S.collisionS[tileNum];
         switch (c) {
         case 'S': // Solid
+            type = TileType.SOLID;
             bc.enabled = true;
             rend.sortingOrder = 0;
             bc.center = Vector3.zero;
@@ -77,24 +91,51 @@ public class Tile : MonoBehaviour {
             break;
         case 'P':   // Pushable
                     // have to handle this case
+            type = TileType.PUSHABLE;
             rend.sortingOrder = 0;
             bc.tag = "Tile";
             bc.enabled = true;
             bc.isTrigger = false;
             break;
         case 'D': // Doorway
+            type = TileType.DOOR;
             rend.sortingOrder = 0;
             bc.enabled = true;
             bc.isTrigger = true;
             bc.tag = "Door";
             rend.sortingOrder = 3;
             break;
+        case 'L':
+            type = TileType.LOCKED;
+            bc.enabled = true;
+            bc.tag = "LockedDoor";
+            rend.sortingOrder = 1;
+            break;
         default:
             bc.tag = "Tile";
+            type = TileType.NORMAL;
             rend.sortingOrder = 0;
             bc.enabled = false;
             bc.isTrigger = false;
             break;
         }
-	}	
+	}
+    
+    public void openDoor() {
+        if(tileNum == northDoorLockedTileNumLeft) {
+            SetTile(x, y, northDoorTileNumLeft);
+            SetTile(x + 1, y, northDoorTileNumRight);
+            ShowMapOnCamera.MAP[x, y] = northDoorTileNumLeft;
+            ShowMapOnCamera.MAP[x + 1, y] = northDoorTileNumRight;
+        } else if(tileNum == northDoorLockedTileNumRight) {
+            SetTile(x, y, northDoorTileNumRight);
+            SetTile(x - 1, y, northDoorTileNumLeft);
+            // then we have east  
+        } else if(tileNum == eastDoorLockedTileNum) {
+            SetTile(x, y, eastDoorTileNum);
+            // else we have west
+        } else {
+            SetTile(x, y, westDoorTileNum);
+        }
+    }	
 }

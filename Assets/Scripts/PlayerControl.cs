@@ -250,6 +250,18 @@ public class PlayerControl : MonoBehaviour {
         animation_state_machine.ChangeState(new StateLinkDoorMovementAnimation(this, GetComponent<SpriteRenderer>(), animationSprites, 6, transitionTime));
         //kanimation_state_machine.ChangeState(new StateLinkStunnedSprite(this, gameObject.GetComponent<SpriteRenderer>(), sprite, transitionTime + time_to_cross_threshold));
     }
+
+    void OnCollisionEnter(Collision other) {
+        switch (other.gameObject.tag) {
+            case "LockedDoor":
+                if(small_key_count > 0) {
+                    Tile tile = other.gameObject.GetComponent<Tile>();
+                    tile.openDoor();
+                    small_key_count--;
+                }
+                break;
+        }
+    }
 }
 
 //    void OnCollisionEnter(Collision coll) { }
