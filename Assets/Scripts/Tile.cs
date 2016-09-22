@@ -124,9 +124,7 @@ public class Tile : MonoBehaviour {
     public void openDoor() {
         if(tileNum == northDoorLockedTileNumLeft) {
             SetTile(x, y, northDoorTileNumLeft);
-            SetTile(x + 1, y, northDoorTileNumRight);
-            ShowMapOnCamera.MAP[x, y] = northDoorTileNumLeft;
-            ShowMapOnCamera.MAP[x + 1, y] = northDoorTileNumRight;
+           // SetTile(x + 1, y, northDoorTileNumRight);
         } else if(tileNum == northDoorLockedTileNumRight) {
             SetTile(x, y, northDoorTileNumRight);
             SetTile(x - 1, y, northDoorTileNumLeft);
