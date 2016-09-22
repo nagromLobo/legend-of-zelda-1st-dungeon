@@ -87,13 +87,7 @@ public class Tile : MonoBehaviour {
                 bc.tag = "Tile";
                 break;
             case 'T': // Door Threshold
-                bc.enabled = true;
-                rend.sortingOrder = 0;
-                bc.center = Vector3.zero;
-                bc.size = Vector3.one;
-                bc.size = Vector3.one;
-                bc.isTrigger = true;
-                bc.tag = "Threshold";
+                setUpThreshold(this);
                 break;
             case 'P':   // Pushable
                         // have to handle this case
@@ -120,7 +114,10 @@ public class Tile : MonoBehaviour {
                 rend.sortingOrder = 1;
                 break;
             default:
-                setUpDefault(this);
+                bc.tag = "Tile";
+                rend.sortingOrder = 0;
+                bc.enabled = false;
+                bc.isTrigger = false;
                 break;
         }
 	}
@@ -129,36 +126,39 @@ public class Tile : MonoBehaviour {
         if(tileNum == northDoorLockedTileNumLeft) {
             SpriteRenderer rend = GetComponent<SpriteRenderer>();
             rend.sprite = northDoorLeft;
-            setUpDefault(this);
+            setUpThreshold(this);
             Tile otherTile = ShowMapOnCamera.MAP_TILES[x + 1, y];
             rend = otherTile.GetComponent<SpriteRenderer>();
             rend.sprite = northDoorRight;
-            setUpDefault(otherTile);
+            setUpThreshold(otherTile);
         } else if(tileNum == northDoorLockedTileNumRight) {
             SpriteRenderer rend = GetComponent<SpriteRenderer>();
             rend.sprite = northDoorRight;
-            setUpDefault(this);
+            setUpThreshold(this);
             Tile otherTile = ShowMapOnCamera.MAP_TILES[x - 1, y];
             rend = otherTile.GetComponent<SpriteRenderer>();
             rend.sprite = northDoorLeft;
-            setUpDefault(otherTile);
+            setUpThreshold(otherTile);
             // then we have east  
         } else if(tileNum == eastDoorLockedTileNum) {
             SpriteRenderer rend = GetComponent<SpriteRenderer>();
             rend.sprite = eastDoor;
-            setUpDefault(this);
+            setUpThreshold(this);
             // else we have west
         } else {
             SetTile(x, y, westDoorTileNum);
         }
     }	
 
-    private void setUpDefault(Tile tile) {
-        SpriteRenderer rend = tile.GetComponent<SpriteRenderer>();
+    private void setUpThreshold(Tile tile) {
         BoxCollider bc = tile.GetComponent<BoxCollider>();
-        bc.tag = "Tile";
+        SpriteRenderer rend = tile.GetComponent<SpriteRenderer>();
+        bc.enabled = true;
         rend.sortingOrder = 0;
-        bc.enabled = false;
-        bc.isTrigger = false;
+        bc.center = Vector3.zero;
+        bc.size = Vector3.one;
+        bc.size = Vector3.one;
+        bc.isTrigger = true;
+        bc.tag = "Threshold";
     }
 }

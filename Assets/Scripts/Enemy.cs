@@ -45,29 +45,39 @@ public class Enemy : MonoBehaviour {
         //    control_statemachine.ChangeState(new StateEnemyMovement(this, timeToCrossTile, UtilityFunctions.randomDirection(currDirection), turnProbability));
         //}
       }
-
-    void OnCollisionEnter(Collision other) {
-        if(other.gameObject.tag == "Tile" || other.gameObject.tag == "Threshold") {
-            Vector3 currPos = transform.position;
-            switch (currDirection) {
-                case Direction.NORTH:
-                    currPos = new Vector3(currPos.x, Mathf.Floor(currPos.y), currPos.z);
-                    break;
-                case Direction.EAST:
-                    currPos = new Vector3(Mathf.Floor(currPos.x), currPos.y, currPos.z);
-                    break;
-                case Direction.SOUTH:
-                    currPos = new Vector3(currPos.x, Mathf.Ceil(currPos.y), currPos.z);
-                    break;
-                case Direction.WEST:
-                    currPos = new Vector3(Mathf.Ceil(currPos.x), currPos.y, currPos.z);
-                    break;
-
-            }
-            this.gameObject.transform.position = currPos;
+    void OnTriggerEnter(Collider other) {
+        if(other.gameObject.tag == "Threshold" || other.gameObject.tag == "LockedDoor") {
+            this.gameObject.transform.position = adjustBackToGrid(currDirection, transform.position);
             control_statemachine.ChangeState(new StateEnemyMovement(this, timeToCrossTile, UtilityFunctions.randomDirection(currDirection), turnProbability));
         }
     }
+
+    void OnCollisionEnter(Collision other) {
+        if(other.gameObject.tag == "Tile") {
+            this.gameObject.transform.position = adjustBackToGrid(currDirection, transform.position);
+            control_statemachine.ChangeState(new StateEnemyMovement(this, timeToCrossTile, UtilityFunctions.randomDirection(currDirection), turnProbability));
+        }
+    }
+
+    protected Vector3 adjustBackToGrid(Direction d, Vector3 pos) {
+        Vector3 currPos = transform.position;
+        switch (d) {
+            case Direction.NORTH:
+                currPos = new Vector3(currPos.x, Mathf.Floor(currPos.y), currPos.z);
+                break;
+            case Direction.EAST:
+                currPos = new Vector3(Mathf.Floor(currPos.x), currPos.y, currPos.z);
+                break;
+            case Direction.SOUTH:
+                currPos = new Vector3(currPos.x, Mathf.Ceil(currPos.y), currPos.z);
+                break;
+            case Direction.WEST:
+                currPos = new Vector3(Mathf.Ceil(currPos.x), currPos.y, currPos.z);
+                break;
+        }
+        return currPos;
+    }
+   
 
     void CameraMoved(Direction d, float transitionTime) {
         //Invoke("DestroyEnemy", transitionTime);

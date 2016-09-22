@@ -470,7 +470,7 @@ public class StateEnemyMovement : State {
             Direction newDir = UtilityFunctions.randomDirection(direction);
             enemy.transform.position = UtilityFunctions.fixToGrid(enemy.transform.position, newDir, prevDir);
             state_machine.ChangeState(new StateEnemyMovement(enemy, timeToCrossTile, UtilityFunctions.randomDirection(direction), turnProbability));
-        } else {
+        } else if (onMainGrid) {
             setTileLastAndNext();
         }
         return;
