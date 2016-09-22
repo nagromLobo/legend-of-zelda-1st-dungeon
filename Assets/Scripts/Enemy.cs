@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class Enemy : MonoBehaviour {
-    public int damage { get; private set;}
+    public int damage;
     public int movementFramesPerSecond = 4;
     public float timeToCrossTile = 0.0f;
     public float turnProbability = 0.02f;
