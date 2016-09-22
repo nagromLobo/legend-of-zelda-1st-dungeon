@@ -275,6 +275,7 @@ public class StateLinkStunnedMovement : State {
     public StateLinkStunnedMovement(PlayerControl pc, float coolDown, bool pushBack) {
         this.pc = pc;
         this.coolDown = coolDown;
+        this.pushBack = pushBack;
     }
 
     public override void OnStart() {
@@ -284,13 +285,13 @@ public class StateLinkStunnedMovement : State {
             // set links rigid body in the other direction
             switch (pc.current_direction) {
                 case (Direction.NORTH):
-                    velocityVector = new Vector3(0, 1, 0);
+                    velocityVector = new Vector3(0, -1, 0);
                     break;
                 case (Direction.EAST):
                     velocityVector = new Vector3(-1, 0, 0);
                     break;
                 case (Direction.SOUTH):
-                    velocityVector = new Vector3(0, -1, 0);
+                    velocityVector = new Vector3(0, 1, 0);
                     break;
                 case (Direction.WEST):
                     velocityVector = new Vector3(1, 0, 0);
