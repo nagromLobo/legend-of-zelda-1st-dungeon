@@ -57,13 +57,13 @@ public class CameraControl : MonoBehaviour {
         changeCameraPos = true;
         switch (d) {
             case Direction.SOUTH:
-                cameraEndPos = new Vector3(cameraStartPos.x, cameraStartPos.y + roomHeight, cameraStartPos.z);
+                cameraEndPos = new Vector3(cameraStartPos.x, cameraStartPos.y - roomHeight, cameraStartPos.z);
                 break;
             case Direction.EAST:
                 cameraEndPos = new Vector3(cameraStartPos.x + roomWidth, cameraStartPos.y, cameraStartPos.z);
                 break;
             case Direction.NORTH:
-                cameraEndPos = new Vector3(cameraStartPos.x, cameraStartPos.y - roomHeight, cameraStartPos.z);
+                cameraEndPos = new Vector3(cameraStartPos.x, cameraStartPos.y + roomHeight, cameraStartPos.z);
                 break;
             case Direction.WEST:
                 cameraEndPos = new Vector3(cameraStartPos.x - roomWidth, cameraStartPos.y, cameraStartPos.z);

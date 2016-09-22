@@ -37,14 +37,37 @@ public class Enemy : MonoBehaviour {
 	}
 
     void OnTriggerStay(Collider other) {
-        MonoBehaviour.print("OnTrigger Skeleton");
-        if (other.gameObject.tag == "Tile") {
-            // adjust enemy position back to the subgrid
-            Vector3 currPos = this.gameObject.transform.position;
-            this.gameObject.transform.position.Set(Mathf.Round(currPos.x), Mathf.Round(currPos.y), currPos.z);
+        //MonoBehaviour.print("OnTrigger Skeleton");
+        //if (other.gameObject.tag == "Tile") {
+        //    // adjust enemy position back to the subgrid
+        //    Vector3 currPos = this.gameObject.transform.position;
+        //    this.gameObject.transform.position.Set(Mathf.Round(currPos.x), Mathf.Round(currPos.y), currPos.z);
+        //    control_statemachine.ChangeState(new StateEnemyMovement(this, timeToCrossTile, UtilityFunctions.randomDirection(currDirection), turnProbability));
+        //}
+      }
+
+    void OnCollisionEnter(Collision other) {
+        if(other.gameObject.tag == "Tile" || other.gameObject.tag == "Threshold") {
+            Vector3 currPos = transform.position;
+            switch (currDirection) {
+                case Direction.NORTH:
+                    currPos = new Vector3(currPos.x, Mathf.Floor(currPos.y), currPos.z);
+                    break;
+                case Direction.EAST:
+                    currPos = new Vector3(Mathf.Floor(currPos.x), currPos.y, currPos.z);
+                    break;
+                case Direction.SOUTH:
+                    currPos = new Vector3(currPos.x, Mathf.Ceil(currPos.y), currPos.z);
+                    break;
+                case Direction.WEST:
+                    currPos = new Vector3(Mathf.Ceil(currPos.x), currPos.y, currPos.z);
+                    break;
+
+            }
+            this.gameObject.transform.position = currPos;
             control_statemachine.ChangeState(new StateEnemyMovement(this, timeToCrossTile, UtilityFunctions.randomDirection(currDirection), turnProbability));
         }
-      }
+    }
 
     void CameraMoved(Direction d, float transitionTime) {
         //Invoke("DestroyEnemy", transitionTime);

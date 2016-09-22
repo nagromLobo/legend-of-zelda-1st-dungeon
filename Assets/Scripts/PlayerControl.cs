@@ -30,6 +30,10 @@ public class PlayerControl : MonoBehaviour {
     public Sprite[] link_run_right;
     public Sprite[] link_run_left;
 
+    public Sprite northDoorLeft;
+    public Sprite northDoorRight;
+    public Sprite eastDoor;
+
 
 
     private bool link_moving_through_doorway = false;
@@ -106,22 +110,23 @@ public class PlayerControl : MonoBehaviour {
         Vector3 currPos = gameObject.transform.position;
         // vertical
         if (link_doorway_direction == Direction.NORTH || link_doorway_direction == Direction.SOUTH) {
-            float newPosY = Mathf.Lerp(linkPosDoorwayThreshold.y, linkPosDoorwayThreshold.y + threshold_width, u);
+            float newPosY = Mathf.Lerp(linkPosDoorwayThreshold.y, linkPosDoorwayThreshold.y + 11 + 4, u);
             gameObject.transform.position.Set(currPos.x, newPosY, currPos.z);
             // horizontial
         } else {
-            float newPosX = Mathf.Lerp(linkPosDoorwayThreshold.x, linkPosDoorwayThreshold.x + threshold_width, u);
-            gameObject.transform.position.Set(newPosX, currPos.y, currPos.z);
+            float newPosX = Mathf.Lerp(linkPosDoorwayThreshold.x, linkPosDoorwayThreshold.x + threshold_width - 11, u);
+            transform.position.Set(newPosX, currPos.y, currPos.z);
         }
-        if(u > 1) {
-            if(current_state == EntityState.DOOR_TRANSITION) {
+        if (u > 1) {
+            if (current_state == EntityState.DOOR_TRANSITION) {
                 timeStartCrossThreshold = Time.time;
                 linkPosDoorwayThreshold = transform.position;
                 current_state = EntityState.ENTERING_DOOR;
-            } else if(current_state == EntityState.ENTERING_DOOR) {
+            } else if (current_state == EntityState.ENTERING_DOOR) {
                 current_state = EntityState.NORMAL;
             }
         }
+        current_state = EntityState.NORMAL;
     }
 
     private void handleDamaged() {
@@ -198,17 +203,16 @@ public class PlayerControl : MonoBehaviour {
                 max_half_heart_count += 2;
                 half_heart_count = max_half_heart_count;
                 break;
-            // Enemys
-            case "Enemy":
-                if(current_state != EntityState.DAMAGED) {
-                    Enemy enemy = coll.GetComponent<Enemy>();
-                    linkDamaged(enemy.damage);
+            case "Door":
+                if (current_state == EntityState.NORMAL) {
+                    CameraControl.S.MoveCamera(current_direction);
                 }
                 break;
-            // Other game actions
-            case "Door":
-                if (!link_moving_through_doorway) {
-                    CameraControl.S.MoveCamera(current_direction);
+                // dont let link get damaged into a door
+            case "DoorThreshold":
+                //FIXME --> SET UP DOOR THRESHOLD
+                if(current_state == EntityState.DAMAGED) {
+                    GetComponent<Rigidbody>().velocity = Vector3.zero;
                 }
                 break;
             default:
@@ -216,9 +220,10 @@ public class PlayerControl : MonoBehaviour {
         }
     }
 
-    public void linkDamaged(int damage) {
+    public void linkDamaged(int damage, Vector3 normal) {
+        normal = Vector3.Normalize(normal);
         // turns off player control
-        control_state_machine.ChangeState(new StateLinkStunnedMovement(this, damageCooldown / 2, true));
+        control_state_machine.ChangeState(new StateLinkStunnedMovement(this, damageCooldown / 2, normal));
         Sprite[] animation = new Sprite[2];
         switch (current_direction) {
             case Direction.NORTH:
@@ -255,16 +260,16 @@ public class PlayerControl : MonoBehaviour {
         linkPosDoorwayThreshold = gameObject.transform.position;
         link_doorway_direction = d;
         Sprite[] animationSprites;
-        control_state_machine.ChangeState(new StateLinkStunnedMovement(this, transitionTime, false));
+        control_state_machine.ChangeState(new StateLinkStunnedMovement(this, transitionTime * 2, Vector3.zero));
         switch (d) {
             case Direction.SOUTH:
-                animationSprites = link_run_up;
+                animationSprites = link_run_down;
                 break;
             case Direction.EAST:
                 animationSprites = link_run_right;
                 break;
             case Direction.NORTH:
-                animationSprites = link_run_down;
+                animationSprites = link_run_up;
                 break;
             case Direction.WEST:
                 animationSprites = link_run_left;
@@ -282,10 +287,18 @@ public class PlayerControl : MonoBehaviour {
             case "LockedDoor":
                 if(small_key_count > 0) {
                     Tile tile = other.gameObject.GetComponent<Tile>();
-                    tile.openDoor();
+                    tile.openDoor(northDoorLeft, northDoorRight, eastDoor);
                     small_key_count--;
                 }
                 break;
+            // Enemys
+            case "Enemy":
+                if (current_state != EntityState.DAMAGED) {
+                    Enemy enemy = other.gameObject.GetComponent<Enemy>();
+                    linkDamaged(enemy.damage, other.contacts[0].normal);
+                }
+                break;
+                // Other game actions
         }
     }
 }

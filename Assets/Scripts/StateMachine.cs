@@ -270,44 +270,44 @@ public class StateLinkStunnedMovement : State {
     private PlayerControl pc;
     private float coolDown;
     private float startTime;
-    private bool pushBack; // should link be thrown back on stun
+    private Vector3 pushBackNormal; // should link be thrown back on stun
 
-    public StateLinkStunnedMovement(PlayerControl pc, float coolDown, bool pushBack) {
+    public StateLinkStunnedMovement(PlayerControl pc, float coolDown, Vector3 pushBackNoraml) {
         this.pc = pc;
         this.coolDown = coolDown;
-        this.pushBack = pushBack;
+        this.pushBackNormal = pushBackNoraml;
     }
 
     public override void OnStart() {
         startTime = Time.time;
-        if (pushBack) {
+        if (pushBackNormal != Vector3.zero) {
             Vector3 velocityVector;
             // set links rigid body in the other direction
-            switch (pc.current_direction) {
-                case (Direction.NORTH):
-                    velocityVector = new Vector3(0, -1, 0);
-                    break;
-                case (Direction.EAST):
-                    velocityVector = new Vector3(-1, 0, 0);
-                    break;
-                case (Direction.SOUTH):
-                    velocityVector = new Vector3(0, 1, 0);
-                    break;
-                case (Direction.WEST):
-                    velocityVector = new Vector3(1, 0, 0);
-                    break;
-                default:
-                    velocityVector = Vector3.zero;
-                    break;
-            }
+            //switch (pc.current_direction) {
+            //    case (Direction.NORTH):
+            //        velocityVector = new Vector3(0, -1, 0);
+            //        break;
+            //    case (Direction.EAST):
+            //        velocityVector = new Vector3(-1, 0, 0);
+            //        break;
+            //    case (Direction.SOUTH):
+            //        velocityVector = new Vector3(0, 1, 0);
+            //        break;
+            //    case (Direction.WEST):
+            //        velocityVector = new Vector3(1, 0, 0);
+            //        break;
+            //    default:
+            //        velocityVector = Vector3.zero;
+            //        break;
+            
             pc.GetComponent<Rigidbody>().velocity =
-                pc.GetComponent<Rigidbody>().velocity = velocityVector * pc.walkingVelocity;
+                pc.GetComponent<Rigidbody>().velocity = pushBackNormal * pc.walkingVelocity;
 
         }
     }
 
     public override void OnUpdate(float time_delta_fraction) {
-        if(Time.time - startTime > coolDown) {
+        if((Time.time - startTime) > coolDown) {
             state_machine.ChangeState(new StateLinkNormalMovement(pc));
         }
     }
@@ -324,7 +324,7 @@ public class StateLinkStunnedSprite : State {
     float coolDown;
     float startTime;
 
-    public StateLinkStunnedSprite(PlayerControl pc, SpriteRenderer renderer, Sprite sprite, float coolDown) {
+    public StateLinkStunnedSprite(PlayerControl pc, SpriteRenderer renderer, Sprite sprite) {
         this.pc = pc;
         this.renderer = renderer;
         this.sprite = sprite;
@@ -455,6 +455,9 @@ public class StateEnemyMovement : State {
     public override void OnStart() {
         enemy.currDirection = direction;
         setTileLastAndNext();
+        Rigidbody rigidBody = enemy.GetComponent<Rigidbody>();
+        rigidBody.velocity = Vector3.zero;
+        rigidBody.angularVelocity = Vector3.zero;
         return;
     }
 
