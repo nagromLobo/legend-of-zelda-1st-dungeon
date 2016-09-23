@@ -26,7 +26,7 @@ public class Enemy : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         animation_statemachine.ChangeState(new StateEnemyMovementAnimation(this, GetComponent<SpriteRenderer>(), spriteAnimation, movementFramesPerSecond));
-        control_statemachine.ChangeState(new StateEnemyMovement(this, timeToCrossTile, UtilityFunctions.randomDirection(), turnProbability));
+        StartEnemyMovement(false);
         CameraControl.S.cameraMovedDelegate += CameraMoved;
     }
 	
@@ -45,18 +45,19 @@ public class Enemy : MonoBehaviour {
         //    control_statemachine.ChangeState(new StateEnemyMovement(this, timeToCrossTile, UtilityFunctions.randomDirection(currDirection), turnProbability));
         //}
       }
+
     void OnTriggerEnter(Collider other) {
         if(other.gameObject.tag == "Threshold" || other.gameObject.tag == "LockedDoor") {
             this.gameObject.transform.position = adjustBackToGrid(currDirection, transform.position);
-            control_statemachine.ChangeState(new StateEnemyMovement(this, timeToCrossTile, UtilityFunctions.randomDirection(currDirection), turnProbability));
+            StartEnemyMovement(true);
         }
     }
 
     void OnCollisionEnter(Collision other) {
-        if(other.gameObject.tag == "Tile") {
+        if(other.gameObject.tag == "Tile" || other.gameObject.tag == "LockedDoor") {
             this.gameObject.transform.position = adjustBackToGrid(currDirection, transform.position);
-            control_statemachine.ChangeState(new StateEnemyMovement(this, timeToCrossTile, UtilityFunctions.randomDirection(currDirection), turnProbability));
-        }
+            StartEnemyMovement(true);
+        } 
     }
 
     protected Vector3 adjustBackToGrid(Direction d, Vector3 pos) {
@@ -79,8 +80,21 @@ public class Enemy : MonoBehaviour {
     }
    
 
-    void CameraMoved(Direction d, float transitionTime) {
+    public virtual void CameraMoved(Direction d, float transitionTime) {
         //Invoke("DestroyEnemy", transitionTime);
+    }
+
+    public virtual void StartEnemyMovement(bool disallowCurrentDirection) {
+        if (disallowCurrentDirection) {
+            control_statemachine.ChangeState(new StateEnemyMovement(this, timeToCrossTile, UtilityFunctions.randomDirection(currDirection), turnProbability));
+        } else {
+            control_statemachine.ChangeState(new StateEnemyMovement(this, timeToCrossTile, UtilityFunctions.randomDirection(), turnProbability));
+        }
+    }
+
+    // start movement in a given direction
+    public virtual void StartEnemyMovement(Direction d) {
+        control_statemachine.ChangeState(new StateEnemyMovement(this, timeToCrossTile, d, turnProbability));
     }
 
     void DestroyEnemy() {

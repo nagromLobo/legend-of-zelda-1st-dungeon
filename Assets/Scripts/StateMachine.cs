@@ -377,7 +377,7 @@ public class StateLinkStunnedSprite : State {
     float coolDown;
     float startTime;
 
-    public StateLinkStunnedSprite(PlayerControl pc, SpriteRenderer renderer, Sprite sprite) {
+    public StateLinkStunnedSprite(PlayerControl pc, SpriteRenderer renderer, Sprite sprite, float coolDown) {
         this.pc = pc;
         this.renderer = renderer;
         this.sprite = sprite;
@@ -433,24 +433,25 @@ public class StateLinkStunnedSprite : State {
             pc.current_direction = Direction.NORTH;
         else if (vertical_input > 0.0f)
             pc.current_direction = Direction.SOUTH;
+        pc.GetComponent<Rigidbody>().velocity = new Vector3(horizontal_input, -vertical_input, 0)
+            * pc.walkingVelocity
+            * time_delta_fraction;
 
         pc.transform.position = UtilityFunctions.fixToGrid(pc.transform.position, pc.current_direction, prevDirection);
 
 
 
-		pc.GetComponent<Rigidbody> ().velocity = new Vector3 (horizontal_input, -vertical_input, 0)
-			* pc.walkingVelocity
-			* time_delta_fraction;
+
 
         //link attack
         if (Input.GetKeyDown(KeyCode.A)) {
-			state_machine.ChangeState(new StateLinkAttack(pc, pc.Sword_prefab, 15));
+            state_machine.ChangeState(new StateLinkAttack(pc, pc.Sword_prefab, 15));
         }
-		//handle no weapon selection
-		if (Input.GetKeyDown(KeyCode.S)) {
-			if((pc.selected_weapon_prefab.name == "Bomb") && (pc.bomb_count > 0))
-				state_machine.ChangeState(new StateLinkBombAttack(pc, pc.selected_weapon_prefab, 6));
-		}
+        //handle no weapon selection
+        if (Input.GetKeyDown(KeyCode.S)) {
+            if ((pc.selected_weapon_prefab.name == "Bomb") && (pc.bomb_count > 0))
+                state_machine.ChangeState(new StateLinkBombAttack(pc, pc.selected_weapon_prefab, 6));
+        }
 
     }
 }
@@ -522,9 +523,28 @@ public class StateGelMovement : StateEnemyMovement {
 }
 
 public class StateEnemyStunned : State {
-
+    Enemy enemy;
+    Direction direction;
+    float turnProbability;
+    float stunCooldown;
+    float timeToCrossTile;
+    float timeStart;
     public StateEnemyStunned(Enemy enemy, float timeToCrossTile, Direction direction, float turnProbability, float stunCooldown) {
+        this.enemy = enemy;
+        this.timeToCrossTile = timeToCrossTile;
+        this.direction = direction;
+        this.turnProbability = turnProbability;
+        this.stunCooldown = stunCooldown;
+    }
 
+    public override void OnStart() {
+        timeStart = Time.time;
+    }
+
+    public override void OnUpdate(float time_delta_fraction) {
+        if((Time.time - timeStart) > stunCooldown) {
+            enemy.StartEnemyMovement(direction);
+        }
     }
 }
 
