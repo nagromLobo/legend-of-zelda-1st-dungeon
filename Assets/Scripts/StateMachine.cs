@@ -433,12 +433,47 @@ public class StateEnemyMovementAnimation : State {
     }
 }
 
+public class StateGelMovement : StateEnemyMovement {
+    protected float pauseProbability = 0.8f;
+    protected float timeToPause = 1.0f;
+    public StateGelMovement(Enemy enemy, float timeToCrossTile, Direction direction, float turnProbability, float pauseProbability, float timeToPause)
+        : base(enemy, timeToCrossTile, direction, turnProbability){
+        this.pauseProbability = pauseProbability;
+        this.timeToPause = timeToPause;
+    }
+
+    protected override bool shouldEnemyWait() {
+        if(Random.value < pauseProbability) {
+            return true;
+        }
+        return false;
+    }
+
+    protected override void pauseEnemy() {
+        state_machine.ChangeState(new StateEnemyStunned(enemy, timeToCrossTile, direction, turnProbability, timeToPause));
+    }
+
+
+
+
+
+
+
+}
+
+public class StateEnemyStunned : State {
+
+    public StateEnemyStunned(Enemy enemy, float timeToCrossTile, Direction direction, float turnProbability, float stunCooldown) {
+
+    }
+}
+
 // assumes enemy starts on grid
 public class StateEnemyMovement : State {
-    Enemy enemy;
-    Direction direction;
-    float timeToCrossTile;
-    float turnProbability; // probability of turning for each tile reached
+    protected Enemy enemy;
+    protected Direction direction;
+    protected float timeToCrossTile;
+    protected float turnProbability; // probability of turning for each tile reached
     //Vector3 lastTilePosition;
     //float lastRoundPos = -1.0f; // so we don't check for turning multiple times for the same tile
     float timeLastTile;
@@ -465,11 +500,14 @@ public class StateEnemyMovement : State {
 
     public override void OnUpdate(float time_delta_fraction) {
         bool onMainGrid = MoveEnemy();
-        if (onMainGrid && shouldEnemyTurn()) {
-            Direction prevDir = direction;
-            Direction newDir = UtilityFunctions.randomDirection(direction);
-            enemy.transform.position = UtilityFunctions.fixToGrid(enemy.transform.position, newDir, prevDir);
-            state_machine.ChangeState(new StateEnemyMovement(enemy, timeToCrossTile, UtilityFunctions.randomDirection(direction), turnProbability));
+        if (onMainGrid) {
+            if (shouldEnemyTurn()) {
+                turnEnemy();
+            } else if (shouldEnemyWait()) {
+                pauseEnemy();
+            } else if (shouldEnemyAttack()) {
+                enemyAttack();
+            }
         } else if (onMainGrid) {
             setTileLastAndNext();
         }
@@ -496,9 +534,29 @@ public class StateEnemyMovement : State {
         return false;
     }
 
-    protected bool shouldEnemyTurn() {
+    protected virtual bool shouldEnemyTurn() {
         return (Random.value < turnProbability);
     }
+
+    protected virtual void turnEnemy() {
+        Direction prevDir = direction;
+        Direction newDir = UtilityFunctions.randomDirection(direction);
+        enemy.transform.position = UtilityFunctions.fixToGrid(enemy.transform.position, newDir, prevDir);
+        state_machine.ChangeState(new StateEnemyMovement(enemy, timeToCrossTile, UtilityFunctions.randomDirection(direction), turnProbability));
+    }
+
+    protected virtual bool shouldEnemyWait() {
+        return false;
+    }
+
+    protected virtual void pauseEnemy() {}
+
+    protected virtual bool shouldEnemyAttack() {
+        return false;
+    }
+
+    protected virtual void enemyAttack() {}
+
 
     // sets the last tile to the current position and the next tiel
     // to the correct value relevant to the current position and direction
