@@ -84,6 +84,7 @@ public class Tile : MonoBehaviour {
                 bc.center = Vector3.zero;
                 bc.size = Vector3.one;
                 bc.isTrigger = false;
+                gameObject.layer = LayerMask.NameToLayer("Tiles");
                 bc.tag = "Tile";
                 break;
             case 'T': // Door Threshold
@@ -94,16 +95,29 @@ public class Tile : MonoBehaviour {
                 rend.sortingOrder = 0;
                 bc.center = Vector3.zero;
                 bc.size = Vector3.one;
-                bc.tag = "Tile";
+                bc.tag = "Pushable";
+                gameObject.layer = LayerMask.NameToLayer("MiddleBlocks");
                 bc.enabled = true;
                 bc.isTrigger = false;
                 break;
+            case 'M': // middle tiles
+                rend.sortingOrder = 0;
+                bc.center = Vector3.zero;
+                bc.size = Vector3.one;
+                bc.tag = "Tile";
+                gameObject.layer = LayerMask.NameToLayer("MiddleBlocks");
+               
+                bc.enabled = true;
+                bc.isTrigger = false;
+                break;
+
             case 'D': // Doorway
                 bc.enabled = true;
                 bc.isTrigger = true;
                 bc.center = Vector3.zero;
                 bc.size = Vector3.one;
                 bc.tag = "Door";
+                gameObject.layer = LayerMask.NameToLayer("Tiles");
                 rend.sortingOrder = 3;
                     break;
             case 'L':
@@ -112,12 +126,14 @@ public class Tile : MonoBehaviour {
                 bc.center = Vector3.zero;
                 bc.size = Vector3.one;
                 rend.sortingOrder = 1;
+                gameObject.layer = LayerMask.NameToLayer("Tiles");
                 break;
             default:
                 bc.tag = "Tile";
                 rend.sortingOrder = 0;
                 bc.enabled = false;
                 bc.isTrigger = false;
+                gameObject.layer = LayerMask.NameToLayer("Tiles");
                 break;
         }
 	}

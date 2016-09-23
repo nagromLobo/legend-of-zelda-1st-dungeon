@@ -494,6 +494,76 @@ public class StateEnemyMovementAnimation : State {
     }
 }
 
+public class StateKeeseMovement : StateEnemyMovement {
+    float pauseProbability;
+    float timeToPause;
+    float pauseSlowdownTime;
+    float sinEccentricity;
+    float maxFlyRadius;
+    float flyRadius;
+    Vector3 directionVector;
+
+    public StateKeeseMovement(Enemy enemy, float timeToCrossTile, Direction direction, float turnProbability,
+                             float pauseProbability, float timeToPause, float pauseSlowdownTime,
+                             float maxFlyRadius, Vector3 directionVector)
+        : base(enemy, timeToCrossTile, direction, turnProbability) {
+        this.pauseProbability = pauseProbability;
+        this.timeToPause = timeToPause;
+        this.maxFlyRadius = maxFlyRadius;
+        this.sinEccentricity = 0.6f;
+        this.pauseSlowdownTime = pauseSlowdownTime;
+        this.directionVector = Vector3.Normalize(directionVector);
+
+
+    }
+    public override void OnStart() {
+        setTileLastAndNext();
+    }
+    protected override bool shouldEnemyWait() {
+        if (Random.value < pauseProbability) {
+            return true;
+        }
+        return false;
+    }
+
+    //protected override void pauseEnemy() {
+        
+    //}
+
+    protected override bool MoveEnemy() {
+        float u = (Time.time - timeLastTile) / (timeToCrossTile * flyRadius);
+        if (u > 1) {
+            return true;
+        }
+        // Adjust u by adding an easing curve based on a Sine wave
+        //u = u + sinEccentricity * (Mathf.Sin(u * Mathf.PI * 2));
+
+        // Intepolate the two linear interpolation points
+        //enemy.transform.position = ((1 - u) * posLastTile + u * posNextTile);
+        enemy.transform.position = Vector3.Lerp(posLastTile, posNextTile, u);
+        return false;
+    }
+
+    protected override void turnEnemy() {
+        state_machine.ChangeState(new StateKeeseMovement(enemy, timeToCrossTile, direction,
+                                                         turnProbability, pauseProbability, timeToPause,
+                                                         pauseSlowdownTime, maxFlyRadius, Vector3.zero));
+    }
+
+    protected override void setTileLastAndNext() {
+        timeLastTile = Time.time;
+        posLastTile = enemy.transform.position;
+        flyRadius = Random.Range(0, maxFlyRadius);
+        if(directionVector == Vector3.zero) {
+            Vector2 xyChoordsNextTile = (Random.insideUnitCircle * flyRadius);
+            posNextTile = new Vector3(posLastTile.x + xyChoordsNextTile.x, posLastTile.y + xyChoordsNextTile.y, posLastTile.z);
+        } else {
+            posNextTile = posLastTile + (directionVector * flyRadius);
+        }
+        
+    }
+}
+
 public class StateGelMovement : StateEnemyMovement {
     protected float pauseProbability = 0.8f;
     protected float timeToPause = 1.0f;
@@ -556,9 +626,9 @@ public class StateEnemyMovement : State {
     protected float turnProbability; // probability of turning for each tile reached
     //Vector3 lastTilePosition;
     //float lastRoundPos = -1.0f; // so we don't check for turning multiple times for the same tile
-    float timeLastTile;
-    Vector3 posLastTile;
-    Vector3 posNextTile;
+    protected float timeLastTile;
+    protected Vector3 posLastTile;
+    protected Vector3 posNextTile;
 
     public StateEnemyMovement(Enemy enemy, float timeToCrossTile, Direction direction, float turnProbability) {
         this.enemy = enemy;
@@ -595,7 +665,7 @@ public class StateEnemyMovement : State {
     }
 
     // returns true if we are back on the main grid
-    protected bool MoveEnemy() {
+    protected virtual bool MoveEnemy() {
         Vector3 currEnemyPosition = enemy.transform.position;
         float u = (Time.time - timeLastTile) / timeToCrossTile;
         if(u > 1.0f) {
@@ -640,7 +710,7 @@ public class StateEnemyMovement : State {
 
     // sets the last tile to the current position and the next tiel
     // to the correct value relevant to the current position and direction
-    protected void setTileLastAndNext() {
+    protected virtual void setTileLastAndNext() {
         posLastTile = enemy.transform.position;
         switch (direction) {
             case Direction.NORTH:

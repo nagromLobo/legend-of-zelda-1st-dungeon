@@ -22,9 +22,10 @@ GameObject:
   - 212: {fileID: 212000013056107036}
   - 65: {fileID: 65000014144922862}
   - 114: {fileID: 114000011116244546}
+  - 54: {fileID: 54000011677096428}
   m_Layer: 9
   m_Name: Gel
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -36,12 +37,27 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000011065228070}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 35.482056, y: 6.8128543, z: 0}
+  m_LocalPosition: {x: 34, y: 7, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
+--- !u!54 &54000011677096428
+Rigidbody:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000011065228070}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 120
+  m_CollisionDetection: 0
 --- !u!65 &65000014144922862
 BoxCollider:
   m_ObjectHideFlags: 1
@@ -52,7 +68,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.5, y: 0.5, z: 0.2}
+  m_Size: {x: 0.8, y: 0.8, z: 0.2}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &114000011116244546
 MonoBehaviour:
@@ -66,16 +82,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 0
-  movementFramesPerSecond: 4
-  timeToCrossTile: 0
-  turnProbability: 0.02
+  movementFramesPerSecond: 22
+  timeToCrossTile: 0.5
+  turnProbability: 0.15
   heartCount: 1
   spriteAnimation:
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 21300208, guid: ed8d739b8ae50f145b00b1db86c365bf, type: 3}
+  - {fileID: 21300240, guid: ed8d739b8ae50f145b00b1db86c365bf, type: 3}
   currDirection: 2
-  pauseProbability: 0.8
-  timeToPause: 1
+  pauseProbability: 0.3
+  timeToPause: 0.7
 --- !u!212 &212000013056107036
 SpriteRenderer:
   m_ObjectHideFlags: 1
