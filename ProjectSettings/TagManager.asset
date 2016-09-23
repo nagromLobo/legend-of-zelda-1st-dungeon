@@ -21,6 +21,7 @@ TagManager:
   - Door
   - LockedDoor
   - Threshold
+  - Pushable
   layers:
   - Default
   - TransparentFX
@@ -33,9 +34,9 @@ TagManager:
   - Item
   - Enemies
   - Water
-  - 
-  - 
-  - 
+  - Tiles
+  - MiddleBlocks
+  - Flying
   - 
   - 
   - 
