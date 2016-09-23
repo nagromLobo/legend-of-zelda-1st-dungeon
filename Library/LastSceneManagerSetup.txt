@@ -1,4 +1,0 @@
-sceneSetups:
-- path: Assets/Scenes/Dungeon.unity
-  isLoaded: 1
-  isActive: 1
