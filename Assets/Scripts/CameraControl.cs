@@ -8,7 +8,7 @@ public class CameraControl : MonoBehaviour {
     public int roomHeight = 13;
     public float transitionTime;
     private bool changeCameraPos = false;
-    private Vector3 cameraStartPos;s
+    private Vector3 cameraStartPos;
     private Vector3 cameraEndPos;
     private float cameraMoveStart;
     private Direction transitionDir;

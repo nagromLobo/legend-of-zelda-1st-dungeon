@@ -583,9 +583,14 @@ public class StateGelMovement : StateEnemyMovement {
     protected override void pauseEnemy() {
         state_machine.ChangeState(new StateEnemyStunned(enemy, timeToCrossTile, direction, turnProbability, timeToPause));
     }
+}
 
-
-
+public class StateGoriyaMovement : StateEnemyMovement {
+    float throwBoomerangProbability = 0.2f;
+    public StateGoriyaMovement(Enemy enemy, float timeToCrossTile, Direction direction, float turnProbability, float throwBoomerangProbability)
+        :base(enemy, timeToCrossTile, direction, turnProbability){
+        this.throwBoomerangProbability = throwBoomerangProbability;
+    }
 
 
 
@@ -658,7 +663,6 @@ public class StateEnemyMovement : State {
             } else if (shouldEnemyAttack()) {
                 enemyAttack();
             }
-        } else if (onMainGrid) {
             setTileLastAndNext();
         }
         return;
