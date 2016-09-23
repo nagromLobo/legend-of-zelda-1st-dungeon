@@ -294,6 +294,8 @@ public class StateLinkBombAttack: State {
 		Vector3 direction_offset = Vector3.zero;
 		weapon_instance = MonoBehaviour.Instantiate(weapon_prefab, PlayerControl.instance.transform.position, Quaternion.identity) as GameObject;
 
+		weapon_instance.AddComponent<Bomb>().ReleaseBomb ();
+
 		if (pc.current_direction == Direction.NORTH) {
 			direction_offset = new Vector3(0, 1, 0);
 		} else if (pc.current_direction == Direction.EAST) {
@@ -303,6 +305,8 @@ public class StateLinkBombAttack: State {
 		} else if (pc.current_direction == Direction.WEST) {
 			direction_offset = new Vector3(-1, 0, 0);
 		}
+
+		//weapon_instance.ReleaseBomb ();
 
 		// move and rotate weapon
 		weapon_instance.transform.position += direction_offset;
