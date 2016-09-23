@@ -501,14 +501,18 @@ public class StateKeeseMovement : StateEnemyMovement {
     float sinEccentricity;
     float maxFlyRadius;
     float flyRadius;
+    Vector3 directionVector;
 
-    public StateKeeseMovement(Enemy enemy, float timeToCrossTile, Direction direction, float turnProbability, float pauseProbability, float timeToPause, float pauseSlowdownTime, float maxFlyRadius)
+    public StateKeeseMovement(Enemy enemy, float timeToCrossTile, Direction direction, float turnProbability,
+                             float pauseProbability, float timeToPause, float pauseSlowdownTime,
+                             float maxFlyRadius, Vector3 directionVector)
         : base(enemy, timeToCrossTile, direction, turnProbability) {
         this.pauseProbability = pauseProbability;
         this.timeToPause = timeToPause;
         this.maxFlyRadius = maxFlyRadius;
         this.sinEccentricity = 0.6f;
         this.pauseSlowdownTime = pauseSlowdownTime;
+        this.directionVector = Vector3.Normalize(directionVector);
 
 
     }
@@ -522,32 +526,41 @@ public class StateKeeseMovement : StateEnemyMovement {
         return false;
     }
 
-    protected override void pauseEnemy() {
+    //protected override void pauseEnemy() {
         
-    }
+    //}
 
     protected override bool MoveEnemy() {
-        float u = (Time.time - timeLastTile) / timeToCrossTile;
+        float u = (Time.time - timeLastTile) / (timeToCrossTile / flyRadius);
         if (u > 1) {
             return true;
         }
         // Adjust u by adding an easing curve based on a Sine wave
-        u = u + sinEccentricity * (Mathf.Sin(u * Mathf.PI * 2));
+        //u = u + sinEccentricity * (Mathf.Sin(u * Mathf.PI * 2));
 
         // Intepolate the two linear interpolation points
-        enemy.transform.position = ((1 - u) * posLastTile + u * posNextTile);
+        //enemy.transform.position = ((1 - u) * posLastTile + u * posNextTile);
+        enemy.transform.position = Vector3.Lerp(posLastTile, posNextTile, u);
         return false;
     }
 
     protected override void turnEnemy() {
-        state_machine.ChangeState(new StateKeeseMovement(enemy, timeToCrossTile, direction, turnProbability, pauseProbability, timeToPause, pauseSlowdownTime, maxFlyRadius));
+        state_machine.ChangeState(new StateKeeseMovement(enemy, timeToCrossTile, direction,
+                                                         turnProbability, pauseProbability, timeToPause,
+                                                         pauseSlowdownTime, maxFlyRadius, Vector3.zero));
     }
 
     protected override void setTileLastAndNext() {
         timeLastTile = Time.time;
         posLastTile = enemy.transform.position;
-        flyRadius = Random.Range(0.0f, maxFlyRadius);
-        posNextTile = Random.insideUnitCircle * flyRadius;
+        flyRadius = Random.Range(2, maxFlyRadius);
+        if(directionVector == Vector3.zero) {
+            Vector2 xyChoordsNextTile = (Random.insideUnitCircle * flyRadius);
+            posNextTile = new Vector3(posLastTile.x + xyChoordsNextTile.x, posLastTile.y + xyChoordsNextTile.y, posLastTile.z);
+        } else {
+            posNextTile = directionVector * flyRadius;
+        }
+        
     }
 }
 

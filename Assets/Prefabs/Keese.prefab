@@ -21,6 +21,8 @@ GameObject:
   - 4: {fileID: 4000014289965892}
   - 212: {fileID: 212000010725858102}
   - 65: {fileID: 65000011452837408}
+  - 54: {fileID: 54000011745690812}
+  - 114: {fileID: 114000012626420674}
   m_Layer: 9
   m_Name: Keese
   m_TagString: Enemy
@@ -41,6 +43,21 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
+--- !u!54 &54000011745690812
+Rigidbody:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000012053100012}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 120
+  m_CollisionDetection: 0
 --- !u!65 &65000011452837408
 BoxCollider:
   m_ObjectHideFlags: 1
@@ -53,6 +70,30 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 0.5, z: 0.2}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &114000012626420674
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000012053100012}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8aa715f6c2f96024dad0fa2c248e2db9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 0
+  movementFramesPerSecond: 6
+  timeToCrossTile: 1
+  turnProbability: 0.02
+  heartCount: 1
+  spriteAnimation:
+  - {fileID: 21300306, guid: ed8d739b8ae50f145b00b1db86c365bf, type: 3}
+  - {fileID: 21300308, guid: ed8d739b8ae50f145b00b1db86c365bf, type: 3}
+  currDirection: 2
+  pauseProbability: 0.2
+  pauseSlowdownTime: 0.2
+  maxFlyRadius: 4
+  timeToPause: 1
 --- !u!212 &212000010725858102
 SpriteRenderer:
   m_ObjectHideFlags: 1
