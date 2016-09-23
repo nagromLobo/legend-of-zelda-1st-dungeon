@@ -31,7 +31,6 @@ public class ShowMapOnCamera : MonoBehaviour {
     public Transform        mapAnchor;
     public int              spriteSheetW;
 
-
     void Awake() {
         S = this;
 
