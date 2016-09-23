@@ -35,3 +35,4 @@ sysinfo.txt
 *.unitypackage
 .DS_Store
 thumbs.db
+Library/assetDatabase3

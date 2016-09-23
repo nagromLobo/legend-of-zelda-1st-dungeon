@@ -15,3 +15,9 @@
 *.PDF	 diff=astextplain
 *.rtf	 diff=astextplain
 *.RTF	 diff=astextplain
+*.unity binary
+*.prefab binary
+*.asset binary
+*.unity binary diff=unity
+*.prefab binary diff=unity
+*.asset binary diff=unity

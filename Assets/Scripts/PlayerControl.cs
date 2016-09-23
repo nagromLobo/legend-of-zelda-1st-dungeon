@@ -15,7 +15,7 @@ public class PlayerControl : MonoBehaviour {
     public int rupee_count = 0;
     public int bomb_count = 0;
     public int max_half_heart_count = 6;
-    public float half_heart_count = 6;
+    public int half_heart_count = 6;
     public int small_key_count = 0;
     public bool map_retrieved = false;
     public bool compass_retrieved = false;

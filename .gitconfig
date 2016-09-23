@@ -1,0 +1,8 @@
+[merge]
+	tool = unityyamlmerge
+[mergetool "unityyamlmerge"]
+	trustExitCode = false
+	keepTemporaries = true
+	keepBackup = false
+	path = <Unity Install Location>/Editor/Data/Tools/UnityYAMLMerge.exe
+	cmd = \"<Unity Install Location>/Editor/Data/Tools/UnityYAMLMerge.exe\" merge -p "$BASE" "$REMOTE" "$LOCAL" "$MERGED"
