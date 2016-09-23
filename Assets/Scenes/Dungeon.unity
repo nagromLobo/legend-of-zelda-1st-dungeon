@@ -267,6 +267,11 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e3ff8794e4ad4e6478f49c107f63a31c, type: 2}
   m_IsPrefabParent: 0
+--- !u!1 &349856028 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1000013893029978, guid: e3ff8794e4ad4e6478f49c107f63a31c,
+    type: 2}
+  m_PrefabInternal: {fileID: 341417355}
 --- !u!1001 &360971371
 Prefab:
   m_ObjectHideFlags: 0
@@ -618,6 +623,47 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.66, y: 0.3, z: 0.2}
   m_Center: {x: 0, y: -0.24, z: 0}
+--- !u!1 &1159029259
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1159029260}
+  - 114: {fileID: 1159029261}
+  m_Layer: 0
+  m_Name: Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1159029260
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1159029259}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 39.51, y: 3.666252, z: -10}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 9
+--- !u!114 &1159029261
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1159029259}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8e493d18761f471cbcbf1122c41cdb5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemy_prefab: {fileID: 349856028}
 --- !u!1 &1670848005
 GameObject:
   m_ObjectHideFlags: 0
