@@ -25,7 +25,7 @@ public class Enemy : MonoBehaviour {
     }
 	// Use this for initialization
 	void Start () {
-        animation_statemachine.ChangeState(new StateEnemyMovementAnimation(this, GetComponent<SpriteRenderer>(), spriteAnimation, movementFramesPerSecond));
+        StartEnemyAnimation(currDirection);
         StartEnemyMovement(false);
         CameraControl.S.cameraMovedDelegate += CameraMoved;
     }
@@ -103,6 +103,10 @@ public class Enemy : MonoBehaviour {
     // start movement in a given direction
     public virtual void StartEnemyMovement(Direction d) {
         control_statemachine.ChangeState(new StateEnemyMovement(this, timeToCrossTile, d, turnProbability));
+    }
+
+    public virtual void StartEnemyAnimation(Direction d) {
+        animation_statemachine.ChangeState(new StateEnemyMovementAnimation(this, GetComponent<SpriteRenderer>(), spriteAnimation, movementFramesPerSecond));
     }
 
     void DestroyEnemy() {

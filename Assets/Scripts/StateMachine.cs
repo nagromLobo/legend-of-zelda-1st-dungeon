@@ -439,10 +439,6 @@ public class StateLinkStunnedSprite : State {
 
         pc.transform.position = UtilityFunctions.fixToGrid(pc.transform.position, pc.current_direction, prevDirection);
 
-
-
-
-
         //link attack
         if (Input.GetKeyDown(KeyCode.A)) {
             state_machine.ChangeState(new StateLinkAttack(pc, pc.Sword_prefab, 15));
@@ -455,6 +451,16 @@ public class StateLinkStunnedSprite : State {
 
     }
 }
+
+//public class StateGoriyaMovementAnimation : StateEnemyMovementAnimation {
+//    Direction currDirection;
+//    public StateGoriyaMovementAnimation(Enemy enemy, SpriteRenderer renderer, Sprite[] animation, int fps, Direction dir)
+//        : base(enemy, renderer, animation, fps) {
+//        this.currDirection = dir;
+//    }
+
+
+//}
 
 public class StateEnemyMovementAnimation : State {
     private Enemy enemy;
@@ -587,9 +593,24 @@ public class StateGelMovement : StateEnemyMovement {
 
 public class StateGoriyaMovement : StateEnemyMovement {
     float throwBoomerangProbability = 0.2f;
-    public StateGoriyaMovement(Enemy enemy, float timeToCrossTile, Direction direction, float turnProbability, float throwBoomerangProbability)
+    float boomerangCooldown = 0.0f;
+    public StateGoriyaMovement(Enemy enemy, float timeToCrossTile, Direction direction, float turnProbability, float throwBoomerangProbability, float boomerangCoolDown)
         :base(enemy, timeToCrossTile, direction, turnProbability){
         this.throwBoomerangProbability = throwBoomerangProbability;
+    }
+
+    protected override bool shouldEnemyAttack() {
+        if(Random.value < throwBoomerangProbability) {
+            return true;
+        }
+        return false;
+    }
+
+    protected override void enemyAttack() {
+        // instantiate boomerang
+        // throw boomerang
+        state_machine.ChangeState(new StateEnemyStunned(enemy, timeToCrossTile, direction, turnProbability, boomerangCooldown));
+        
     }
 
 
