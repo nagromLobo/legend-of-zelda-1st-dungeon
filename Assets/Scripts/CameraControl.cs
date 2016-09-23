@@ -16,6 +16,8 @@ public class CameraControl : MonoBehaviour {
 
     public delegate void CameraMoved(Direction d, float transitionTime);
     public CameraMoved cameraMovedDelegate;
+	public delegate void CameraMoveComplete (Vector3 pos);
+	public CameraMoveComplete cameraMoveCompleteDelegate;
 
 
     void Awake() {
@@ -44,6 +46,7 @@ public class CameraControl : MonoBehaviour {
                 transform.position = currCameraPos;
             } else {
                 changeCameraPos = false;
+				cameraMoveCompleteDelegate(transform.position);
             }
         }
 

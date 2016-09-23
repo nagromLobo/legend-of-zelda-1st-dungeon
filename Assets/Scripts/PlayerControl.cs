@@ -259,6 +259,7 @@ public class PlayerControl : MonoBehaviour {
 
         current_state = EntityState.DAMAGED;
         half_heart_count -= damage;
+        Hud.UpdateLives();
         if(half_heart_count <= 0) {
             current_state = EntityState.GAME_OVER;
         }
