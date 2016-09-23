@@ -531,7 +531,7 @@ public class StateKeeseMovement : StateEnemyMovement {
     //}
 
     protected override bool MoveEnemy() {
-        float u = (Time.time - timeLastTile) / (timeToCrossTile / flyRadius);
+        float u = (Time.time - timeLastTile) / (timeToCrossTile * flyRadius);
         if (u > 1) {
             return true;
         }
@@ -553,12 +553,12 @@ public class StateKeeseMovement : StateEnemyMovement {
     protected override void setTileLastAndNext() {
         timeLastTile = Time.time;
         posLastTile = enemy.transform.position;
-        flyRadius = Random.Range(2, maxFlyRadius);
+        flyRadius = Random.Range(0, maxFlyRadius);
         if(directionVector == Vector3.zero) {
             Vector2 xyChoordsNextTile = (Random.insideUnitCircle * flyRadius);
             posNextTile = new Vector3(posLastTile.x + xyChoordsNextTile.x, posLastTile.y + xyChoordsNextTile.y, posLastTile.z);
         } else {
-            posNextTile = directionVector * flyRadius;
+            posNextTile = posLastTile + (directionVector * flyRadius);
         }
         
     }
