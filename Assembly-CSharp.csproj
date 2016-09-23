@@ -48,7 +48,10 @@
      <Compile Include="Assets\Scripts\BombBehavior.cs" />
      <Compile Include="Assets\Scripts\CameraControl.cs" />
      <Compile Include="Assets\Scripts\CameraFollow.cs" />
+     <Compile Include="Assets\Scripts\EmptyClass.cs" />
      <Compile Include="Assets\Scripts\Enemy.cs" />
+     <Compile Include="Assets\Scripts\EnemyFabrication.cs" />
+     <Compile Include="Assets\Scripts\Gel.cs" />
      <Compile Include="Assets\Scripts\Hud.cs" />
      <Compile Include="Assets\Scripts\ParseZeldaMap.cs" />
      <Compile Include="Assets\Scripts\PlayerControl.cs" />

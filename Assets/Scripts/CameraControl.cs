@@ -8,7 +8,7 @@ public class CameraControl : MonoBehaviour {
     public int roomHeight = 13;
     public float transitionTime;
     private bool changeCameraPos = false;
-    private Vector3 cameraStartPos;
+    private Vector3 cameraStartPos;s
     private Vector3 cameraEndPos;
     private float cameraMoveStart;
     private Direction transitionDir;
@@ -16,6 +16,8 @@ public class CameraControl : MonoBehaviour {
 
     public delegate void CameraMoved(Direction d, float transitionTime);
     public CameraMoved cameraMovedDelegate;
+	public delegate void CameraMoveComplete (Vector3 pos);
+	public CameraMoveComplete cameraMoveCompleteDelegate;
 
 
     void Awake() {
@@ -44,6 +46,7 @@ public class CameraControl : MonoBehaviour {
                 transform.position = currCameraPos;
             } else {
                 changeCameraPos = false;
+				cameraMoveCompleteDelegate(transform.position);
             }
         }
 
