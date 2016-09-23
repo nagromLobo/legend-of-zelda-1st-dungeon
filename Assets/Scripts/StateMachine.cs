@@ -273,6 +273,10 @@ public class StateLinkBombAttack: State {
 	GameObject weapon_prefab;
 	GameObject weapon_instance;
 	float coolDown = 0.0f;
+	public delegate void Bombdropped(GameObject bomb);
+	public Bombdropped bombDropped;
+
+	//Bomb bomb;
 
 	public StateLinkBombAttack(PlayerControl pc, GameObject weapon_prefab, float coolDown) {
 		this.pc = pc;
@@ -285,9 +289,10 @@ public class StateLinkBombAttack: State {
 		//if bow is used decrement arrows
 		pc.current_state = EntityState.ATTACKING;
 		pc.GetComponent<Rigidbody>().velocity = Vector3.zero;
-		weapon_instance = MonoBehaviour.Instantiate(weapon_prefab, pc.transform.position, Quaternion.identity) as GameObject;
+
 
 		Vector3 direction_offset = Vector3.zero;
+		weapon_instance = MonoBehaviour.Instantiate(weapon_prefab, PlayerControl.instance.transform.position, Quaternion.identity) as GameObject;
 
 		if (pc.current_direction == Direction.NORTH) {
 			direction_offset = new Vector3(0, 1, 0);
@@ -302,12 +307,13 @@ public class StateLinkBombAttack: State {
 		// move and rotate weapon
 		weapon_instance.transform.position += direction_offset;
 //		weapon_instance.GetComponent<BoxCollider>().isTrigger = false;
-		weapon_instance.transform.tag = "BombReleased";
+		weapon_instance.tag = "BombReleased";
 		pc.bomb_count -= 1;
 		Hud.UpdateBombs ();
 	}
 
 	public override void OnUpdate(float time_delta_fraction) {
+//		bomb.Update(time_delta_fraction);
 		coolDown -= time_delta_fraction;
 		if (coolDown <= 0) {
 			ConcludeState();
@@ -317,6 +323,7 @@ public class StateLinkBombAttack: State {
 	public override void OnFinish() {
 		pc.current_state = EntityState.NORMAL;
 	}
+		
 }
 
 public class StateLinkStunnedMovement : State {
