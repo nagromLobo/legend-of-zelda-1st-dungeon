@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
+using System.Collections.Generic;
 
 public enum Direction {NORTH, EAST, SOUTH, WEST};
 public enum EntityState {NORMAL, ATTACKING, DAMAGED, DOOR_TRANSITION, ENTERING_DOOR, GAME_OVER};
@@ -34,6 +35,17 @@ public class PlayerControl : MonoBehaviour {
     public Sprite northDoorRight;
     public Sprite eastDoor;
 
+	StateMachine animation_state_machine;
+	StateMachine control_state_machine;
+
+	public EntityState current_state = EntityState.NORMAL;
+	public Direction current_direction = Direction.SOUTH;
+
+	public GameObject[] Inventory; // 0 Boomerang, 2 Bomb, 3 Bow
+
+	public GameObject Sword_prefab;
+
+	public GameObject selected_weapon_prefab;
 
 
     private bool link_moving_through_doorway = false;
@@ -46,15 +58,6 @@ public class PlayerControl : MonoBehaviour {
     private SpriteRenderer spriteRenderer;
     private Color normalColor;
 
-
-    StateMachine animation_state_machine;
-    StateMachine control_state_machine;
-
-    public EntityState current_state = EntityState.NORMAL;
-    public Direction current_direction = Direction.SOUTH;
-
-    public GameObject selected_weapon_prefab;
-
     public static PlayerControl instance;
 
     // FIXME --> Connect all the sprites to this array (and the speed) in the inspector
@@ -65,12 +68,15 @@ public class PlayerControl : MonoBehaviour {
             Debug.LogError("Mutiple Link objects detected:");
         }
         instance = this;
-        print("in start");
-
-        CameraControl.S.cameraMovedDelegate += CameraMoved;
+		//print("in start"); 
 
         // Launch Idle State
         animation_state_machine = new StateMachine();
+        control_state_machine = new StateMachine();
+        control_state_machine.ChangeState(new StateLinkNormalMovement(this));
+
+        CameraControl.S.cameraMovedDelegate += CameraMoved;
+
         animation_state_machine.ChangeState(new StateIdleWithSprite(this, GetComponent<SpriteRenderer>(), link_run_down[0]));
 
         control_state_machine = new StateMachine();
@@ -101,7 +107,6 @@ public class PlayerControl : MonoBehaviour {
         if (control_state_machine.IsFinished()) {
             control_state_machine.ChangeState(new StateLinkNormalMovement(this));
         }
-
     }
 
     private void handleDoorTransition() {
@@ -150,28 +155,36 @@ public class PlayerControl : MonoBehaviour {
 
     void OnTriggerEnter(Collider coll) {
 
+		//add arrows to this list
+
         switch (coll.gameObject.tag) {
             // General Collectables
             case "Rupee":
                 Destroy(coll.gameObject);
                 rupee_count++;
+				//print ("rupees: "+ rupee_count); 
+				Hud.UpdateRupees();
                 break;
             case "Heart":
                 Destroy(coll.gameObject);
                 if (half_heart_count < max_half_heart_count) {
                     half_heart_count += 2;
                 }
+				Hud.UpdateLives ();
                 break;
             case "Fairy":
                 Destroy(coll.gameObject);
                 half_heart_count = max_half_heart_count;
+				Hud.UpdateLives ();
                 break;
-            case "SmallKey":
-                Destroy(coll.gameObject);
-                small_key_count++;
-                break;
+			case "SmallKey":
+				Destroy (coll.gameObject);
+				small_key_count++;
+				Hud.UpdateKeys ();
+				break;
             // Weapon Collectables
             case "Bow":
+				//cannot use bow unless you have arrows 
                 Destroy(coll.gameObject);
                 bow_retrieved = true;
                 break;
@@ -182,6 +195,9 @@ public class PlayerControl : MonoBehaviour {
             case "Bomb":
                 Destroy(coll.gameObject);
                 bomb_count++;
+				//update weapon selection
+				//if(bomb_count>=1) ; //add to weapons list
+				Hud.UpdateBombs ();
                 break;
             // Dungeon State Collectables
             case "Map":
