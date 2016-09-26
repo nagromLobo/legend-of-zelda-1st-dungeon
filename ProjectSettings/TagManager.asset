@@ -22,6 +22,7 @@ TagManager:
   - LockedDoor
   - Threshold
   - Pushable
+  - Weapon
   layers:
   - Default
   - TransparentFX
@@ -33,7 +34,7 @@ TagManager:
   - 
   - Item
   - Enemies
-  - 
+  - Weapons
   - Tiles
   - MiddleBlocks
   - Flying

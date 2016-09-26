@@ -42,13 +42,7 @@ public class Enemy : MonoBehaviour {
             this.gameObject.transform.position = adjustBackToGrid(currDirection, transform.position);
             StartEnemyMovement(true);
         } else if (other.gameObject.tag == "Weapon") {
-            // int damageHalfHearts = other.gameObject.getComponent<Weapon>().damage;
-            int damage = 0;
-            heartCount -= damage;
-            if(heartCount <= 0) {
-                // update room state (enemy destroyed)
-                Destroy(other.gameObject);
-            } 
+            EnemyDamaged(other.GetComponent<Weapon>());
         }
     }
 
@@ -105,6 +99,18 @@ public class Enemy : MonoBehaviour {
 
     public virtual void OnEnemyTurned(Direction d) {
         currDirection = d;
+    }
+
+    public virtual void EnemyDamaged(Weapon w) {
+        //int damageHalfHearts = w.damage;
+        int damage = 0;
+        heartCount -= damage;
+        if (heartCount <= 0) {
+            // update room state (enemy destroyed)
+            Destroy(w.gameObject);
+            return;
+        }
+        // if not destroyed animate enemy
     }
 
     void DestroyEnemy() {
