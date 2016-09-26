@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 
 public enum Direction {NORTH, EAST, SOUTH, WEST};
-public enum EntityState {NORMAL, ATTACKING, DAMAGED, DOOR_TRANSITION, ENTERING_DOOR, GAME_OVER};
+public enum EntityState {NORMAL, ATTACKING, DAMAGED, CAMERA_TRANSITION, ENTERING_ROOM, GAME_OVER};
 
 public class PlayerControl : MonoBehaviour {
 
@@ -12,6 +12,11 @@ public class PlayerControl : MonoBehaviour {
     public Color LinkDamageColor;
     public float damageCooldown = 1;
     public float damageFlashLength = 0.2f;
+    public float timeToEnterThreshold = 1.0f;
+    public float delayInThreshold = 1.0f;
+    public float timeToLeaveThreshold = 1.0f;
+    public float distanceToLeaveThreshold = 2.0f;
+    public float distanceToEnterThreshold = 2.0f;
 
     public int rupee_count = 0;
     public int bomb_count = 0;
@@ -34,8 +39,9 @@ public class PlayerControl : MonoBehaviour {
     public Sprite northDoorLeft;
     public Sprite northDoorRight;
     public Sprite eastDoor;
+    public Sprite westDoor;
 
-	StateMachine animation_state_machine;
+    StateMachine animation_state_machine;
 	StateMachine control_state_machine;
 
 	public EntityState current_state = EntityState.NORMAL;
@@ -47,12 +53,12 @@ public class PlayerControl : MonoBehaviour {
 
 	public GameObject selected_weapon_prefab;
 
-
-    private bool link_moving_through_doorway = false;
     private Direction link_doorway_direction;
-    private float timeStartCrossThreshold;
-    private float timeToCrossThreshold;
-    private Vector3 linkPosDoorwayThreshold;
+    private float timeStartDelay = 0.0f;
+    private float timeStartTransition;
+    private float transitionTime;
+    private Vector3 posStartTransition;
+    private Vector3 posEndTransition;
     private float damageStartTime;
     private float lastDamageFlashTime;
     private SpriteRenderer spriteRenderer;
@@ -90,11 +96,11 @@ public class PlayerControl : MonoBehaviour {
     // Update is called once per frame
     void Update() {
         switch (current_state) {
-            case EntityState.DOOR_TRANSITION:
-                handleDoorTransition();
+            case EntityState.CAMERA_TRANSITION:
+                handleTransitionMovement();
                 break;
-            case EntityState.ENTERING_DOOR:
-                handleDoorTransition();
+            case EntityState.ENTERING_ROOM:
+                handleTransitionMovement();
                 break;
             case EntityState.DAMAGED:
                 handleDamaged();
@@ -109,29 +115,55 @@ public class PlayerControl : MonoBehaviour {
         }
     }
 
-    private void handleDoorTransition() {
-        // Linearly interpolate 
-        float u = (Time.time - timeStartCrossThreshold) / timeToCrossThreshold;
+    private void handleTransitionMovement() {
+        float u = (Time.time - timeStartTransition) / transitionTime;
+        if (u > 1) {
+            if(timeStartDelay == 0.0f) {
+                // then we start delaying now
+                timeStartDelay = Time.time;
+            }
+            if(((Time.time - timeStartDelay) / delayInThreshold) < 1) {
+                // then we have to wait
+                return;
+            }
+            if (current_state == EntityState.CAMERA_TRANSITION) {
+                // then we have to start entering room transition
+                timeStartTransition = Time.time;
+                transitionTime = timeToLeaveThreshold;
+                posStartTransition = transform.position;
+                switch (current_direction) {
+                    case Direction.NORTH:
+                        posEndTransition = new Vector3(posStartTransition.x, posStartTransition.y + distanceToLeaveThreshold, posStartTransition.z);
+                        break;
+                    case Direction.EAST:
+                        posEndTransition = new Vector3(posStartTransition.x + distanceToLeaveThreshold, posStartTransition.y, posStartTransition.z);
+                        break;
+                    case Direction.SOUTH:
+                        posEndTransition = new Vector3(posStartTransition.x, posStartTransition.y - distanceToLeaveThreshold, posStartTransition.z);
+                        break;
+                    case Direction.WEST:
+                        posEndTransition = new Vector3(posStartTransition.x - distanceToLeaveThreshold, posStartTransition.y, posStartTransition.z);
+                        break;
+                }
+                current_state = EntityState.ENTERING_ROOM;
+            } else {
+                current_state = EntityState.NORMAL;
+                // have to set this back to zero so we know if we've started waiting the next time
+                timeStartDelay = 0.0f;
+                return;
+            }
+        }
         Vector3 currPos = gameObject.transform.position;
         // vertical
         if (link_doorway_direction == Direction.NORTH || link_doorway_direction == Direction.SOUTH) {
-            float newPosY = Mathf.Lerp(linkPosDoorwayThreshold.y, linkPosDoorwayThreshold.y + 11 + 4, u);
-            gameObject.transform.position.Set(currPos.x, newPosY, currPos.z);
+            float newPosY = Mathf.Lerp(posStartTransition.y, posEndTransition.y, u);
+            currPos.Set(posStartTransition.x, newPosY, currPos.z);
             // horizontial
         } else {
-            float newPosX = Mathf.Lerp(linkPosDoorwayThreshold.x, linkPosDoorwayThreshold.x + threshold_width - 11, u);
-            transform.position.Set(newPosX, currPos.y, currPos.z);
+            float newPosX = Mathf.Lerp(posStartTransition.x, posEndTransition.x, u);
+            currPos.Set(newPosX, currPos.y, currPos.z);
         }
-        if (u > 1) {
-            if (current_state == EntityState.DOOR_TRANSITION) {
-                timeStartCrossThreshold = Time.time;
-                linkPosDoorwayThreshold = transform.position;
-                current_state = EntityState.ENTERING_DOOR;
-            } else if (current_state == EntityState.ENTERING_DOOR) {
-                current_state = EntityState.NORMAL;
-            }
-        }
-        current_state = EntityState.NORMAL;
+        transform.position = currPos;
     }
 
     private void handleDamaged() {
@@ -270,33 +302,39 @@ public class PlayerControl : MonoBehaviour {
         
     }
 
-    public void CameraMoved(Direction d, float transitionTime) {
-        current_state = EntityState.DOOR_TRANSITION;
-        timeStartCrossThreshold = Time.time;
-        timeToCrossThreshold = transitionTime;
-        linkPosDoorwayThreshold = gameObject.transform.position;
+    public void CameraMoved(Direction d, float cameraTransitionTime) {
+        current_state = EntityState.CAMERA_TRANSITION;
+        timeStartTransition = Time.time;
+        transitionTime = timeToEnterThreshold;
+        posStartTransition = gameObject.transform.position;
+
         link_doorway_direction = d;
         Sprite[] animationSprites;
-        control_state_machine.ChangeState(new StateLinkStunnedMovement(this, transitionTime * 2, Vector3.zero));
+        // turn off movement control
+        control_state_machine.ChangeState(new StateLinkStunnedMovement(this, timeToEnterThreshold + timeToLeaveThreshold + delayInThreshold, Vector3.zero));
         switch (d) {
             case Direction.SOUTH:
                 animationSprites = link_run_down;
+                posEndTransition = new Vector3(posStartTransition.x, posStartTransition.y - distanceToEnterThreshold, posStartTransition.z);
                 break;
             case Direction.EAST:
                 animationSprites = link_run_right;
+                posEndTransition = new Vector3(posStartTransition.x + distanceToEnterThreshold, posStartTransition.y, posStartTransition.z);
                 break;
             case Direction.NORTH:
                 animationSprites = link_run_up;
+                posEndTransition = new Vector3(posStartTransition.x, posStartTransition.y + distanceToEnterThreshold, posStartTransition.z);
                 break;
             case Direction.WEST:
                 animationSprites = link_run_left;
+                posEndTransition = new Vector3(posStartTransition.x - distanceToEnterThreshold, posStartTransition.y, posStartTransition.z);
                 break;
             default:
                 animationSprites = link_run_up;
                 break;
         }
-        animation_state_machine.ChangeState(new StateLinkDoorMovementAnimation(this, GetComponent<SpriteRenderer>(), animationSprites, 6, transitionTime * 2));
-        //kanimation_state_machine.ChangeState(new StateLinkStunnedSprite(this, gameObject.GetComponent<SpriteRenderer>(), sprite, transitionTime + time_to_cross_threshold));
+        // keep animation of link walking in the current direction
+        animation_state_machine.ChangeState(new StateLinkDoorMovementAnimation(this, GetComponent<SpriteRenderer>(), animationSprites, 6, timeToEnterThreshold + timeToLeaveThreshold + delayInThreshold));
     }
 
     void OnCollisionEnter(Collision other) {
@@ -304,7 +342,7 @@ public class PlayerControl : MonoBehaviour {
             case "LockedDoor":
                 if(small_key_count > 0) {
                     Tile tile = other.gameObject.GetComponent<Tile>();
-                    tile.openDoor(northDoorLeft, northDoorRight, eastDoor);
+                    tile.openDoor();
                     small_key_count--;
                 }
                 break;
@@ -319,6 +357,3 @@ public class PlayerControl : MonoBehaviour {
         }
     }
 }
-
-//    void OnCollisionEnter(Collision coll) { }
-//}
