@@ -2,14 +2,22 @@
 using System.Collections;
 
 public class Enemy : MonoBehaviour {
+    public EntityState current_state = EntityState.NORMAL;
     public int damage;
     public int movementFramesPerSecond = 4;
     public float timeToCrossTile = 0.0f;
     public float turnProbability = 0.02f;
     public int heartCount = 1;
+    public float damageFlashLength = 1.0f;
     public Sprite[] spriteAnimation;
+    public Color enemyDamageColor = Color.red;
+    public float damageCooldown = 2.0f;
+    protected Color normalColor;
+    protected float damageStartTime = 0.0f;
+    protected SpriteRenderer spriteRenderer;
     protected StateMachine animation_statemachine;
     protected StateMachine control_statemachine;
+    protected float lastDamageFlashTime = 0.0f;
     public Direction currDirection = Direction.SOUTH;
 
     public Enemy() {
@@ -34,6 +42,9 @@ public class Enemy : MonoBehaviour {
 	void Update () {
         animation_statemachine.Update();
         control_statemachine.Update();
+        if(current_state == EntityState.DAMAGED) {
+            handleDamaged();
+        }
 	}
 
 
@@ -103,14 +114,36 @@ public class Enemy : MonoBehaviour {
 
     public virtual void EnemyDamaged(Weapon w) {
         //int damageHalfHearts = w.damage;
-        int damage = 0;
+        int damage = 1;
+        normalColor = spriteRenderer.color;
+        current_state = EntityState.DAMAGED;
+        damageStartTime = Time.time;
         heartCount -= damage;
         if (heartCount <= 0) {
             // update room state (enemy destroyed)
-            Destroy(w.gameObject);
+            Destroy(this.gameObject);
             return;
         }
         // if not destroyed animate enemy
+    }
+
+    private void handleDamaged() {
+        // then we should show damaged color in the flash
+        if ((Time.time - lastDamageFlashTime) < (damageFlashLength)) {
+            spriteRenderer.color = enemyDamageColor;
+            // else if the amount of time passed is less than 2 times the flash rate, stay normal
+        } else if ((Time.time - lastDamageFlashTime) < (2 * damageFlashLength)) {
+            spriteRenderer.color = normalColor;
+            // else start the cycle over
+        } else {
+            lastDamageFlashTime = Time.time;
+            spriteRenderer.color = enemyDamageColor;
+        }
+        if ((Time.time - damageStartTime) > damageCooldown) {
+            current_state = EntityState.NORMAL;
+            spriteRenderer.color = normalColor;
+        }
+
     }
 
     void DestroyEnemy() {

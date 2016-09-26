@@ -429,7 +429,8 @@ MonoBehaviour:
   current_state: 0
   current_direction: 2
   Inventory: []
-  Sword_prefab: {fileID: 0}
+  Sword_prefab: {fileID: 1000012755623840, guid: dde012012b86747cabe96058f1e2424d,
+    type: 2}
   selected_weapon_prefab: {fileID: 1000012755623840, guid: dde012012b86747cabe96058f1e2424d,
     type: 2}
 --- !u!65 &1026231735
