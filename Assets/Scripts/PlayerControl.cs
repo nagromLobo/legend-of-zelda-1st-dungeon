@@ -34,8 +34,9 @@ public class PlayerControl : MonoBehaviour {
     public Sprite northDoorLeft;
     public Sprite northDoorRight;
     public Sprite eastDoor;
+    public Sprite westDoor;
 
-	StateMachine animation_state_machine;
+    StateMachine animation_state_machine;
 	StateMachine control_state_machine;
 
 	public EntityState current_state = EntityState.NORMAL;
@@ -110,28 +111,28 @@ public class PlayerControl : MonoBehaviour {
     }
 
     private void handleDoorTransition() {
-        // Linearly interpolate 
-        float u = (Time.time - timeStartCrossThreshold) / timeToCrossThreshold;
-        Vector3 currPos = gameObject.transform.position;
-        // vertical
-        if (link_doorway_direction == Direction.NORTH || link_doorway_direction == Direction.SOUTH) {
-            float newPosY = Mathf.Lerp(linkPosDoorwayThreshold.y, linkPosDoorwayThreshold.y + 11 + 4, u);
-            gameObject.transform.position.Set(currPos.x, newPosY, currPos.z);
-            // horizontial
-        } else {
-            float newPosX = Mathf.Lerp(linkPosDoorwayThreshold.x, linkPosDoorwayThreshold.x + threshold_width - 11, u);
-            transform.position.Set(newPosX, currPos.y, currPos.z);
-        }
-        if (u > 1) {
-            if (current_state == EntityState.DOOR_TRANSITION) {
-                timeStartCrossThreshold = Time.time;
-                linkPosDoorwayThreshold = transform.position;
-                current_state = EntityState.ENTERING_DOOR;
-            } else if (current_state == EntityState.ENTERING_DOOR) {
-                current_state = EntityState.NORMAL;
-            }
-        }
-        current_state = EntityState.NORMAL;
+        //// Linearly interpolate 
+        //float u = (Time.time - timeStartCrossThreshold) / timeToCrossThreshold;
+        //Vector3 currPos = gameObject.transform.position;
+        //// vertical
+        //if (link_doorway_direction == Direction.NORTH || link_doorway_direction == Direction.SOUTH) {
+        //    float newPosY = Mathf.Lerp(linkPosDoorwayThreshold.y, linkPosDoorwayThreshold.y + 11 + 4, u);
+        //    gameObject.transform.position.Set(currPos.x, newPosY, currPos.z);
+        //    // horizontial
+        //} else {
+        //    float newPosX = Mathf.Lerp(linkPosDoorwayThreshold.x, linkPosDoorwayThreshold.x + threshold_width - 11, u);
+        //    transform.position.Set(newPosX, currPos.y, currPos.z);
+        //}
+        //if (u > 1) {
+        //    if (current_state == EntityState.DOOR_TRANSITION) {
+        //        timeStartCrossThreshold = Time.time;
+        //        linkPosDoorwayThreshold = transform.position;
+        //        current_state = EntityState.ENTERING_DOOR;
+        //    } else if (current_state == EntityState.ENTERING_DOOR) {
+        //        current_state = EntityState.NORMAL;
+        //    }
+        //}
+        //current_state = EntityState.NORMAL;
     }
 
     private void handleDamaged() {
@@ -271,13 +272,13 @@ public class PlayerControl : MonoBehaviour {
     }
 
     public void CameraMoved(Direction d, float transitionTime) {
-        current_state = EntityState.DOOR_TRANSITION;
+        //current_state = EntityState.DOOR_TRANSITION;
         timeStartCrossThreshold = Time.time;
         timeToCrossThreshold = transitionTime;
         linkPosDoorwayThreshold = gameObject.transform.position;
         link_doorway_direction = d;
         Sprite[] animationSprites;
-        control_state_machine.ChangeState(new StateLinkStunnedMovement(this, transitionTime * 2, Vector3.zero));
+        //control_state_machine.ChangeState(new StateLinkStunnedMovement(this, transitionTime * 2, Vector3.zero));
         switch (d) {
             case Direction.SOUTH:
                 animationSprites = link_run_down;
@@ -304,7 +305,7 @@ public class PlayerControl : MonoBehaviour {
             case "LockedDoor":
                 if(small_key_count > 0) {
                     Tile tile = other.gameObject.GetComponent<Tile>();
-                    tile.openDoor(northDoorLeft, northDoorRight, eastDoor);
+                    tile.openDoor();
                     small_key_count--;
                 }
                 break;
@@ -319,6 +320,3 @@ public class PlayerControl : MonoBehaviour {
         }
     }
 }
-
-//    void OnCollisionEnter(Collision coll) { }
-//}

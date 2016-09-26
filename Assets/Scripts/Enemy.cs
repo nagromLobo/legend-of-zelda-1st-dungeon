@@ -36,15 +36,6 @@ public class Enemy : MonoBehaviour {
         control_statemachine.Update();
 	}
 
-    void OnTriggerStay(Collider other) {
-        //MonoBehaviour.print("OnTrigger Skeleton");
-        //if (other.gameObject.tag == "Tile") {
-        //    // adjust enemy position back to the subgrid
-        //    Vector3 currPos = this.gameObject.transform.position;
-        //    this.gameObject.transform.position.Set(Mathf.Round(currPos.x), Mathf.Round(currPos.y), currPos.z);
-        //    control_statemachine.ChangeState(new StateEnemyMovement(this, timeToCrossTile, UtilityFunctions.randomDirection(currDirection), turnProbability));
-        //}
-      }
 
     void OnTriggerEnter(Collider other) {
         if(other.gameObject.tag == "Threshold" || other.gameObject.tag == "LockedDoor") {
@@ -93,11 +84,14 @@ public class Enemy : MonoBehaviour {
     }
 
     public virtual void StartEnemyMovement(bool disallowCurrentDirection) {
+        Direction turnDirection;
         if (disallowCurrentDirection) {
-            control_statemachine.ChangeState(new StateEnemyMovement(this, timeToCrossTile, UtilityFunctions.randomDirection(currDirection), turnProbability));
+            turnDirection = UtilityFunctions.randomDirection(currDirection);
         } else {
-            control_statemachine.ChangeState(new StateEnemyMovement(this, timeToCrossTile, UtilityFunctions.randomDirection(), turnProbability));
+            turnDirection = UtilityFunctions.randomDirection();
         }
+        control_statemachine.ChangeState(new StateEnemyMovement(this, timeToCrossTile, turnDirection, turnProbability));
+        OnEnemyTurned(turnDirection);
     }
 
     // start movement in a given direction
@@ -107,6 +101,10 @@ public class Enemy : MonoBehaviour {
 
     public virtual void StartEnemyAnimation(Direction d) {
         animation_statemachine.ChangeState(new StateEnemyMovementAnimation(this, GetComponent<SpriteRenderer>(), spriteAnimation, movementFramesPerSecond));
+    }
+
+    public virtual void OnEnemyTurned(Direction d) {
+        currDirection = d;
     }
 
     void DestroyEnemy() {

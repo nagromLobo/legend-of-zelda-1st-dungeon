@@ -452,16 +452,6 @@ public class StateLinkStunnedSprite : State {
     }
 }
 
-//public class StateGoriyaMovementAnimation : StateEnemyMovementAnimation {
-//    Direction currDirection;
-//    public StateGoriyaMovementAnimation(Enemy enemy, SpriteRenderer renderer, Sprite[] animation, int fps, Direction dir)
-//        : base(enemy, renderer, animation, fps) {
-//        this.currDirection = dir;
-//    }
-
-
-//}
-
 public class StateEnemyMovementAnimation : State {
     private Enemy enemy;
     private SpriteRenderer renderer;
@@ -594,9 +584,10 @@ public class StateGelMovement : StateEnemyMovement {
 public class StateGoriyaMovement : StateEnemyMovement {
     float throwBoomerangProbability = 0.2f;
     float boomerangCooldown = 0.0f;
-    public StateGoriyaMovement(Enemy enemy, float timeToCrossTile, Direction direction, float turnProbability, float throwBoomerangProbability, float boomerangCoolDown)
+    public StateGoriyaMovement(Enemy enemy, float timeToCrossTile, Direction direction, float turnProbability, float throwBoomerangProbability, float boomerangCooldown)
         :base(enemy, timeToCrossTile, direction, turnProbability){
         this.throwBoomerangProbability = throwBoomerangProbability;
+        this.boomerangCooldown = boomerangCooldown;
     }
 
     protected override bool shouldEnemyAttack() {
@@ -664,7 +655,7 @@ public class StateEnemyMovement : State {
     }
 
     public override void OnStart() {
-        enemy.currDirection = direction;
+        enemy.OnEnemyTurned(direction);
         setTileLastAndNext();
         Rigidbody rigidBody = enemy.GetComponent<Rigidbody>();
         rigidBody.velocity = Vector3.zero;

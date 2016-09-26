@@ -12,6 +12,12 @@ public class Tile : MonoBehaviour {
     private Material        mat;
     private SpriteRenderer rend;
 
+    public Sprite northDoorLeft;
+    public Sprite northDoorRight;
+    public Sprite eastDoor;
+    public Sprite westDoor;
+
+
     // tile numvalues in order of increasing x coordinate
     private static int northDoorTileNumLeft = 92;
     private static int northDoorTileNumRight = 93;
@@ -19,8 +25,8 @@ public class Tile : MonoBehaviour {
     private static int eastDoorTileNum = 48;
     private static int northDoorLockedTileNumLeft = 80;
     private static int northDoorLockedTileNumRight = 81;
-    //private static int westDoorLockedTileNum = 101;
-    private static int eastDoorLockedTileNum = 106;
+    private static int westDoorLockedTileNum = 106;
+    private static int eastDoorLockedTileNum = 101;
 
     private SpriteRenderer  sprend;
 
@@ -138,8 +144,9 @@ public class Tile : MonoBehaviour {
         }
 	}
     
-    public void openDoor(Sprite northDoorLeft, Sprite northDoorRight, Sprite eastDoor) {
+    public void openDoor() {
         if(tileNum == northDoorLockedTileNumLeft) {
+            // make this change show up imediatly
             SpriteRenderer rend = GetComponent<SpriteRenderer>();
             rend.sprite = northDoorLeft;
             setUpThreshold(this);
@@ -147,7 +154,11 @@ public class Tile : MonoBehaviour {
             rend = otherTile.GetComponent<SpriteRenderer>();
             rend.sprite = northDoorRight;
             setUpThreshold(otherTile);
+            // make this change peremenant
+            ShowMapOnCamera.MAP[x, y] = northDoorTileNumLeft;
+            ShowMapOnCamera.MAP[x + 1, y] = northDoorTileNumRight;
         } else if(tileNum == northDoorLockedTileNumRight) {
+            // make this change show up immediatly
             SpriteRenderer rend = GetComponent<SpriteRenderer>();
             rend.sprite = northDoorRight;
             setUpThreshold(this);
@@ -155,14 +166,25 @@ public class Tile : MonoBehaviour {
             rend = otherTile.GetComponent<SpriteRenderer>();
             rend.sprite = northDoorLeft;
             setUpThreshold(otherTile);
+            // make this change permenant
+            ShowMapOnCamera.MAP[x, y] = northDoorTileNumRight;
+            ShowMapOnCamera.MAP[x - 1, y] = northDoorTileNumLeft;
             // then we have east  
         } else if(tileNum == eastDoorLockedTileNum) {
+            // make this change immediate
             SpriteRenderer rend = GetComponent<SpriteRenderer>();
             rend.sprite = eastDoor;
             setUpThreshold(this);
+            // make this change perminant
+            ShowMapOnCamera.MAP[x, y] = eastDoorTileNum;
             // else we have west
         } else {
-            SetTile(x, y, westDoorTileNum);
+            // make this chage immediate
+            SpriteRenderer rend = GetComponent<SpriteRenderer>();
+            rend.sprite = westDoor;
+            setUpThreshold(this);
+            // make this change perminant
+            ShowMapOnCamera.MAP[x, y] = westDoorTileNum;
         }
     }	
 
