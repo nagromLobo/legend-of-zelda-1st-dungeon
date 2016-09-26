@@ -212,7 +212,7 @@ public class PlayerControl : MonoBehaviour {
 			case "SmallKey":
 				Destroy (coll.gameObject);
 				small_key_count++;
-				Hud.UpdateKeys ();
+				Hud.UpdateKeys();
 				break;
             // Weapon Collectables
             case "Bow":
@@ -344,6 +344,7 @@ public class PlayerControl : MonoBehaviour {
                     Tile tile = other.gameObject.GetComponent<Tile>();
                     tile.openDoor();
                     small_key_count--;
+                    Hud.UpdateKeys();
                 }
                 break;
             // Enemys
