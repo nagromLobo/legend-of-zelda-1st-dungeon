@@ -334,28 +334,8 @@ public class StateLinkStunnedMovement : State {
     public override void OnStart() {
         startTime = Time.time;
         if (pushBackNormal != Vector3.zero) {
-            Vector3 velocityVector;
-            // set links rigid body in the other direction
-            //switch (pc.current_direction) {
-            //    case (Direction.NORTH):
-            //        velocityVector = new Vector3(0, -1, 0);
-            //        break;
-            //    case (Direction.EAST):
-            //        velocityVector = new Vector3(-1, 0, 0);
-            //        break;
-            //    case (Direction.SOUTH):
-            //        velocityVector = new Vector3(0, 1, 0);
-            //        break;
-            //    case (Direction.WEST):
-            //        velocityVector = new Vector3(1, 0, 0);
-            //        break;
-            //    default:
-            //        velocityVector = Vector3.zero;
-            //        break;
-            
             pc.GetComponent<Rigidbody>().velocity =
                 pc.GetComponent<Rigidbody>().velocity = pushBackNormal * pc.walkingVelocity;
-
         }
     }
 
@@ -449,6 +429,10 @@ public class StateLinkStunnedSprite : State {
                 state_machine.ChangeState(new StateLinkBombAttack(pc, pc.selected_weapon_prefab, 6));
         }
 
+    }
+
+    public override void OnFinish() {
+        pc.GetComponent<Rigidbody>().velocity = Vector3.zero;
     }
 }
 

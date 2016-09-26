@@ -235,7 +235,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   roomWidth: 15
-  roomHeight: 10
+  roomHeight: 11
   transitionTime: 3
 --- !u!1 &737124830
 GameObject:
@@ -394,6 +394,11 @@ MonoBehaviour:
   LinkDamageColor: {r: 0.9117647, g: 0.23464532, b: 0.23464532, a: 1}
   damageCooldown: 1.5
   damageFlashLength: 0.1
+  timeToEnterThreshold: 0.5
+  delayInThreshold: 2.5
+  timeToLeaveThreshold: 1
+  distanceToLeaveThreshold: 2
+  distanceToEnterThreshold: 1
   rupee_count: 0
   bomb_count: 0
   max_half_heart_count: 6
