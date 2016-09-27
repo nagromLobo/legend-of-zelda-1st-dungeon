@@ -55,6 +55,36 @@ public class EnemyFabrication : MonoBehaviour {
                                             new Vector3(60.0f, 27.0f, 0.0f),
                                             new Vector3(60.0f, 23.0f, 0.0f)
         };
+        spawnGrid[7] = new List<Vector3> { new Vector3(24.0f, 36.0f, 0.0f),
+                                            new Vector3(25.0f, 40.0f, 0.0f),
+                                            new Vector3(23.0f, 40.0f, 0.0f)
+        };
+        spawnGrid[8] = new List<Vector3> { new Vector3(35.0f, 41.0f, 0.0f),
+                                            new Vector3(45.0f, 41.0f, 0.0f),
+                                            new Vector3(45.0f, 35.0f, 0.0f),
+                                            new Vector3(42.0f, 36.0f, 0.0f)
+        };
+        spawnGrid[9] = new List<Vector3> { new Vector3(35.0f, 51.0f, 0.0f),
+                                            new Vector3(42.0f, 50.0f, 0.0f),
+                                            new Vector3(44.0f, 49.0f, 0.0f)
+        };
+        spawnGrid[10] = new List<Vector3> { new Vector3(41.0f, 63.0f, 0.0f),
+                                            new Vector3(40.0f, 61.0f, 0.0f),
+                                            new Vector3(38.0f, 62.0f, 0.0f)
+        };
+        spawnGrid[11] = new List<Vector3> { new Vector3(29.0f, 63.0f, 0.0f),
+                                            new Vector3(18.0f, 63.0f, 0.0f),
+                                            new Vector3(29.0f, 57.0f, 0.0f),
+                                            new Vector3(18.0f, 57.0f, 0.0f)
+        };
+        spawnGrid[12] = new List<Vector3> { new Vector3(51.0f, 37.0f, 0.0f),
+                                            new Vector3(52.0f, 40.0f, 0.0f),
+                                            new Vector3(53.0f, 40.0f, 0.0f)
+        };
+        // wall masters are a special case?
+        spawnGrid[13] = new List<Vector3>();
+        spawnGrid[14] = new List<Vector3> { new Vector3(75.0f, 49.0f, 0.0f)
+        };
         CameraControl.S.cameraMoveCompleteDelegate += CameraMoveComplete;
         CameraControl.S.cameraMovedDelegate += OnCameraMoved;
     }
@@ -85,6 +115,28 @@ public class EnemyFabrication : MonoBehaviour {
     private void OnEnemyDestroyed(GameObject enemy) {
         // reduce the amount of enemies in the current room
         --numEnemiesInRooms[currentRoom];
+        switch (currentRoom) {
+            // handle room specific enemy killing events
+            case 1:
+                // first keese room
+                if(numEnemiesInRooms[currentRoom] == 0) {
+                    // FIXME --> make key appear
+                }
+                break;
+            case 5:
+                // (3rd) trap keese room
+                if(numEnemiesInRooms[currentRoom] == 0) {
+                    // FIXME --> Unlock door
+                    // (keese room)
+                }
+                break;
+            case 14:
+                // Aquamentus
+                if(numEnemiesInRooms[currentRoom] == 0) {
+                    // FIXME --> Unlock door
+                }
+                break;
+        }
     }
 
     private void OnCameraMoved(Direction d, float transitionTime) {
