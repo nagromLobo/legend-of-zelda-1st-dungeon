@@ -4,49 +4,94 @@ using System.Collections.Generic;
 using System;
 
 public class EnemyFabrication : MonoBehaviour {
+    public Vector3[] roomCameraPositions = new Vector3[14]; // an array containing the set camera positions for rooms
+    public int[] numEnemiesInRooms = new int[14]; // an array of the number of enemies in a given room
+    public GameObject[] enemy_prefabs; // refers to what enemy to show in thier respective room
+    public List<Vector3>[] spawnGrid;
+    private List<GameObject> enemy_instances = new List<GameObject>();// instances in a give room
+    private int currentRoom = 0;
 
-	public GameObject enemy_prefab; //in reality this is a list
 
-	GameObject enemy_instance; // in reality this is a larger container for all enemies in that camera position
+    // Use this for initialization
+    void Start() {
+        spawnGrid = new List<Vector3>[15];
 
-	Vector3 previousCameraPosition = Vector3.zero;
+        for(int i = 0; i < spawnGrid.Length; ++i) {
+            spawnGrid[i] = new List<Vector3>();
+        }
+        spawnGrid[1] = new List<Vector3> { new Vector3(19.0f, 7.0f, 0.0f),
+                                            new Vector3(18.0f, 5.0f, 0.0f),
+                                            new Vector3(26.0f, 2.0f, 0.0f)
+        };
+        spawnGrid[2] = new List<Vector3> { new Vector3(52.0f, 7.0f, 0.0f),
+                                            new Vector3(54.0f, 3.0f, 0.0f),
+                                            new Vector3(57.0f, 5.0f, 0.0f),
+                                            new Vector3(61.0f, 5.0f, 0.0f),
+                                            new Vector3(61.0f, 2.0f, 0.0f)
+        };
+        spawnGrid[3] = new List<Vector3> { new Vector3(41.0f, 19.0f, 0.0f),
+                                            new Vector3(43.0f, 17.0f, 0.0f),
+                                            new Vector3(36.0f, 17.0f, 0.0f)
+        };
+        spawnGrid[4] = new List<Vector3> { new Vector3(34.0f, 29.0f, 0.0f),
+                                            new Vector3(35.0f, 28.0f, 0.0f),
+                                            new Vector3(35.0f, 27.0f, 0.0f),
+                                            new Vector3(37.0f, 29.0f, 0.0f),
+                                            new Vector3(37.0f, 27.0f, 0.0f)
+        };
+        spawnGrid[5] = new List<Vector3> { new Vector3(26.0f, 30.0f, 0.0f),
+                                            new Vector3(18.5f, 29.0f, 0.0f),
+                                            new Vector3(18.5f, 27.0f, 0.0f),
+                                            new Vector3(20.5f, 28.0f, 0.0f),
+                                            new Vector3(21.0f, 26.5f, 0.0f),
+                                            new Vector3(19.0f, 24.5f, 0.0f)
+        };
+        spawnGrid[6] = new List<Vector3> { new Vector3(53.0f, 30.0f, 0.0f),
+                                            new Vector3(53.0f, 24.0f, 0.0f),
+                                            new Vector3(56.0f, 28.0f, 0.0f),
+                                            new Vector3(56.0f, 26.0f, 0.0f),
+                                            new Vector3(58.0f, 26.0f, 0.0f),
+                                            new Vector3(58.0f, 28.0f, 0.0f),
+                                            new Vector3(60.0f, 27.0f, 0.0f),
+                                            new Vector3(60.0f, 23.0f, 0.0f)
+        };
+        CameraControl.S.cameraMoveCompleteDelegate += CameraMoveComplete;
+        CameraControl.S.cameraMovedDelegate += OnCameraMoved;
+    }
 
-	//for first room only. wil figure this out later
+    // Update is called once per frame
+    //	void Update () {
+    //	
+    //	}
 
-	private List<Vector3>[] spawnGrid;
-	//then make something to see which rooms spawn which enemies
+    void CameraMoveComplete(Vector3 pos) {
+        // figure out what room we are in
+        for(int i = 0; i < roomCameraPositions.Length; ++i) {
+            if((Mathf.FloorToInt(pos.x) == Mathf.FloorToInt(roomCameraPositions[i].x)) &&
+                (Mathf.FloorToInt(pos.y) == Mathf.FloorToInt(roomCameraPositions[i].y))) {
+                currentRoom = i;
+                break;
+            }
+        }
+        List<Vector3> currSpawnGrid = spawnGrid[currentRoom];
+        GameObject currEnemy = enemy_prefabs[currentRoom];
+        // if there are stil enemies in the room to spawn, spawn them
+        for(int i = 0; (i < currSpawnGrid.Count) && (i < numEnemiesInRooms[currentRoom]); ++i) {
+            enemy_instances.Add(Instantiate(currEnemy, currSpawnGrid[i], transform.rotation) as GameObject);
+            enemy_instances[i].GetComponent<Enemy>().OnEnemyDestroyed += OnEnemyDestroyed;
+        }
+    }
 
-	// Use this for initialization
-	void Start () {
-		spawnGrid = new List<Vector3> [15];
+    private void OnEnemyDestroyed(GameObject enemy) {
+        // reduce the amount of enemies in the current room
+        --numEnemiesInRooms[currentRoom];
+    }
 
-		for (int i = 0; i < spawnGrid.Length; ++i) {
-				if (i == 1)
-					spawnGrid [1] = new List<Vector3> { new Vector3 (52.0f, 7.0f, 0.0f) };
-				else
-					spawnGrid [i] = new List<Vector3> ();
-		}
-		CameraControl.S.cameraMoveCompleteDelegate += CameraMoveComplete;
-
-	
-	}
-	
-	// Update is called once per frame
-//	void Update () {
-//	
-//	}
-
-	void CameraMoveComplete(Vector3 pos) {
-		if (previousCameraPosition != pos) {
-			Destroy(enemy_instance);
-		}
-		if (Math.Floor (pos.x) == 55) {
-			previousCameraPosition = pos;
-			for (int i = 0; i < spawnGrid.Length; ++i) {
-				foreach(Vector3 vec in spawnGrid[i])  {
-					enemy_instance  = Instantiate(enemy_prefab, vec, transform.rotation) as GameObject;
-				}
-			}
-		}
-	}
+    private void OnCameraMoved(Direction d, float transitionTime) {
+        // destroy all of the enemy instances when offscreen
+        foreach (GameObject enemy in enemy_instances) {
+            Destroy(enemy);
+        }
+        enemy_instances.Clear();
+     }
 }

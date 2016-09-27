@@ -16,8 +16,4 @@ public class Gel : Enemy {
     public override void StartEnemyMovement(Direction d) {
         control_statemachine.ChangeState(new StateGelMovement(this, timeToCrossTile, currDirection, turnProbability, pauseProbability, timeToPause));
     }
-
-    public override void CameraMoved(Direction d, float transitionTime) {
-        base.CameraMoved(d, transitionTime);
-    }
 }
