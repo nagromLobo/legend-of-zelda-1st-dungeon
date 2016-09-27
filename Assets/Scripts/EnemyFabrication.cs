@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using System;
 
 public class EnemyFabrication : MonoBehaviour {
-    public Vector3[] roomCameraPositions = new Vector3[15]; // an array containing the set camera positions for rooms
-    public int[] numEnemiesInRooms = new int[15]; // an array of the number of enemies in a given room
+    public Vector3[] roomCameraPositions = new Vector3[14]; // an array containing the set camera positions for rooms
+    public int[] numEnemiesInRooms = new int[14]; // an array of the number of enemies in a given room
     public GameObject[] enemy_prefabs; // refers to what enemy to show in thier respective room
     public List<Vector3>[] spawnGrid;
     private List<GameObject> enemy_instances = new List<GameObject>();// instances in a give room
@@ -19,11 +19,41 @@ public class EnemyFabrication : MonoBehaviour {
         for(int i = 0; i < spawnGrid.Length; ++i) {
             spawnGrid[i] = new List<Vector3>();
         }
+        spawnGrid[1] = new List<Vector3> { new Vector3(19.0f, 7.0f, 0.0f),
+                                            new Vector3(18.0f, 5.0f, 0.0f),
+                                            new Vector3(26.0f, 2.0f, 0.0f)
+        };
         spawnGrid[2] = new List<Vector3> { new Vector3(52.0f, 7.0f, 0.0f),
                                             new Vector3(54.0f, 3.0f, 0.0f),
                                             new Vector3(57.0f, 5.0f, 0.0f),
                                             new Vector3(61.0f, 5.0f, 0.0f),
                                             new Vector3(61.0f, 2.0f, 0.0f)
+        };
+        spawnGrid[3] = new List<Vector3> { new Vector3(41.0f, 19.0f, 0.0f),
+                                            new Vector3(43.0f, 17.0f, 0.0f),
+                                            new Vector3(36.0f, 17.0f, 0.0f)
+        };
+        spawnGrid[4] = new List<Vector3> { new Vector3(34.0f, 29.0f, 0.0f),
+                                            new Vector3(35.0f, 28.0f, 0.0f),
+                                            new Vector3(35.0f, 27.0f, 0.0f),
+                                            new Vector3(37.0f, 29.0f, 0.0f),
+                                            new Vector3(37.0f, 27.0f, 0.0f)
+        };
+        spawnGrid[5] = new List<Vector3> { new Vector3(26.0f, 30.0f, 0.0f),
+                                            new Vector3(18.5f, 29.0f, 0.0f),
+                                            new Vector3(18.5f, 27.0f, 0.0f),
+                                            new Vector3(20.5f, 28.0f, 0.0f),
+                                            new Vector3(21.0f, 26.5f, 0.0f),
+                                            new Vector3(19.0f, 24.5f, 0.0f)
+        };
+        spawnGrid[6] = new List<Vector3> { new Vector3(53.0f, 30.0f, 0.0f),
+                                            new Vector3(53.0f, 24.0f, 0.0f),
+                                            new Vector3(56.0f, 28.0f, 0.0f),
+                                            new Vector3(56.0f, 26.0f, 0.0f),
+                                            new Vector3(58.0f, 26.0f, 0.0f),
+                                            new Vector3(58.0f, 28.0f, 0.0f),
+                                            new Vector3(60.0f, 27.0f, 0.0f),
+                                            new Vector3(60.0f, 23.0f, 0.0f)
         };
         CameraControl.S.cameraMoveCompleteDelegate += CameraMoveComplete;
         CameraControl.S.cameraMovedDelegate += OnCameraMoved;
