@@ -485,6 +485,48 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 11
+--- !u!1001 &1023227337
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4000011890643044, guid: 47e5d1908535e1d43a847712bbd36dd0, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 40.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 4000011890643044, guid: 47e5d1908535e1d43a847712bbd36dd0, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 5.99
+      objectReference: {fileID: 0}
+    - target: {fileID: 4000011890643044, guid: 47e5d1908535e1d43a847712bbd36dd0, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4000011890643044, guid: 47e5d1908535e1d43a847712bbd36dd0, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4000011890643044, guid: 47e5d1908535e1d43a847712bbd36dd0, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4000011890643044, guid: 47e5d1908535e1d43a847712bbd36dd0, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4000011890643044, guid: 47e5d1908535e1d43a847712bbd36dd0, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4000011890643044, guid: 47e5d1908535e1d43a847712bbd36dd0, type: 2}
+      propertyPath: m_RootOrder
+      value: 12
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: 47e5d1908535e1d43a847712bbd36dd0, type: 2}
+  m_IsPrefabParent: 0
 --- !u!1 &1026231730
 GameObject:
   m_ObjectHideFlags: 0
@@ -617,7 +659,7 @@ MonoBehaviour:
   Inventory: []
   Sword_prefab: {fileID: 1000012755623840, guid: dde012012b86747cabe96058f1e2424d,
     type: 2}
-  selected_weapon_prefab: {fileID: 1000012755623840, guid: dde012012b86747cabe96058f1e2424d,
+  selected_weapon_prefab: {fileID: 1000010690206656, guid: 47e5d1908535e1d43a847712bbd36dd0,
     type: 2}
 --- !u!65 &1026231735
 BoxCollider:

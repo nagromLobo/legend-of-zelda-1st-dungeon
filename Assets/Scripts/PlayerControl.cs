@@ -201,6 +201,8 @@ public class PlayerControl : MonoBehaviour {
                 Destroy(coll.gameObject);
                 if (half_heart_count < max_half_heart_count) {
                     half_heart_count += 2;
+					if (half_heart_count > max_half_heart_count)
+						half_heart_count = max_half_heart_count;
                 }
 				Hud.UpdateLives ();
                 break;

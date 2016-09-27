@@ -22,6 +22,8 @@ TagManager:
   - LockedDoor
   - Threshold
   - Pushable
+  - Sword
+  - BombReleased
   layers:
   - Default
   - TransparentFX
