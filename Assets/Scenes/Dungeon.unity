@@ -306,6 +306,12 @@ Prefab:
       propertyPath: m_RootOrder
       value: 7
       objectReference: {fileID: 0}
+    - target: {fileID: 114000014170422792, guid: 47e5d1908535e1d43a847712bbd36dd0,
+        type: 2}
+      propertyPath: weapon_instance
+      value: 
+      objectReference: {fileID: 1000010690206656, guid: 47e5d1908535e1d43a847712bbd36dd0,
+        type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 47e5d1908535e1d43a847712bbd36dd0, type: 2}
   m_IsPrefabParent: 0
@@ -439,23 +445,6 @@ Prefab:
     - {fileID: 114000013725514172, guid: 0fcca3b2a5e5e4759ba91a0808d9e490, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: 0fcca3b2a5e5e4759ba91a0808d9e490, type: 2}
   m_IsPrefabParent: 0
---- !u!1 &642797128 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 1000010690206656, guid: 47e5d1908535e1d43a847712bbd36dd0,
-    type: 2}
-  m_PrefabInternal: {fileID: 360971371}
---- !u!114 &642797129
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 642797128}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: afad1cacd91394759bd280e636467dfc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  weapon_instance: {fileID: 642797128}
 --- !u!1 &737124830
 GameObject:
   m_ObjectHideFlags: 0

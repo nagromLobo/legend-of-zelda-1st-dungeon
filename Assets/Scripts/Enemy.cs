@@ -29,7 +29,7 @@ public class Enemy : MonoBehaviour {
 	}
 
     void OnTriggerStay(Collider other) {
-        MonoBehaviour.print("OnTrigger Skeleton");
+        //MonoBehaviour.print("OnTrigger Skeleton");
         if (other.gameObject.tag == "Tile") {
             // adjust enemy position back to the subgrid
             Vector3 currPos = this.gameObject.transform.position;

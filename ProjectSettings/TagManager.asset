@@ -12,6 +12,14 @@ TagManager:
   - Fairy
   - Boomerang
   - Bow
+  - Rupee
+  - Heart
+  - Enemy
+  - Compass
+  - Sword
+  - SmallKey
+  - HeartContainer
+  - Triforce
   layers:
   - Default
   - TransparentFX
@@ -21,8 +29,8 @@ TagManager:
   - UI
   - 
   - 
-  - 
-  - 
+  - Weapon
+  - FlyingWeapons
   - 
   - 
   - 

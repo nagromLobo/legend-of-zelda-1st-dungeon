@@ -1,11 +1,15 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEditor;
 
 public class Bomb: MonoBehaviour {
 
-	private float timer;
+	public float timer = 5.0f;
+	PlayerControl pc;
+	public GameObject weapon_prefab;
+	bool bomb_dropped = false;
+	//private bool onUpdate = false;
 	public GameObject weapon_instance;
-	//public GameObject weapon_prefab;
 
 
 //	PlayerControl pc;
@@ -21,12 +25,6 @@ public class Bomb: MonoBehaviour {
 //	}
 
 
-	// Use this for initialization
-	public void Start () {
-		//print ("I am a bomb"); 
-		timer = 30.0f;
-		//print (this.gameObject.tag);
-	}
 
 //	public GameObject GetInstance() {
 ////		GameObject;
@@ -37,28 +35,43 @@ public class Bomb: MonoBehaviour {
 
 	// Update is called once per frame
 
+	void Awake() { this.weapon_instance = weapon_prefab; }
+
+	public void Initiate() {
+		weapon_instance = MonoBehaviour.Instantiate( PlayerControl.instance.selected_weapon_prefab, PlayerControl.instance.transform.position, Quaternion.identity) as GameObject;
+	}
+
 	void FixedUpdate() {
 		///print ("anything"); 
-		timer -= Time.deltaTime;
+		if (timer <= 0) {
+			Invoke ("ReleaseBomb", 1);
+			//onUpdate = false;
+		} else if (bomb_dropped) {
+			//print ("bomb dropped"); 
+			timer -= Time.fixedDeltaTime;
+		}
+		//print (timer); 
 	}
 
 	public void ReleaseBomb () {
 		//print (this.transform.tag);
+		//print ("hello"); 
+		bomb_dropped = true;
 
-		if (weapon_instance != null) {
-			if (weapon_instance.gameObject.tag == "BombReleased") { 
+		//onUpdate = true;
+
+		//if (weapon_instance != null) {
+			//if (weapon_instance.gameObject.tag == "BombReleased") { 
 				//print ("released"); 
-				if (timer > 0) { 
-					float time_delta = Time.deltaTime / (1.0f / Application.targetFrameRate);
-					timer -= time_delta;
-					print (timer);
-				} else {
+				if(timer <= 0) {
+						
+					//print ("timer " + timer);
 					SphereCollider myCollider = weapon_instance.transform.GetComponent<SphereCollider> ();
-					myCollider.radius = 1f; // or whatever radius you want.
+					myCollider.radius = 1.0f; // or whatever radius you want.
 					//print ("hello"); 
 					Destroy (weapon_instance);
 				}
-			}
-		}
+			//}
+		//}
 	}
 } 

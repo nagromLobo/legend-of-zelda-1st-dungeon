@@ -21,6 +21,7 @@ GameObject:
   - 4: {fileID: 4000011890643044}
   - 212: {fileID: 212000014122404144}
   - 135: {fileID: 135000010786721758}
+  - 114: {fileID: 114000014170422792}
   m_Layer: 8
   m_Name: Bomb
   m_TagString: Bomb
@@ -41,6 +42,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
+--- !u!114 &114000014170422792
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000010690206656}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: afad1cacd91394759bd280e636467dfc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timer: 5
+  weapon_prefab: {fileID: 1000010690206656}
+  weapon_instance: {fileID: 0}
 --- !u!135 &135000010786721758
 SphereCollider:
   m_ObjectHideFlags: 1

@@ -57,6 +57,7 @@
      <Compile Include="Assets\Scripts\StateMachine.cs" />
      <Compile Include="Assets\Scripts\Tile.cs" />
      <Compile Include="Assets\Scripts\UtilityFunctions.cs" />
+     <Compile Include="Assets\Scripts\WoodenSword.cs" />
      <None Include="Assets\Resources\Collision.txt" />
      <None Include="Assets\Resources\Destructible.txt" />
      <None Include="Assets\Resources\map_sprites_data.txt" />
