@@ -25,7 +25,7 @@ public class Tile : MonoBehaviour {
     private static int eastDoorTileNum = 48;
     private static int northDoorLockedTileNumLeft = 80;
     private static int northDoorLockedTileNumRight = 81;
-    private static int westDoorLockedTileNum = 106;
+    // private static int westDoorLockedTileNum = 106;
     private static int eastDoorLockedTileNum = 101;
 
     private SpriteRenderer  sprend;

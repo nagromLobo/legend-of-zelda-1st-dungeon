@@ -478,7 +478,6 @@ public class StateKeeseMovement : StateEnemyMovement {
     float pauseProbability;
     float timeToPause;
     float pauseSlowdownTime;
-    float sinEccentricity;
     float maxFlyRadius;
     float flyRadius;
     Vector3 directionVector;
@@ -490,7 +489,6 @@ public class StateKeeseMovement : StateEnemyMovement {
         this.pauseProbability = pauseProbability;
         this.timeToPause = timeToPause;
         this.maxFlyRadius = maxFlyRadius;
-        this.sinEccentricity = 0.6f;
         this.pauseSlowdownTime = pauseSlowdownTime;
         this.directionVector = Vector3.Normalize(directionVector);
 
@@ -561,7 +559,7 @@ public class StateGelMovement : StateEnemyMovement {
     }
 
     protected override void pauseEnemy() {
-        state_machine.ChangeState(new StateEnemyStunned(enemy, timeToCrossTile, direction, turnProbability, timeToPause));
+        state_machine.ChangeState(new StateEnemyStunned(enemy, direction, turnProbability, timeToPause));
     }
 }
 
@@ -584,7 +582,7 @@ public class StateGoriyaMovement : StateEnemyMovement {
     protected override void enemyAttack() {
         // instantiate boomerang
         // throw boomerang
-        state_machine.ChangeState(new StateEnemyStunned(enemy, timeToCrossTile, direction, turnProbability, boomerangCooldown));
+        state_machine.ChangeState(new StateEnemyStunned(enemy, direction, turnProbability, boomerangCooldown));
         
     }
 
@@ -598,11 +596,9 @@ public class StateEnemyStunned : State {
     Direction direction;
     float turnProbability;
     float stunCooldown;
-    float timeToCrossTile;
     float timeStart;
-    public StateEnemyStunned(Enemy enemy, float timeToCrossTile, Direction direction, float turnProbability, float stunCooldown) {
+    public StateEnemyStunned(Enemy enemy, Direction direction, float turnProbability, float stunCooldown) {
         this.enemy = enemy;
-        this.timeToCrossTile = timeToCrossTile;
         this.direction = direction;
         this.turnProbability = turnProbability;
         this.stunCooldown = stunCooldown;

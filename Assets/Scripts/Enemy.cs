@@ -12,6 +12,10 @@ public class Enemy : MonoBehaviour {
     public Sprite[] spriteAnimation;
     public Color enemyDamageColor = Color.red;
     public float damageCooldown = 2.0f;
+
+    public delegate void onEnemyDestroyed(GameObject enemy);
+    public onEnemyDestroyed OnEnemyDestroyed;
+
     protected Color normalColor;
     protected float damageStartTime = 0.0f;
     protected SpriteRenderer spriteRenderer;
@@ -35,7 +39,6 @@ public class Enemy : MonoBehaviour {
 	void Start () {
         StartEnemyAnimation(currDirection);
         StartEnemyMovement(false);
-        CameraControl.S.cameraMovedDelegate += CameraMoved;
     }
 	
 	// Update is called once per frame
@@ -58,7 +61,7 @@ public class Enemy : MonoBehaviour {
     }
 
     void OnCollisionEnter(Collision other) {
-        if(other.gameObject.tag == "Tile" || other.gameObject.tag == "LockedDoor") {
+        if(other.gameObject.tag == "Tile" || other.gameObject.tag == "LockedDoor" || other.gameObject.tag == "Pushable") {
             this.gameObject.transform.position = adjustBackToGrid(currDirection, transform.position);
             StartEnemyMovement(true);
         } 
@@ -81,11 +84,6 @@ public class Enemy : MonoBehaviour {
                 break;
         }
         return currPos;
-    }
-   
-
-    public virtual void CameraMoved(Direction d, float transitionTime) {
-        //Invoke("DestroyEnemy", transitionTime);
     }
 
     public virtual void StartEnemyMovement(bool disallowCurrentDirection) {
@@ -121,6 +119,7 @@ public class Enemy : MonoBehaviour {
         heartCount -= damage;
         if (heartCount <= 0) {
             // update room state (enemy destroyed)
+            OnEnemyDestroyed(this.gameObject);
             Destroy(this.gameObject);
             return;
         }
@@ -145,6 +144,8 @@ public class Enemy : MonoBehaviour {
         }
 
     }
+
+
 
     void DestroyEnemy() {
         Destroy(gameObject);
