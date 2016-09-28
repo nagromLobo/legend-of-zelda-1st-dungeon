@@ -474,6 +474,42 @@ public class StateEnemyMovementAnimation : State {
     }
 }
 
+public class StateBladeTrapMovement : State {
+    BladeTrap bladeTrap;
+    float velocity;
+    Direction direction;
+
+    public StateBladeTrapMovement(BladeTrap bt, float velocity, Direction d) {
+        this.bladeTrap = bt;
+        this.velocity = velocity;
+        this.direction = d;
+    }
+
+    public override void OnStart() {
+        Vector3 velocityVector = Vector3.zero;
+        switch(direction){
+            case Direction.NORTH:
+                velocityVector = new Vector3(0, 1, 0);
+                break;
+            case Direction.EAST:
+                velocityVector = new Vector3(1, 0, 0);
+                break;
+            case Direction.SOUTH:
+                velocityVector = new Vector3(0, -1, 0);
+                break;
+            case Direction.WEST:
+                velocityVector = new Vector3(-1, 0, 0);
+                break;
+        }
+        bladeTrap.GetComponent<Rigidbody>().velocity = velocityVector * velocity;
+    }
+
+    public override void OnFinish() {
+        bladeTrap.GetComponent<Rigidbody>().velocity = Vector3.zero;
+    }
+
+}
+
 public class StateKeeseMovement : StateEnemyMovement {
     float pauseProbability;
     float timeToPause;

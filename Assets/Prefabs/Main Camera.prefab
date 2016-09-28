@@ -119,7 +119,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   roomWidth: 16
   roomHeight: 11
-  transitionTime: 3
+  transitionTime: 2
 --- !u!114 &114000012568473420
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -149,7 +149,7 @@ MonoBehaviour:
   - {x: 71.51, y: 50.41, z: -10}
   numEnemiesInRooms: 000000000300000005000000030000000500000006000000080000000300000004000000030000000300000004000000030000000100000001000000
   enemy_prefabs:
-  - {fileID: 0}
+  - {fileID: 1000013954072722, guid: 2d41e70fe449dc243afc88e2d83f4e1f, type: 2}
   - {fileID: 1000012053100012, guid: 472e2daafbce35644ae7ecef9de5e05b, type: 2}
   - {fileID: 1000013893029978, guid: e3ff8794e4ad4e6478f49c107f63a31c, type: 2}
   - {fileID: 1000013893029978, guid: e3ff8794e4ad4e6478f49c107f63a31c, type: 2}

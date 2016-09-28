@@ -36,7 +36,7 @@ public class Enemy : MonoBehaviour {
         control_statemachine = new StateMachine();
     }
 	// Use this for initialization
-	void Start () {
+	protected virtual void Start () {
         StartEnemyAnimation(currDirection);
         StartEnemyMovement(false);
     }
@@ -51,7 +51,7 @@ public class Enemy : MonoBehaviour {
 	}
 
 
-    void OnTriggerEnter(Collider other) {
+    protected virtual void OnTriggerEnter(Collider other) {
         if(other.gameObject.tag == "Threshold" || other.gameObject.tag == "LockedDoor") {
             this.gameObject.transform.position = adjustBackToGrid(currDirection, transform.position);
             StartEnemyMovement(true);
@@ -60,7 +60,7 @@ public class Enemy : MonoBehaviour {
         }
     }
 
-    void OnCollisionEnter(Collision other) {
+    protected virtual void OnCollisionEnter(Collision other) {
         if(other.gameObject.tag == "Tile" || other.gameObject.tag == "LockedDoor" || other.gameObject.tag == "Pushable") {
             this.gameObject.transform.position = adjustBackToGrid(currDirection, transform.position);
             StartEnemyMovement(true);
