@@ -71,8 +71,8 @@ MonoBehaviour:
   distanceToTravel1: 1
   distanceToTravel2: 1
   velocity: 1
-  normalSprite: {fileID: 0}
-  LinkCapturedSprite: {fileID: 0}
+  normalSprite: {fileID: 21300048, guid: ed8d739b8ae50f145b00b1db86c365bf, type: 3}
+  LinkCapturedSprite: {fileID: 21300018, guid: ed8d739b8ae50f145b00b1db86c365bf, type: 3}
 --- !u!212 &212000014245500556
 SpriteRenderer:
   m_ObjectHideFlags: 1

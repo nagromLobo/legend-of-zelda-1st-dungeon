@@ -9,30 +9,31 @@ Prefab:
     m_Modifications: []
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 1000013547112128}
+  m_RootGameObject: {fileID: 1000012653040686}
   m_IsPrefabParent: 1
---- !u!1 &1000013547112128
+--- !u!1 &1000012653040686
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 4
   m_Component:
-  - 4: {fileID: 4000014088181356}
-  - 114: {fileID: 114000013892995210}
+  - 4: {fileID: 4000013542279240}
+  - 114: {fileID: 114000012783480158}
+  - 65: {fileID: 65000010354700076}
   m_Layer: 0
-  m_Name: WallMasterManager
+  m_Name: WallmasterTrigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4000014088181356
+--- !u!4 &4000013542279240
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013547112128}
+  m_GameObject: {fileID: 1000012653040686}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 39.51, y: 6.41, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -40,23 +41,29 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
---- !u!114 &114000013892995210
+--- !u!65 &65000010354700076
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000012653040686}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &114000012783480158
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013547112128}
+  m_GameObject: {fileID: 1000012653040686}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0b5edb0961a114e44820ce02614870a3, type: 3}
+  m_Script: {fileID: 11500000, guid: 2f0170f352a836f4189b62470f29c147, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  roomHeight: 6
-  roomWidth: 11
-  triggerPrefab: {fileID: 1000012653040686, guid: 0b5013eec16d0f046b43938c543c0489,
-    type: 2}
-  wallmasterPrefab: {fileID: 1000013800623660, guid: 749565c734af5e64091b85a9873bcca7,
-    type: 2}
-  timeBetweenWallmasters: 2
-  wallMasterWallOffset: 2
-  wallMasterLinkOffset: 6
+  type: 0
+  horizontialSize: 15
+  verticalSize: 15

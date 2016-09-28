@@ -57,6 +57,7 @@ public class WallMasterManager : MonoBehaviour {
         
 
         if ((Time.time - startTime) >= timeBetweenWallmasters) {
+            startTime = Time.time;
             // then generate a new wallmaster
             switch (dir) {
                 case Direction.NORTH:
@@ -99,7 +100,7 @@ public class WallMasterManager : MonoBehaviour {
                     }
                     break;
             }
-            Wallmaster wm = (Instantiate(triggerPrefab, startPosition, Quaternion.identity) as GameObject).GetComponent<Wallmaster>();
+            Wallmaster wm = (Instantiate(wallmasterPrefab, startPosition, Quaternion.identity) as GameObject).GetComponent<Wallmaster>();
             wm.startDirection = wmDir;
             wm.turnDirection = wmTurnDir;
             wm.distanceToTravel1 = wallMasterWallOffset;

@@ -33,7 +33,6 @@ public class Wallmaster : MonoBehaviour {
     // Use this for initialization
     void Start () {
         spriteRenderer = GetComponent<SpriteRenderer>();
-        spriteRenderer.sprite = normalSprite;
         currentDirection = startDirection;
         startTime = Time.time;
         // set up first end position
