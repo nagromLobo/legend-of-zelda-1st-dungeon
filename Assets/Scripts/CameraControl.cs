@@ -83,6 +83,7 @@ public class CameraControl : MonoBehaviour {
     public void ReturnToStart() {
         current_state = CameraState.RESET;
         transform.position = cameraInitialPos;
+        PlayerControl.instance.OnReturnToStart();
         current_state = CameraState.NORMAL;
     }
 }

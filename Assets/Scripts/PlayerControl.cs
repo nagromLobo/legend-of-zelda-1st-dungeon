@@ -63,20 +63,24 @@ public class PlayerControl : MonoBehaviour {
     private float lastDamageFlashTime;
     private SpriteRenderer spriteRenderer;
     private Color normalColor;
+    private Vector3 startPosition;
 
     public static PlayerControl instance;
 
-    // FIXME --> Connect all the sprites to this array (and the speed) in the inspector
-
-    // Use this for initialization
-    void Start() {
+    // runs before any start function gets called
+    void Awake() {
         if (instance != null) {
             Debug.LogError("Mutiple Link objects detected:");
         }
         instance = this;
-		//print("in start"); 
+        //print("in start"); 
+    }
+
+    // Use this for initialization
+    void Start() {
 
         // Launch Idle State
+        startPosition = transform.position;
         animation_state_machine = new StateMachine();
         control_state_machine = new StateMachine();
         control_state_machine.ChangeState(new StateLinkNormalMovement(this));
@@ -355,5 +359,9 @@ public class PlayerControl : MonoBehaviour {
                 break;
                 // Other game actions
         }
+    }
+
+    public void OnReturnToStart() {
+        transform.position = startPosition;
     }
 }

@@ -8,8 +8,12 @@ public class EnemyFabrication : MonoBehaviour {
     public int[] numEnemiesInRooms = new int[14]; // an array of the number of enemies in a given room
     public GameObject[] enemy_prefabs; // refers to what enemy to show in thier respective room
     public List<Vector3>[] spawnGrid;
+    public float timeBetweenWallMasterSpawn = 1.0f;
+    public float timeBetweenWallMasterSpawnDoor = 0.5f;
     private List<GameObject> enemy_instances = new List<GameObject>();// instances in a give room
     private int currentRoom = 0;
+    private static int WALL_MASTER_ROOM;
+    private float timeLastWallMasterSpawn = 0.0f;
 
 
     // Use this for initialization
@@ -91,9 +95,17 @@ public class EnemyFabrication : MonoBehaviour {
     }
 
     // Update is called once per frame
-    //	void Update () {
-    //	
-    //	}
+    void Update() {
+        // in the wall master room we want to fabricate wallmasters on a timer
+        // speed it up when the player is close to the boss doorS
+        if(currentRoom == WALL_MASTER_ROOM) {
+            if((Time.time - timeLastWallMasterSpawn) > timeBetweenWallMasterSpawn){
+                // then spawn wallmaster
+            }
+            
+        }
+
+    }
 
     void CameraMoveComplete(Vector3 pos) {
         // figure out what room we are in
@@ -110,6 +122,9 @@ public class EnemyFabrication : MonoBehaviour {
         for(int i = 0; (i < currSpawnGrid.Count) && (i < numEnemiesInRooms[currentRoom]); ++i) {
             enemy_instances.Add(Instantiate(currEnemy, currSpawnGrid[i], transform.rotation) as GameObject);
             enemy_instances[i].GetComponent<Enemy>().OnEnemyDestroyed += OnEnemyDestroyed;
+        }
+        if(currentRoom == WALL_MASTER_ROOM) {
+            timeLastWallMasterSpawn = Time.time;
         }
     }
 

@@ -4,15 +4,15 @@ using System.Collections;
 public class BladeTrap : Enemy {
     public enum BladeTrapState { FOREWARDS, BACKWARDS, PAUSED }
     public GameObject bladeTrapTriggerPrefab;
-    private BladeTrapTrigger[] triggers = new BladeTrapTrigger[2];
+    private RoomSizedTrigger[] triggers = new RoomSizedTrigger[2];
     public BladeTrapState bladeTrapState = BladeTrapState.PAUSED;
 
     protected override void Start() {
         base.Start();
-        triggers[0] = (Instantiate(bladeTrapTriggerPrefab, transform.position, Quaternion.identity) as GameObject).GetComponent<BladeTrapTrigger>();
-        triggers[1] = (Instantiate(bladeTrapTriggerPrefab, transform.position, Quaternion.identity) as GameObject).GetComponent<BladeTrapTrigger>();
-        triggers[0].SetTriggerType(BladeTrapTrigger.TriggerType.HORIZONTIAL);
-        triggers[1].SetTriggerType(BladeTrapTrigger.TriggerType.VERTICAL);
+        triggers[0] = (Instantiate(bladeTrapTriggerPrefab, transform.position, Quaternion.identity) as GameObject).GetComponent<RoomSizedTrigger>();
+        triggers[1] = (Instantiate(bladeTrapTriggerPrefab, transform.position, Quaternion.identity) as GameObject).GetComponent<RoomSizedTrigger>();
+        triggers[0].SetTriggerType(RoomSizedTrigger.TriggerType.HORIZONTIAL);
+        triggers[1].SetTriggerType(RoomSizedTrigger.TriggerType.VERTICAL);
         triggers[0].OnTriggered += OnTriggered;
         triggers[1].OnTriggered += OnTriggered;
     }

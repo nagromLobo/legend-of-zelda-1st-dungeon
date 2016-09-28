@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class BladeTrapTrigger : MonoBehaviour {
+public class RoomSizedTrigger : MonoBehaviour {
     public enum TriggerType { VERTICAL, HORIZONTIAL}
     public TriggerType type;
     public int horizontialSize = 15;
