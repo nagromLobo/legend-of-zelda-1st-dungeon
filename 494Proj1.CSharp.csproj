@@ -87,6 +87,7 @@
     <Compile Include="Assets\Scripts\Tile.cs" />
     <Compile Include="Assets\Scripts\UtilityFunctions.cs" />
     <Compile Include="Assets\Scripts\WallMasterManager.cs" />
+    <Compile Include="Assets\Scripts\WallMasterTrigger.cs" />
     <Compile Include="Assets\Scripts\Wallmaster.cs" />
     <Compile Include="Assets\Scripts\Weapon.cs" />
   </ItemGroup>

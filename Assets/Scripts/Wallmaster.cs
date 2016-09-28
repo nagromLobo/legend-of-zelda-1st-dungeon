@@ -20,7 +20,7 @@ public class Wallmaster : MonoBehaviour {
     public Sprite LinkCapturedSprite;
 
     private Direction currentDirection = Direction.SOUTH;
-    private float startTime = Time.time;
+    private float startTime;
     private Vector3 endPosition1 = Vector3.zero;
     private Vector3 endPosition2 = Vector3.zero;
     private Vector3 finalEndPosition = Vector3.zero;
@@ -35,6 +35,7 @@ public class Wallmaster : MonoBehaviour {
         spriteRenderer = GetComponent<SpriteRenderer>();
         spriteRenderer.sprite = normalSprite;
         currentDirection = startDirection;
+        startTime = Time.time;
         // set up first end position
         switch (startDirection) {
             case Direction.NORTH:

@@ -23,7 +23,8 @@ public class EnemyFabrication : MonoBehaviour {
         for(int i = 0; i < spawnGrid.Length; ++i) {
             spawnGrid[i] = new List<Vector3>();
         }
-        // for testing blade traps
+        // for testing wall masters
+        spawnGrid[0] = new List<Vector3> { new Vector3(39.5f, 5f, 0.0f) };
         spawnGrid[1] = new List<Vector3> { new Vector3(19.0f, 7.0f, 0.0f),
                                             new Vector3(18.0f, 5.0f, 0.0f),
                                             new Vector3(26.0f, 2.0f, 0.0f)

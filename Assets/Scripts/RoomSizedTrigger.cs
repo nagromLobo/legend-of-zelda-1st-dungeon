@@ -34,7 +34,7 @@ public class RoomSizedTrigger : MonoBehaviour {
         }
     }
 
-    void OnTriggerEnter(Collider other) {
+    protected virtual void OnTriggerEnter(Collider other) {
         if (other.tag == "Link") {
             OnTriggered(other);
         }

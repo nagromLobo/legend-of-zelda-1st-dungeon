@@ -51,3 +51,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b5edb0961a114e44820ce02614870a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  roomHeight: 6
+  roomWidth: 11
+  triggerPrefab: {fileID: 1000011697571830, guid: 9677b9a276a240b4eb27569e076cd1ac,
+    type: 2}
