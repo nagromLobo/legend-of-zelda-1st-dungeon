@@ -85,7 +85,7 @@ MonoBehaviour:
   damage: 0
   movementFramesPerSecond: 4
   timeToCrossTile: 2.5
-  turnProbability: 0
+  turnProbability: 0.8
   heartCount: 1
   damageFlashLength: 1
   spriteAnimation:
