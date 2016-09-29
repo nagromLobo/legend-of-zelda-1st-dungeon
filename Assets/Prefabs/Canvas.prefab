@@ -391,7 +391,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: beb507e8fb832fb479e77b90825a79fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  heartPrefab: {fileID: 0}
+  heartPrefab: {fileID: 1000010487066540, guid: bcd4c86912591a14c97ab134f636d640,
+    type: 2}
   heartImages: []
   rupee_text: {fileID: 114000010498742536}
   heart_text: {fileID: 114000010484592380}

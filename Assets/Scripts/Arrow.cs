@@ -1,27 +1,25 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-//Implement time pause for weapon release
-
-public class WoodenSword : MonoBehaviour {
+public class Arrow : MonoBehaviour {
 
 	public GameObject weapon_prefab;
 	public GameObject weapon_instance;
 	public bool released;
+	public GameObject BowInstance;
+	public GameObject BowPrefab;
 	//public Vector3 pos;
 
 	// Use this for initialization
 	void Awake () {
 		weapon_instance = weapon_prefab;
+		BowInstance = MonoBehaviour.Instantiate (BowPrefab, PlayerControl.instance.transform.position, Quaternion.identity) as GameObject;
 		released = false;
 	}
 
-	bool IsFullHealth() {
-		return PlayerControl.instance.half_heart_count == PlayerControl.instance.max_half_heart_count;
-	}
-
 	public void Instantiate() {
-		weapon_instance = MonoBehaviour.Instantiate(weapon_prefab, PlayerControl.instance.transform.position, Quaternion.identity) as GameObject;	
+		weapon_instance = MonoBehaviour.Instantiate(weapon_prefab, PlayerControl.instance.transform.position, Quaternion.identity) as GameObject;
+		//BowInstance = MonoBehaviour.Instantiate (BowPrefab, PlayerControl.instance.transform.position, Quaternion.identity) as GameObject;
 	}
 
 	// Update is called once per frame
@@ -41,19 +39,16 @@ public class WoodenSword : MonoBehaviour {
 		}
 	}
 
-	public void ReleaseSword() {
-		if (IsFullHealth ()) {
+	public void ReleaseArrow() {
 			released = true;
-			print ("full health you should leave");
-		}
 	}
 
 	void OnCollisionEnter() {
-		print ("don't get here yet"); 
-		if (IsFullHealth () && released) {
-			print("destroy already"); 
+		//print ("don't get here yet"); 
+		if (released) {
+			//print("destroy already"); 
 			Destroy (weapon_instance);
+			Destroy (BowInstance);
 		}
 	}
 }
- 

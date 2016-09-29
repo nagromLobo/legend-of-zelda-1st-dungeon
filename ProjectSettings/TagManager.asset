@@ -24,6 +24,7 @@ TagManager:
   - Pushable
   - Sword
   - BombReleased
+  - Arrow
   layers:
   - Default
   - TransparentFX

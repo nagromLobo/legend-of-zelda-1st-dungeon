@@ -53,6 +53,8 @@ public class PlayerControl : MonoBehaviour {
 
 	public GameObject selected_weapon_prefab;
 
+	//public GameObject BowPrefab;
+
     private Direction link_doorway_direction;
     private float timeStartDelay = 0.0f;
     private float timeStartTransition;

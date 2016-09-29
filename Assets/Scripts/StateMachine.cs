@@ -217,12 +217,16 @@ public class StateLinkAttack : State {
     PlayerControl pc;
     GameObject weapon_prefab;
     GameObject weapon_instance;
+	float duration = 0.0f;
     float coolDown = 0.0f;
+	GameObject BowInstance;
 
     public StateLinkAttack(PlayerControl pc, GameObject weapon_prefab, float coolDown) {
         this.pc = pc;
         this.weapon_prefab = weapon_prefab;
         this.coolDown = coolDown;
+		this.duration = coolDown;
+
     }
 
     public override void OnStart() {
@@ -232,8 +236,22 @@ public class StateLinkAttack : State {
         pc.GetComponent<Rigidbody>().velocity = Vector3.zero;
         //weapon_instance = MonoBehaviour.Instantiate(weapon_prefab, pc.transform.position, Quaternion.identity) as GameObject;
 
-		weapon_prefab.GetComponent<WoodenSword>().Instantiate ();
-		weapon_instance = GameObject.FindWithTag("Sword").GetComponent<WoodenSword>().weapon_instance;
+		if (weapon_prefab.name == "Boomerang") {
+
+			weapon_prefab.GetComponent<Boomerang> ().Instantiate ();
+			weapon_instance = GameObject.FindWithTag ("Boomerang").GetComponent<Boomerang> ().weapon_instance;
+
+		} else if (weapon_prefab.name == "Arrow") {
+
+			weapon_prefab.GetComponent<Arrow> ().Instantiate ();
+			weapon_instance = GameObject.FindWithTag ("Arrow").GetComponent<Arrow> ().weapon_instance;
+			BowInstance = GameObject.FindWithTag ("Arrow").GetComponent<Arrow> ().BowInstance;
+
+		} else {
+
+			weapon_prefab.GetComponent<WoodenSword> ().Instantiate ();
+			weapon_instance = GameObject.FindWithTag ("Sword").GetComponent<WoodenSword> ().weapon_instance;
+		}
 
         Vector3 direction_offset = Vector3.zero;
         Vector3 direction_eulerangle = Vector3.zero;
@@ -251,14 +269,30 @@ public class StateLinkAttack : State {
             direction_offset = new Vector3(-1, 0, 0);
             direction_eulerangle = new Vector3(0, 0, 180);
         }
+			
 
         // move and rotate weapon
-		MonoBehaviour.print("before " + weapon_instance.transform.position);
+		//MonoBehaviour.print("before " + weapon_instance.transform.position);
         weapon_instance.transform.position += direction_offset;
         Quaternion new_weapon_rotation = new Quaternion();
         new_weapon_rotation.eulerAngles = direction_eulerangle;
         weapon_instance.transform.rotation = new_weapon_rotation;
-		MonoBehaviour.print("after " + weapon_instance.transform.position);
+
+		if (weapon_instance.tag == "Arrow") {
+
+			BowInstance.transform.position += direction_offset;
+			BowInstance.transform.rotation = new_weapon_rotation;
+		}
+
+		if (weapon_instance.tag == "Boomerang") {
+
+			MonoBehaviour.print ("in Boomerang");
+
+			GameObject.FindWithTag ("Boomerang").GetComponent<Boomerang> ().ReleaseBoomerang (duration);
+			GameObject.FindWithTag ("Boomerang").GetComponent<Boomerang> ().released = true;
+		}
+
+		//MonoBehaviour.print("after " + weapon_instance.transform.position);
 		//GameObject.FindWithTag("Sword").GetComponent<WoodenSword>().pos = weapon_instance.transform.position;
     }
 
@@ -271,12 +305,24 @@ public class StateLinkAttack : State {
 
     public override void OnFinish() {
         pc.current_state = EntityState.NORMAL;
-		GameObject.FindWithTag("Sword").GetComponent<WoodenSword>().ReleaseSword ();
-		GameObject.FindWithTag ("Sword").GetComponent<WoodenSword>().released = true;
-		if (pc.half_heart_count != pc.max_half_heart_count) {
-			MonoBehaviour.print ("if full you should not be here");
+
+		if (weapon_prefab.name == "Arrow") {
+			GameObject.FindWithTag ("Arrow").GetComponent<Arrow> ().ReleaseArrow ();
+			GameObject.FindWithTag ("Arrow").GetComponent<Arrow> ().released = true;
+			//MonoBehaviour.Destroy (BowInstance);
+		} else if (weapon_instance.tag != "Boomerang") {
+
+			GameObject.FindWithTag ("Sword").GetComponent<WoodenSword> ().ReleaseSword ();
+			GameObject.FindWithTag ("Sword").GetComponent<WoodenSword> ().released = true;
+
+			if (pc.half_heart_count != pc.max_half_heart_count) {
+				//MonoBehaviour.print ("if full you should not be here");
+				MonoBehaviour.Destroy (weapon_instance);
+			} 
+		} else {
 			MonoBehaviour.Destroy (weapon_instance);
 		}
+			
     }
 }
 
@@ -459,8 +505,14 @@ public class StateLinkStunnedSprite : State {
         }
         //handle no weapon selection
         if (Input.GetKeyDown(KeyCode.S)) {
-            if ((pc.selected_weapon_prefab.name == "Bomb") && (pc.bomb_count > 0))
-                state_machine.ChangeState(new StateLinkBombAttack(pc, pc.selected_weapon_prefab, 6));
+			if(pc.selected_weapon_prefab != null) {
+	            if ((pc.selected_weapon_prefab.name == "Bomb") && (pc.bomb_count > 0))
+	                state_machine.ChangeState(new StateLinkBombAttack(pc, pc.selected_weapon_prefab, 6));
+				else if (pc.selected_weapon_prefab.name == "Boomerang")
+					state_machine.ChangeState(new StateLinkAttack(pc, pc.selected_weapon_prefab, 30));
+				else if (pc.selected_weapon_prefab.name == "Arrow")
+					state_machine.ChangeState(new StateLinkAttack(pc, pc.selected_weapon_prefab, 30));
+			}
         }
 
     }

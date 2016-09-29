@@ -321,12 +321,6 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e3ff8794e4ad4e6478f49c107f63a31c, type: 2}
   m_IsPrefabParent: 0
---- !u!114 &396621324 stripped
-MonoBehaviour:
-  m_PrefabParentObject: {fileID: 114000010484592380, guid: 0fcca3b2a5e5e4759ba91a0808d9e490,
-    type: 2}
-  m_PrefabInternal: {fileID: 1029794197}
-  m_Script: {fileID: 708705254, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
 --- !u!1001 &529379979
 Prefab:
   m_ObjectHideFlags: 0
@@ -369,12 +363,6 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 472e2daafbce35644ae7ecef9de5e05b, type: 2}
   m_IsPrefabParent: 0
---- !u!114 &624584738 stripped
-MonoBehaviour:
-  m_PrefabParentObject: {fileID: 114000010498742536, guid: 0fcca3b2a5e5e4759ba91a0808d9e490,
-    type: 2}
-  m_PrefabInternal: {fileID: 1029794197}
-  m_Script: {fileID: 708705254, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
 --- !u!1001 &713939407
 Prefab:
   m_ObjectHideFlags: 0
@@ -417,12 +405,6 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 34251d4bbf2821c4db490834030f5683, type: 2}
   m_IsPrefabParent: 0
---- !u!114 &721990326 stripped
-MonoBehaviour:
-  m_PrefabParentObject: {fileID: 114000010267106380, guid: 0fcca3b2a5e5e4759ba91a0808d9e490,
-    type: 2}
-  m_PrefabInternal: {fileID: 1029794197}
-  m_Script: {fileID: 708705254, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
 --- !u!1 &737124830
 GameObject:
   m_ObjectHideFlags: 0
@@ -659,7 +641,7 @@ MonoBehaviour:
   Inventory: []
   Sword_prefab: {fileID: 1000012755623840, guid: dde012012b86747cabe96058f1e2424d,
     type: 2}
-  selected_weapon_prefab: {fileID: 1000010690206656, guid: 47e5d1908535e1d43a847712bbd36dd0,
+  selected_weapon_prefab: {fileID: 1000013872525264, guid: 213a0da10235c40b29a3110c930b64e9,
     type: 2}
 --- !u!65 &1026231735
 BoxCollider:
@@ -770,41 +752,34 @@ Prefab:
       propertyPath: m_Pivot.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 114000013725514172, guid: 0fcca3b2a5e5e4759ba91a0808d9e490,
+    - target: {fileID: 114000010132963768, guid: 0fcca3b2a5e5e4759ba91a0808d9e490,
         type: 2}
-      propertyPath: bomb_text
-      value: 
-      objectReference: {fileID: 721990326}
-    - target: {fileID: 114000013725514172, guid: 0fcca3b2a5e5e4759ba91a0808d9e490,
+      propertyPath: m_UiScaleMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114000010132963768, guid: 0fcca3b2a5e5e4759ba91a0808d9e490,
         type: 2}
-      propertyPath: heart_text
-      value: 
-      objectReference: {fileID: 396621324}
-    - target: {fileID: 114000013725514172, guid: 0fcca3b2a5e5e4759ba91a0808d9e490,
+      propertyPath: m_ReferenceResolution.x
+      value: 256
+      objectReference: {fileID: 0}
+    - target: {fileID: 114000010132963768, guid: 0fcca3b2a5e5e4759ba91a0808d9e490,
         type: 2}
-      propertyPath: rupee_text
-      value: 
-      objectReference: {fileID: 624584738}
-    - target: {fileID: 114000013725514172, guid: 0fcca3b2a5e5e4759ba91a0808d9e490,
+      propertyPath: m_ReferenceResolution.y
+      value: 240
+      objectReference: {fileID: 0}
+    - target: {fileID: 114000010132963768, guid: 0fcca3b2a5e5e4759ba91a0808d9e490,
         type: 2}
-      propertyPath: key_text
-      value: 
-      objectReference: {fileID: 1183866284}
-    - target: {fileID: 114000013725514172, guid: 0fcca3b2a5e5e4759ba91a0808d9e490,
+      propertyPath: m_ScreenMatchMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114000010132963768, guid: 0fcca3b2a5e5e4759ba91a0808d9e490,
         type: 2}
-      propertyPath: heartPrefab
-      value: 
-      objectReference: {fileID: 1000010487066540, guid: bcd4c86912591a14c97ab134f636d640,
-        type: 2}
+      propertyPath: m_MatchWidthOrHeight
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 0fcca3b2a5e5e4759ba91a0808d9e490, type: 2}
   m_IsPrefabParent: 0
---- !u!114 &1183866284 stripped
-MonoBehaviour:
-  m_PrefabParentObject: {fileID: 114000013902076970, guid: 0fcca3b2a5e5e4759ba91a0808d9e490,
-    type: 2}
-  m_PrefabInternal: {fileID: 1029794197}
-  m_Script: {fileID: 708705254, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
 --- !u!1001 &1484131569
 Prefab:
   m_ObjectHideFlags: 0

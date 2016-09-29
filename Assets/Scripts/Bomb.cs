@@ -4,7 +4,7 @@ using UnityEditor;
 
 public class Bomb: MonoBehaviour {
 
-	public float timer = 5.0f;
+	public float timer = 3.0f;
 	PlayerControl pc;
 	public GameObject weapon_prefab;
 	bool bomb_dropped = false;
