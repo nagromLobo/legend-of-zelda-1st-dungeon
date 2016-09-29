@@ -68,7 +68,7 @@ MonoBehaviour:
   weapon_prefab: {fileID: 1000011314384716}
   weapon_instance: {fileID: 1000011314384716}
   released: 0
-  duration: 0
+  duration: 2
   speed: 5
 --- !u!212 &212000011502317782
 SpriteRenderer:
