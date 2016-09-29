@@ -15,7 +15,14 @@ public class Keese : Enemy {
         control_statemachine.ChangeState(new StateKeeseMovement(this, timeToCrossTile, currDirection, turnProbability, pauseProbability, timeToPause, pauseSlowdownTime, maxFlyRadius, Vector3.zero));
     }
 
-    void OnCollisionEnter(Collision other) {
+    protected override void OnCollisionEnter(Collision other) {
+        MonoBehaviour.print(other.gameObject.tag);
+        transform.position = new Vector3(Mathf.Round(transform.position.x), Mathf.Round(transform.position.y), transform.position.z);
+        //Vector3 newDirection = other.contacts[0].normal;
+        control_statemachine.ChangeState(new StateKeeseMovement(this, timeToCrossTile, currDirection, turnProbability, pauseProbability, timeToPause, pauseSlowdownTime, maxFlyRadius, Vector3.zero));
+    }
+
+    protected override void OnTriggerEnter(Collider other) {
         MonoBehaviour.print(other.gameObject.tag);
         transform.position = new Vector3(Mathf.Round(transform.position.x), Mathf.Round(transform.position.y), transform.position.z);
         //Vector3 newDirection = other.contacts[0].normal;
