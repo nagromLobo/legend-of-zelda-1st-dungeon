@@ -437,7 +437,6 @@ public class StateLinkStunnedSprite : State {
 }
 
 public class StateEnemyMovementAnimation : State {
-    private Enemy enemy;
     private SpriteRenderer renderer;
     private Sprite[] animation;
     private int fps;
@@ -445,8 +444,7 @@ public class StateEnemyMovementAnimation : State {
     float animation_progression;
     float animation_start_time;
 
-    public StateEnemyMovementAnimation(Enemy enemy, SpriteRenderer renderer, Sprite[] animation, int fps) {
-        this.enemy = enemy;
+    public StateEnemyMovementAnimation(SpriteRenderer renderer, Sprite[] animation, int fps) {
         this.renderer = renderer;
         this.animation = animation;
         this.animation_length = animation.Length;

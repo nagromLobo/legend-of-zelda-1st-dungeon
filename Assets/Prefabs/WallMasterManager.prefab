@@ -59,4 +59,4 @@ MonoBehaviour:
     type: 2}
   timeBetweenWallmasters: 3
   wallMasterWallOffset: 3
-  wallMasterLinkOffset: 5
+  wallMasterLinkOffset: 4

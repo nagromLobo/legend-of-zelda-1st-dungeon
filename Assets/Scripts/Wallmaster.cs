@@ -16,14 +16,17 @@ public class Wallmaster : MonoBehaviour {
     public float distanceToTravel1 = 1.0f;
     public float distanceToTravel2 = 1.0f;
     public float velocity = 1.0f;
-    public Sprite normalSprite;
-    public Sprite LinkCapturedSprite;
+    public Sprite[] normalSpriteAnimationLeft;
+    public Sprite[] normalSpriteAnimationRight;
+    public Sprite LinkCapturedSpriteLeft;
+    public Sprite LinkCapturedSpriteRight;
 
     private Direction currentDirection = Direction.SOUTH;
     private float startTime;
     private Vector3 endPosition1 = Vector3.zero;
     private Vector3 endPosition2 = Vector3.zero;
     private Vector3 finalEndPosition = Vector3.zero;
+    private StateMachine animationStateMachine;
     private PlayerControl pc;
     private SpriteRenderer spriteRenderer;
     enum WallMasterState { NORMAL, LINK_CAPTURED};
@@ -32,11 +35,13 @@ public class Wallmaster : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
+        animationStateMachine = new StateMachine();
         spriteRenderer = GetComponent<SpriteRenderer>();
         currentDirection = startDirection;
         startTime = Time.time;
         // set up first end position
         SetUpPositions();
+
         pc = PlayerControl.instance;
     }
 
@@ -51,6 +56,12 @@ public class Wallmaster : MonoBehaviour {
     }
 
     void SetUpPositions() {
+        // left hand for turn east and south
+        if (turnDirection == Direction.EAST || turnDirection == Direction.SOUTH) {
+            animationStateMachine.ChangeState(new StateEnemyMovementAnimation(this.GetComponent<SpriteRenderer>(), normalSpriteAnimationLeft, 6));
+        } else {
+            animationStateMachine.ChangeState(new StateEnemyMovementAnimation(this.GetComponent<SpriteRenderer>(), normalSpriteAnimationRight, 6));
+        }
         switch (startDirection) {
             case Direction.NORTH:
                 endPosition1.Set(startPosition.x, startPosition.y + distanceToTravel1, startPosition.z);
@@ -143,8 +154,14 @@ public class Wallmaster : MonoBehaviour {
     void OnTriggerEnter(Collider other) {
         if(other.gameObject.tag == "Link") {
             currState = WallMasterState.LINK_CAPTURED;
-            spriteRenderer.sprite = LinkCapturedSprite;
+            animationStateMachine.Reset();
+            spriteRenderer.sprite = LinkCapturedSpriteLeft;
             PlayerControl.instance.GrabLink(this);
+            if(turnDirection == Direction.SOUTH || turnDirection == Direction.EAST) {
+                spriteRenderer.sprite = LinkCapturedSpriteLeft;
+            } else {
+                spriteRenderer.sprite = LinkCapturedSpriteRight;
+            }
         }
     }
 }

@@ -103,7 +103,7 @@ public class Enemy : MonoBehaviour {
     }
 
     public virtual void StartEnemyAnimation(Direction d) {
-        animation_statemachine.ChangeState(new StateEnemyMovementAnimation(this, GetComponent<SpriteRenderer>(), spriteAnimation, movementFramesPerSecond));
+        animation_statemachine.ChangeState(new StateEnemyMovementAnimation(GetComponent<SpriteRenderer>(), spriteAnimation, movementFramesPerSecond));
     }
 
     public virtual void OnEnemyTurned(Direction d) {

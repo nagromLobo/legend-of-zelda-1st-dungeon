@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class WallMasterManager : MonoBehaviour {
     public float roomHeight = 0.0f;
@@ -13,6 +14,7 @@ public class WallMasterManager : MonoBehaviour {
     private WallMasterTrigger[] triggers = new WallMasterTrigger[4];
     private float[] triggerStartTimes;
     private float startTime;
+    private List<Wallmaster> instances = new List<Wallmaster>();
 	// Use this for initialization
 	void Start () {
         triggerStartTimes = new float[triggers.Length];
@@ -105,6 +107,7 @@ public class WallMasterManager : MonoBehaviour {
                     break;
             }
             Wallmaster wm = (Instantiate(wallmasterPrefab, startPosition, Quaternion.identity) as GameObject).GetComponent<Wallmaster>();
+            instances.Add(wm);
             wm.setUpPositions(wmDir, wmTurnDir, startPosition, wallMasterWallOffset, wallMasterLinkOffset);
         }
     }
@@ -112,6 +115,9 @@ public class WallMasterManager : MonoBehaviour {
     void OnDestroy() {
         for(int i = 0; i < triggers.Length; ++i) {
             Destroy(triggers[i].gameObject);
+        }
+        foreach(var instance in instances) {
+            Destroy(instance.gameObject);
         }
     }
 }

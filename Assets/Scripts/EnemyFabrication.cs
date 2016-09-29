@@ -24,7 +24,6 @@ public class EnemyFabrication : MonoBehaviour {
             spawnGrid[i] = new List<Vector3>();
         }
         // for testing wall masters
-        spawnGrid[0] = new List<Vector3> { new Vector3(39.5f, 5f, 0.0f) };
         spawnGrid[1] = new List<Vector3> { new Vector3(19.0f, 7.0f, 0.0f),
                                             new Vector3(18.0f, 5.0f, 0.0f),
                                             new Vector3(26.0f, 2.0f, 0.0f)
@@ -87,8 +86,7 @@ public class EnemyFabrication : MonoBehaviour {
                                             new Vector3(52.0f, 40.0f, 0.0f),
                                             new Vector3(53.0f, 40.0f, 0.0f)
         };
-        // wall masters are a special case?
-        spawnGrid[13] = new List<Vector3>();
+        spawnGrid[13] = new List<Vector3> { new Vector3(71.5f, 38.0f, 0.0f) };
         spawnGrid[14] = new List<Vector3> { new Vector3(75.0f, 49.0f, 0.0f)
         };
         CameraControl.S.cameraMoveCompleteDelegate += CameraMoveComplete;
@@ -123,9 +121,6 @@ public class EnemyFabrication : MonoBehaviour {
         for(int i = 0; (i < currSpawnGrid.Count) && (i < numEnemiesInRooms[currentRoom]); ++i) {
             enemy_instances.Add(Instantiate(currEnemy, currSpawnGrid[i], transform.rotation) as GameObject);
             enemy_instances[i].GetComponent<Enemy>().OnEnemyDestroyed += OnEnemyDestroyed;
-        }
-        if(currentRoom == WALL_MASTER_ROOM) {
-            timeLastWallMasterSpawn = Time.time;
         }
     }
 
