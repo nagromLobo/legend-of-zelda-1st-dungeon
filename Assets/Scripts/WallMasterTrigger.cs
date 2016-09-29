@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class WallMasterTrigger : RoomSizedTrigger {
-    Direction direction;
+    public Direction direction;
     public delegate void onTriggeredWithDirection(Direction direction, Collider other);
     public onTriggeredWithDirection OnTriggeredWithDirection;
 

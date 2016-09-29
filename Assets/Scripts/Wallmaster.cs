@@ -36,6 +36,21 @@ public class Wallmaster : MonoBehaviour {
         currentDirection = startDirection;
         startTime = Time.time;
         // set up first end position
+        SetUpPositions();
+        pc = PlayerControl.instance;
+    }
+
+    public void setUpPositions(Direction dir, Direction turn, Vector3 startPosition, float distanceToTravel1, float distanceToTravel2) {
+        this.startDirection = dir;
+        this.turnDirection = turn;
+        this.startPosition = startPosition;
+        this.distanceToTravel1 = distanceToTravel1;
+        this.distanceToTravel2 = distanceToTravel2;
+        SetUpPositions();
+        
+    }
+
+    void SetUpPositions() {
         switch (startDirection) {
             case Direction.NORTH:
                 endPosition1.Set(startPosition.x, startPosition.y + distanceToTravel1, startPosition.z);
@@ -55,16 +70,16 @@ public class Wallmaster : MonoBehaviour {
         switch (turnDirection) {
             case Direction.NORTH:
                 // endPosition1 is the same as startPosition2
-                endPosition1.Set(endPosition1.x, endPosition1.y + distanceToTravel2, endPosition1.z);
+                endPosition2.Set(endPosition1.x, endPosition1.y + distanceToTravel2, endPosition1.z);
                 break;
             case Direction.EAST:
-                endPosition1.Set(endPosition1.x + distanceToTravel2, endPosition1.y, endPosition1.z);
+                endPosition2.Set(endPosition1.x + distanceToTravel2, endPosition1.y, endPosition1.z);
                 break;
             case Direction.SOUTH:
-                endPosition1.Set(endPosition1.x, endPosition1.y - distanceToTravel2, endPosition1.z);
+                endPosition2.Set(endPosition1.x, endPosition1.y - distanceToTravel2, endPosition1.z);
                 break;
             case Direction.WEST:
-                endPosition1.Set(endPosition1.x - distanceToTravel2, endPosition1.y, endPosition1.z);
+                endPosition2.Set(endPosition1.x - distanceToTravel2, endPosition1.y, endPosition1.z);
                 break;
         }
         // set up final end position (travel in the opposite direction)
@@ -80,10 +95,9 @@ public class Wallmaster : MonoBehaviour {
                 finalEndPosition.Set(endPosition2.x, endPosition2.y + distanceToTravel1, endPosition2.z);
                 break;
             case Direction.WEST:
-                finalEndPosition.Set(endPosition2.x - distanceToTravel1, endPosition2.y, endPosition2.z);
+                finalEndPosition.Set(endPosition2.x + distanceToTravel1, endPosition2.y, endPosition2.z);
                 break;
         }
-        pc = PlayerControl.instance;
     }
 	
 	// Update is called once per frame
@@ -92,7 +106,7 @@ public class Wallmaster : MonoBehaviour {
         Vector3 currPos;
         if (currentDirection == startDirection) {
             // then we are in the first leg of our journey
-            u = (Time.time - startTime) / (velocity / distanceToTravel1);
+            u = (Time.time - startTime) / (distanceToTravel1);
             currPos = Vector3.Lerp(startPosition, endPosition1, u);
             transform.position = currPos;
             if(u > 1) {
@@ -100,23 +114,25 @@ public class Wallmaster : MonoBehaviour {
                 currentDirection = turnDirection;
                 // adjust position, just incase there is a bit of an error from the interpolation
                 transform.position = endPosition1;
+                startTime = Time.time;
             }
         } else if(currentDirection == turnDirection) {
             // then we are are turned
-            u = (Time.time - startTime) / (velocity / distanceToTravel2);
+            u = (Time.time - startTime) / (distanceToTravel2);
             currPos = Vector3.Lerp(endPosition1, endPosition2, u);
             transform.position = currPos;
             if (u > 1) {
                 currentDirection = UtilityFunctions.reverseDirection(startDirection);
                 transform.position = endPosition2;
+                startTime = Time.time;
             }
         } else {
             // we are returning
-            u = (Time.time - startTime) / (velocity / distanceToTravel1);
+            u = (Time.time - startTime) / (distanceToTravel1);
             currPos = Vector3.Lerp(endPosition2, finalEndPosition, u);
             transform.position = currPos;
             if(u > 1) {
-                Destroy(this);
+                Destroy(this.gameObject);
                 CameraControl.S.ReturnToStart();
             }
         }

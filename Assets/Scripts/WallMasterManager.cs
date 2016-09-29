@@ -34,12 +34,12 @@ public class WallMasterManager : MonoBehaviour {
         triggerPosition = new Vector3(transform.position.x, transform.position.y - halfHeight, transform.position.z);
         triggers[2] = (Instantiate(triggerPrefab, triggerPosition, Quaternion.identity) as GameObject).GetComponent<WallMasterTrigger>();
         triggers[2].SetTriggerType(RoomSizedTrigger.TriggerType.VERTICAL);
-        triggers[0].SetDirection(Direction.SOUTH);
+        triggers[2].SetDirection(Direction.SOUTH);
         // West trigger
         triggerPosition = new Vector3(transform.position.x - halfWidth, transform.position.y, transform.position.z);
         triggers[3] = (Instantiate(triggerPrefab, triggerPosition, Quaternion.identity) as GameObject).GetComponent<WallMasterTrigger>();
         triggers[3].SetTriggerType(RoomSizedTrigger.TriggerType.HORIZONTIAL);
-        triggers[0].SetDirection(Direction.WEST);
+        triggers[3].SetDirection(Direction.WEST);
 
         for (int i = 0; i < triggers.Length; ++i) {
             triggers[i].OnTriggeredWithDirection += OnTriggered;
@@ -63,6 +63,7 @@ public class WallMasterManager : MonoBehaviour {
                 case Direction.NORTH:
                     // then we have to move south first
                     // equal chance of comming from right of door or left
+                    startPosition.y += (roomHeight / 2);
                     if (Random.value > 0.5) {
                         wmTurnDir = Direction.WEST;
                         startPosition.Set(linkPosition.x + wallMasterLinkOffset, startPosition.y + wallMasterWallOffset, startPosition.z);
@@ -73,6 +74,7 @@ public class WallMasterManager : MonoBehaviour {
                     
                         break;
                 case Direction.EAST:
+                    startPosition.x += (roomWidth / 2);
                     if (Random.value > 0.5) {
                         wmTurnDir = Direction.NORTH;
                         startPosition.Set(startPosition.x + wallMasterWallOffset, linkPosition.y - wallMasterWallOffset, startPosition.z);
@@ -82,6 +84,7 @@ public class WallMasterManager : MonoBehaviour {
                     }
                     break;
                 case Direction.SOUTH:
+                    startPosition.y -= (roomHeight / 2);
                     if (Random.value > 0.5) {
                         wmTurnDir = Direction.WEST;
                         startPosition.Set(linkPosition.x + wallMasterLinkOffset, startPosition.y - wallMasterWallOffset, startPosition.z);
@@ -91,6 +94,7 @@ public class WallMasterManager : MonoBehaviour {
                     }
                     break;
                 case Direction.WEST:
+                    startPosition.y -= (roomWidth / 2);
                     if (Random.value > 0.5) {
                         wmTurnDir = Direction.NORTH;
                         startPosition.Set(startPosition.x - wallMasterWallOffset, linkPosition.y - wallMasterWallOffset, startPosition.z);
@@ -101,10 +105,7 @@ public class WallMasterManager : MonoBehaviour {
                     break;
             }
             Wallmaster wm = (Instantiate(wallmasterPrefab, startPosition, Quaternion.identity) as GameObject).GetComponent<Wallmaster>();
-            wm.startDirection = wmDir;
-            wm.turnDirection = wmTurnDir;
-            wm.distanceToTravel1 = wallMasterWallOffset;
-            wm.distanceToTravel2 = wallMasterLinkOffset;
+            wm.setUpPositions(wmDir, wmTurnDir, startPosition, wallMasterWallOffset, wallMasterLinkOffset);
         }
     }
 
