@@ -132,13 +132,13 @@ Prefab:
     - target: {fileID: 114000012568473420, guid: 7feb558bd6ecec046ba0006fd192aa0c,
         type: 2}
       propertyPath: numEnemiesInRooms.Array.data[0]
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 114000012568473420, guid: 7feb558bd6ecec046ba0006fd192aa0c,
         type: 2}
       propertyPath: enemy_prefabs.Array.data[0]
       value: 
-      objectReference: {fileID: 1000013547112128, guid: debcb57aac9346e43afe67e36f4099f5,
+      objectReference: {fileID: 1000014059354290, guid: 997b551be0ad7864c913270cc97f6161,
         type: 2}
     - target: {fileID: 114000012568473420, guid: 7feb558bd6ecec046ba0006fd192aa0c,
         type: 2}

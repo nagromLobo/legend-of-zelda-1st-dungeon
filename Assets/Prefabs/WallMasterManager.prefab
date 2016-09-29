@@ -57,6 +57,6 @@ MonoBehaviour:
     type: 2}
   wallmasterPrefab: {fileID: 1000013800623660, guid: 749565c734af5e64091b85a9873bcca7,
     type: 2}
-  timeBetweenWallmasters: 3
+  timeBetweenWallmasters: 1.5
   wallMasterWallOffset: 3
-  wallMasterLinkOffset: 4
+  wallMasterLinkOffset: 3

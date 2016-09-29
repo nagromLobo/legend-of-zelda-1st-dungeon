@@ -58,9 +58,9 @@ public class Wallmaster : MonoBehaviour {
     void SetUpPositions() {
         // left hand for turn east and south
         if (turnDirection == Direction.EAST || turnDirection == Direction.SOUTH) {
-            animationStateMachine.ChangeState(new StateEnemyMovementAnimation(this.GetComponent<SpriteRenderer>(), normalSpriteAnimationLeft, 6));
+            animationStateMachine.ChangeState(new StateEnemyMovementAnimation(spriteRenderer, normalSpriteAnimationLeft, 6));
         } else {
-            animationStateMachine.ChangeState(new StateEnemyMovementAnimation(this.GetComponent<SpriteRenderer>(), normalSpriteAnimationRight, 6));
+            animationStateMachine.ChangeState(new StateEnemyMovementAnimation(spriteRenderer, normalSpriteAnimationRight, 6));
         }
         switch (startDirection) {
             case Direction.NORTH:
@@ -115,6 +115,7 @@ public class Wallmaster : MonoBehaviour {
 	void Update () {
         float u;
         Vector3 currPos;
+        animationStateMachine.Update();
         if (currentDirection == startDirection) {
             // then we are in the first leg of our journey
             u = (Time.time - startTime) / (distanceToTravel1 / velocity);
@@ -153,14 +154,16 @@ public class Wallmaster : MonoBehaviour {
 
     void OnTriggerEnter(Collider other) {
         if(other.gameObject.tag == "Link") {
-            currState = WallMasterState.LINK_CAPTURED;
-            animationStateMachine.Reset();
-            spriteRenderer.sprite = LinkCapturedSpriteLeft;
-            PlayerControl.instance.GrabLink(this);
-            if(turnDirection == Direction.SOUTH || turnDirection == Direction.EAST) {
+            if(PlayerControl.instance.current_state != EntityState.GRABBED) {
+                currState = WallMasterState.LINK_CAPTURED;
+                animationStateMachine.Reset();
                 spriteRenderer.sprite = LinkCapturedSpriteLeft;
-            } else {
-                spriteRenderer.sprite = LinkCapturedSpriteRight;
+                PlayerControl.instance.GrabLink(this);
+                if (turnDirection == Direction.SOUTH || turnDirection == Direction.EAST) {
+                    spriteRenderer.sprite = LinkCapturedSpriteLeft;
+                } else {
+                    spriteRenderer.sprite = LinkCapturedSpriteRight;
+                }
             }
         }
     }

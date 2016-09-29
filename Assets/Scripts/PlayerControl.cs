@@ -373,15 +373,16 @@ public class PlayerControl : MonoBehaviour {
     }
 
     public void GrabLink(Wallmaster grabber) {
-        this.linkGrabber = grabber;
-        Sprite[] animation = new Sprite[1];
-        animation[0] = link_run_down[0];
+        if (current_state == EntityState.NORMAL) {
+            this.linkGrabber = grabber;
+            Sprite[] animation = new Sprite[1];
+            animation[0] = link_run_down[0];
 
-        current_state = EntityState.GRABBED;
+            current_state = EntityState.GRABBED;
 
-        control_state_machine.ChangeState(new StateLinkStunnedMovement(this, float.MaxValue, Vector3.zero));
-        animation_state_machine.ChangeState(new StateLinkDoorMovementAnimation(this, spriteRenderer, animation, 6, float.MaxValue));
-
+            control_state_machine.ChangeState(new StateLinkStunnedMovement(this, float.MaxValue, Vector3.zero));
+            animation_state_machine.ChangeState(new StateLinkDoorMovementAnimation(this, spriteRenderer, animation, 6, float.MaxValue));
+        }
     }
 
     public void OnReturnToStart() {

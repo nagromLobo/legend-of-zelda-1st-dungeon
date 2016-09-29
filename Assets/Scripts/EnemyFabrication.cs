@@ -24,6 +24,8 @@ public class EnemyFabrication : MonoBehaviour {
             spawnGrid[i] = new List<Vector3>();
         }
         // for testing wall masters
+        spawnGrid[0] = new List<Vector3> { new Vector3(39.5f, 6.0f, 0.0f)
+        };
         spawnGrid[1] = new List<Vector3> { new Vector3(19.0f, 7.0f, 0.0f),
                                             new Vector3(18.0f, 5.0f, 0.0f),
                                             new Vector3(26.0f, 2.0f, 0.0f)
@@ -91,19 +93,6 @@ public class EnemyFabrication : MonoBehaviour {
         };
         CameraControl.S.cameraMoveCompleteDelegate += CameraMoveComplete;
         CameraControl.S.cameraMovedDelegate += OnCameraMoved;
-    }
-
-    // Update is called once per frame
-    void Update() {
-        // in the wall master room we want to fabricate wallmasters on a timer
-        // speed it up when the player is close to the boss doorS
-        if(currentRoom == WALL_MASTER_ROOM) {
-            if((Time.time - timeLastWallMasterSpawn) > timeBetweenWallMasterSpawn){
-                // then spawn wallmaster
-            }
-            
-        }
-
     }
 
     void CameraMoveComplete(Vector3 pos) {
