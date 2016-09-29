@@ -106,7 +106,7 @@ public class Wallmaster : MonoBehaviour {
         Vector3 currPos;
         if (currentDirection == startDirection) {
             // then we are in the first leg of our journey
-            u = (Time.time - startTime) / (distanceToTravel1);
+            u = (Time.time - startTime) / (distanceToTravel1 / velocity);
             currPos = Vector3.Lerp(startPosition, endPosition1, u);
             transform.position = currPos;
             if(u > 1) {
@@ -118,7 +118,7 @@ public class Wallmaster : MonoBehaviour {
             }
         } else if(currentDirection == turnDirection) {
             // then we are are turned
-            u = (Time.time - startTime) / (distanceToTravel2);
+            u = (Time.time - startTime) / (distanceToTravel2 / velocity);
             currPos = Vector3.Lerp(endPosition1, endPosition2, u);
             transform.position = currPos;
             if (u > 1) {
@@ -128,12 +128,14 @@ public class Wallmaster : MonoBehaviour {
             }
         } else {
             // we are returning
-            u = (Time.time - startTime) / (distanceToTravel1);
+            u = (Time.time - startTime) / (distanceToTravel1 / velocity);
             currPos = Vector3.Lerp(endPosition2, finalEndPosition, u);
             transform.position = currPos;
             if(u > 1) {
                 Destroy(this.gameObject);
-                CameraControl.S.ReturnToStart();
+                if(currState == WallMasterState.LINK_CAPTURED) {
+                    CameraControl.S.ReturnToStart();
+                }
             }
         }
 	}
@@ -142,6 +144,7 @@ public class Wallmaster : MonoBehaviour {
         if(other.gameObject.tag == "Link") {
             currState = WallMasterState.LINK_CAPTURED;
             spriteRenderer.sprite = LinkCapturedSprite;
+            PlayerControl.instance.GrabLink(this);
         }
     }
 }

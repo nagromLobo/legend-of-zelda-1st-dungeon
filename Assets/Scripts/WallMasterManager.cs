@@ -77,10 +77,10 @@ public class WallMasterManager : MonoBehaviour {
                     startPosition.x += (roomWidth / 2);
                     if (Random.value > 0.5) {
                         wmTurnDir = Direction.NORTH;
-                        startPosition.Set(startPosition.x + wallMasterWallOffset, linkPosition.y - wallMasterWallOffset, startPosition.z);
+                        startPosition.Set(startPosition.x + wallMasterWallOffset, linkPosition.y - wallMasterLinkOffset, startPosition.z);
                     } else {
                         wmTurnDir = Direction.SOUTH;
-                        startPosition.Set(startPosition.x + wallMasterWallOffset, linkPosition.y + wallMasterWallOffset, startPosition.z);
+                        startPosition.Set(startPosition.x + wallMasterWallOffset, linkPosition.y + wallMasterLinkOffset, startPosition.z);
                     }
                     break;
                 case Direction.SOUTH:
@@ -94,13 +94,13 @@ public class WallMasterManager : MonoBehaviour {
                     }
                     break;
                 case Direction.WEST:
-                    startPosition.y -= (roomWidth / 2);
+                    startPosition.x -= (roomWidth / 2);
                     if (Random.value > 0.5) {
                         wmTurnDir = Direction.NORTH;
-                        startPosition.Set(startPosition.x - wallMasterWallOffset, linkPosition.y - wallMasterWallOffset, startPosition.z);
+                        startPosition.Set(startPosition.x - wallMasterWallOffset, linkPosition.y - wallMasterLinkOffset, startPosition.z);
                     } else {
                         wmTurnDir = Direction.SOUTH;
-                        startPosition.Set(startPosition.x - wallMasterWallOffset, linkPosition.y = wallMasterWallOffset, startPosition.z);
+                        startPosition.Set(startPosition.x - wallMasterWallOffset, linkPosition.y + wallMasterLinkOffset, startPosition.z);
                     }
                     break;
             }

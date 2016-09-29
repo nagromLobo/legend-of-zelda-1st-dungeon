@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 
 public enum Direction {NORTH, EAST, SOUTH, WEST};
-public enum EntityState {NORMAL, ATTACKING, DAMAGED, CAMERA_TRANSITION, ENTERING_ROOM, GAME_OVER};
+public enum EntityState {NORMAL, ATTACKING, DAMAGED, CAMERA_TRANSITION, ENTERING_ROOM, GAME_OVER, GRABBED};
 
 public class PlayerControl : MonoBehaviour {
 
@@ -64,6 +64,7 @@ public class PlayerControl : MonoBehaviour {
     private SpriteRenderer spriteRenderer;
     private Color normalColor;
     private Vector3 startPosition;
+    private Wallmaster linkGrabber;
 
     public static PlayerControl instance;
 
@@ -108,6 +109,9 @@ public class PlayerControl : MonoBehaviour {
                 break;
             case EntityState.DAMAGED:
                 handleDamaged();
+                break;
+            case EntityState.GRABBED:
+                handleGrabbed();
                 break;
         }
         
@@ -168,6 +172,10 @@ public class PlayerControl : MonoBehaviour {
             currPos.Set(newPosX, currPos.y, currPos.z);
         }
         transform.position = currPos;
+    }
+
+    private void handleGrabbed() {
+        this.transform.position = linkGrabber.transform.position;
     }
 
     private void handleDamaged() {
@@ -361,7 +369,22 @@ public class PlayerControl : MonoBehaviour {
         }
     }
 
+    public void GrabLink(Wallmaster grabber) {
+        this.linkGrabber = grabber;
+        Sprite[] animation = new Sprite[1];
+        animation[0] = link_run_down[0];
+
+        current_state = EntityState.GRABBED;
+
+        control_state_machine.ChangeState(new StateLinkStunnedMovement(this, float.MaxValue, Vector3.zero));
+        animation_state_machine.ChangeState(new StateLinkDoorMovementAnimation(this, spriteRenderer, animation, 6, float.MaxValue));
+
+    }
+
     public void OnReturnToStart() {
         transform.position = startPosition;
+        animation_state_machine.ChangeState(new StateIdleWithSprite(this, GetComponent<SpriteRenderer>(), link_run_up[0]));
+        control_state_machine.ChangeState(new StateLinkNormalMovement(this));
+        current_state = EntityState.NORMAL;
     }
 }

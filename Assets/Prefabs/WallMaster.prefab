@@ -70,7 +70,7 @@ MonoBehaviour:
   startPosition: {x: 0, y: 0, z: 0}
   distanceToTravel1: 1
   distanceToTravel2: 1
-  velocity: 1
+  velocity: 1.5
   normalSprite: {fileID: 21300048, guid: ed8d739b8ae50f145b00b1db86c365bf, type: 3}
   LinkCapturedSprite: {fileID: 21300018, guid: ed8d739b8ae50f145b00b1db86c365bf, type: 3}
 --- !u!212 &212000014245500556
@@ -101,7 +101,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 2
   m_Sprite: {fileID: 21300048, guid: 8e8a9669d1c0c6943a69f3bf099f7b4b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
