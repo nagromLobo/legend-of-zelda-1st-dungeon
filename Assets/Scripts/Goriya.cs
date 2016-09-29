@@ -37,7 +37,7 @@ public class Goriya : Enemy {
                 spriteAnimation = goriya_left_prefabs;
                 break;
         }
-        animation_statemachine.ChangeState(new StateEnemyMovementAnimation(this, GetComponent<SpriteRenderer>(), spriteAnimation, movementFramesPerSecond));
+        animation_statemachine.ChangeState(new StateEnemyMovementAnimation(GetComponent<SpriteRenderer>(), spriteAnimation, movementFramesPerSecond));
     }
 
     public override void OnEnemyTurned(Direction d) {

@@ -23,6 +23,7 @@ TagManager:
   - Threshold
   - Pushable
   - Weapon
+  - BladeTrapTrigger
   layers:
   - Default
   - TransparentFX

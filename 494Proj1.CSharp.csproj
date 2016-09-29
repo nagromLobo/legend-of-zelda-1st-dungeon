@@ -66,6 +66,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\Aquamentus.cs" />
+    <Compile Include="Assets\Scripts\BladeTrap.cs" />
     <Compile Include="Assets\Scripts\BombBehavior.cs" />
     <Compile Include="Assets\Scripts\CameraControl.cs" />
     <Compile Include="Assets\Scripts\CameraFollow.cs" />
@@ -78,11 +80,15 @@
     <Compile Include="Assets\Scripts\Keese.cs" />
     <Compile Include="Assets\Scripts\ParseZeldaMap.cs" />
     <Compile Include="Assets\Scripts\PlayerControl.cs" />
+    <Compile Include="Assets\Scripts\RoomSizedTrigger.cs" />
     <Compile Include="Assets\Scripts\ShowMap.cs" />
     <Compile Include="Assets\Scripts\ShowMapOnCamera.cs" />
     <Compile Include="Assets\Scripts\StateMachine.cs" />
     <Compile Include="Assets\Scripts\Tile.cs" />
     <Compile Include="Assets\Scripts\UtilityFunctions.cs" />
+    <Compile Include="Assets\Scripts\WallMasterManager.cs" />
+    <Compile Include="Assets\Scripts\WallMasterTrigger.cs" />
+    <Compile Include="Assets\Scripts\Wallmaster.cs" />
     <Compile Include="Assets\Scripts\Weapon.cs" />
   </ItemGroup>
   <ItemGroup>
