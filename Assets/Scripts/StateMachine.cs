@@ -523,7 +523,6 @@ public class StateLinkStunnedSprite : State {
 }
 
 public class StateEnemyMovementAnimation : State {
-    private Enemy enemy;
     private SpriteRenderer renderer;
     private Sprite[] animation;
     private int fps;
@@ -531,8 +530,7 @@ public class StateEnemyMovementAnimation : State {
     float animation_progression;
     float animation_start_time;
 
-    public StateEnemyMovementAnimation(Enemy enemy, SpriteRenderer renderer, Sprite[] animation, int fps) {
-        this.enemy = enemy;
+    public StateEnemyMovementAnimation(SpriteRenderer renderer, Sprite[] animation, int fps) {
         this.renderer = renderer;
         this.animation = animation;
         this.animation_length = animation.Length;
@@ -560,11 +558,46 @@ public class StateEnemyMovementAnimation : State {
     }
 }
 
+public class StateBladeTrapMovement : State {
+    BladeTrap bladeTrap;
+    float velocity;
+    Direction direction;
+
+    public StateBladeTrapMovement(BladeTrap bt, float velocity, Direction d) {
+        this.bladeTrap = bt;
+        this.velocity = velocity;
+        this.direction = d;
+    }
+
+    public override void OnStart() {
+        Vector3 velocityVector = Vector3.zero;
+        switch(direction){
+            case Direction.NORTH:
+                velocityVector = new Vector3(0, 1, 0);
+                break;
+            case Direction.EAST:
+                velocityVector = new Vector3(1, 0, 0);
+                break;
+            case Direction.SOUTH:
+                velocityVector = new Vector3(0, -1, 0);
+                break;
+            case Direction.WEST:
+                velocityVector = new Vector3(-1, 0, 0);
+                break;
+        }
+        bladeTrap.GetComponent<Rigidbody>().velocity = velocityVector * velocity;
+    }
+
+    public override void OnFinish() {
+        bladeTrap.GetComponent<Rigidbody>().velocity = Vector3.zero;
+    }
+
+}
+
 public class StateKeeseMovement : StateEnemyMovement {
     float pauseProbability;
     float timeToPause;
     float pauseSlowdownTime;
-    float sinEccentricity;
     float maxFlyRadius;
     float flyRadius;
     Vector3 directionVector;
@@ -576,7 +609,6 @@ public class StateKeeseMovement : StateEnemyMovement {
         this.pauseProbability = pauseProbability;
         this.timeToPause = timeToPause;
         this.maxFlyRadius = maxFlyRadius;
-        this.sinEccentricity = 0.6f;
         this.pauseSlowdownTime = pauseSlowdownTime;
         this.directionVector = Vector3.Normalize(directionVector);
 
@@ -647,7 +679,7 @@ public class StateGelMovement : StateEnemyMovement {
     }
 
     protected override void pauseEnemy() {
-        state_machine.ChangeState(new StateEnemyStunned(enemy, timeToCrossTile, direction, turnProbability, timeToPause));
+        state_machine.ChangeState(new StateEnemyStunned(enemy, direction, turnProbability, timeToPause));
     }
 }
 
@@ -670,7 +702,7 @@ public class StateGoriyaMovement : StateEnemyMovement {
     protected override void enemyAttack() {
         // instantiate boomerang
         // throw boomerang
-        state_machine.ChangeState(new StateEnemyStunned(enemy, timeToCrossTile, direction, turnProbability, boomerangCooldown));
+        state_machine.ChangeState(new StateEnemyStunned(enemy, direction, turnProbability, boomerangCooldown));
         
     }
 
@@ -684,11 +716,9 @@ public class StateEnemyStunned : State {
     Direction direction;
     float turnProbability;
     float stunCooldown;
-    float timeToCrossTile;
     float timeStart;
-    public StateEnemyStunned(Enemy enemy, float timeToCrossTile, Direction direction, float turnProbability, float stunCooldown) {
+    public StateEnemyStunned(Enemy enemy, Direction direction, float turnProbability, float stunCooldown) {
         this.enemy = enemy;
-        this.timeToCrossTile = timeToCrossTile;
         this.direction = direction;
         this.turnProbability = turnProbability;
         this.stunCooldown = stunCooldown;
@@ -702,6 +732,32 @@ public class StateEnemyStunned : State {
         if((Time.time - timeStart) > stunCooldown) {
             enemy.StartEnemyMovement(direction);
         }
+    }
+}
+
+public class StateAquamentusMovement : StateEnemyMovement {
+    float attackProbability;
+    public StateAquamentusMovement(Enemy enemy, float timeToCrossTile, Direction direction, float turnProbability, float attackProbability) 
+        :base(enemy, timeToCrossTile, direction, turnProbability){
+        this.attackProbability = attackProbability;
+    }
+
+    
+
+    protected override void turnEnemy() {
+        Direction prevDir = direction;
+        Direction newDir = UtilityFunctions.reverseDirection(direction);
+        enemy.OnEnemyTurned(newDir);
+        state_machine.ChangeState(new StateAquamentusMovement(enemy, timeToCrossTile, newDir, turnProbability, attackProbability));
+    }
+
+    protected override bool shouldEnemyAttack() {
+        return Random.value < attackProbability;
+    }
+
+    protected override void enemyAttack() {
+        // throw fireballs
+        enemy.OnEnemyAttack();
     }
 }
 
@@ -740,9 +796,11 @@ public class StateEnemyMovement : State {
         if (onMainGrid) {
             if (shouldEnemyTurn()) {
                 turnEnemy();
-            } else if (shouldEnemyWait()) {
+            }
+            if (shouldEnemyWait()) {
                 pauseEnemy();
-            } else if (shouldEnemyAttack()) {
+            }
+            if (shouldEnemyAttack()) {
                 enemyAttack();
             }
             setTileLastAndNext();

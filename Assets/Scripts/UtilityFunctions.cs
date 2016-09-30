@@ -110,4 +110,33 @@ public class UtilityFunctions : MonoBehaviour {
         }
         return position;
     }
+
+    public static Direction DirectionFromNormal(Vector3 normal) {
+        Vector3 north = new Vector3(0, 1, 0);
+        Vector3 east = new Vector3(1, 0, 0);
+        Vector3 south = new Vector3(0, -1, 0);
+        if(normal == north) {
+            return Direction.NORTH;
+        }
+        if(normal == east) {
+            return Direction.EAST;
+        }
+        if(normal == south) {
+            return Direction.SOUTH;
+        }
+        return Direction.WEST;
+    }
+
+    public static Direction reverseDirection(Direction d) {
+        switch (d) {
+            case Direction.NORTH:
+                return Direction.SOUTH;
+            case Direction.EAST:
+                return Direction.WEST;
+            case Direction.SOUTH:
+                return Direction.NORTH;
+            default:
+                return Direction.EAST;
+        }
+    }
 }

@@ -1,17 +1,19 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+enum CameraState { NORMAL, ROOM_TRANSITION, RESET }
 public class CameraControl : MonoBehaviour {
     // Singleton accessor
     public static CameraControl S;
     public int roomWidth = 15;
     public int roomHeight = 13;
     public float transitionTime;
-    private bool changeCameraPos = false;
     private Vector3 cameraStartPos;
     private Vector3 cameraEndPos;
     private float cameraMoveStart;
     private Direction transitionDir;
+    private Vector3 cameraInitialPos;
+    private CameraState current_state = CameraState.NORMAL;
 
 
     public delegate void CameraMoved(Direction d, float transitionTime);
@@ -28,10 +30,14 @@ public class CameraControl : MonoBehaviour {
 
     }
 
+    void Start() {
+        cameraInitialPos = transform.position;
+    }
+
     // Update is called once per frame
     void Update() {
         Vector3 currCameraPos = this.gameObject.transform.position;
-        if (changeCameraPos) {
+        if (current_state == CameraState.ROOM_TRANSITION) {
             float u = (Time.time - cameraMoveStart) / transitionTime;
             if (u <= 1) {
                 // if horizontial
@@ -45,7 +51,7 @@ public class CameraControl : MonoBehaviour {
                 }
                 transform.position = currCameraPos;
             } else {
-                changeCameraPos = false;
+                current_state = CameraState.NORMAL;
 				cameraMoveCompleteDelegate(transform.position);
             }
         }
@@ -57,7 +63,7 @@ public class CameraControl : MonoBehaviour {
         cameraStartPos = this.gameObject.transform.position;
         transitionDir = d;
         cameraMoveStart = Time.time;
-        changeCameraPos = true;
+        current_state = CameraState.ROOM_TRANSITION;
         switch (d) {
             case Direction.SOUTH:
                 cameraEndPos = new Vector3(cameraStartPos.x, cameraStartPos.y - roomHeight, cameraStartPos.z);
@@ -72,5 +78,12 @@ public class CameraControl : MonoBehaviour {
                 cameraEndPos = new Vector3(cameraStartPos.x - roomWidth, cameraStartPos.y, cameraStartPos.z);
                 break;
         }
+    }
+
+    public void ReturnToStart() {
+        current_state = CameraState.RESET;
+        transform.position = cameraInitialPos;
+        PlayerControl.instance.OnReturnToStart();
+        current_state = CameraState.NORMAL;
     }
 }
