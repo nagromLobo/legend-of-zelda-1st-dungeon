@@ -14,6 +14,7 @@ public class EnemyFabrication : MonoBehaviour {
     public Vector3[] pushableTileCoords;
     public Direction[] pushableDirection;
     public GameObject pushableTilePrefab;
+    public GameObject smallKeyPrefab;
 
     private PushableBlock[] pushableBlocks;
 
