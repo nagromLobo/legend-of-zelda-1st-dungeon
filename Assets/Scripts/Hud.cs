@@ -14,6 +14,7 @@ public class Hud : MonoBehaviour {
 	public Text heart_text;
 	public Text key_text;
 	public Text bomb_text;
+	public List<GameObject> weapons = new List<GameObject> ();
 
 	private static Hud instance;
 

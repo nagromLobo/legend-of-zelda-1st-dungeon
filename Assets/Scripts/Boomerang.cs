@@ -15,6 +15,7 @@ public class Boomerang : Weapon {
 	public float duration;
 	//public Vector3 pos;
 	public float speed = 5.0f;
+	float half_duration;
 
 	// Use this for initialization
 	void Awake () {
@@ -33,29 +34,6 @@ public class Boomerang : Weapon {
 	// Update is called once per frame
 	void Update () {
 		if (released) {
-
-			float half_duration = duration / 2.0f;
-			//float step = speed * Time.deltaTime;
-
-			//if (startAgain) Start();
-
-			Vector3 offset = Vector3.zero;
-			Vector3 weapon_pos = Vector3.zero;
-			if (PlayerControl.instance.current_direction == Direction.NORTH) {
-				offset = new Vector3(0, 1, 0);
-				weapon_pos = new Vector3(0, 3, 0);
-			} else if (PlayerControl.instance.current_direction == Direction.EAST) {
-				offset = new Vector3(1, 0, 0);
-				weapon_pos = new Vector3(3, 0, 0);
-			} else if (PlayerControl.instance.current_direction == Direction.SOUTH) {
-				offset = new Vector3(0, -1, 0);
-				weapon_pos = new Vector3(0, -3, 0);
-			} else if (PlayerControl.instance.current_direction == Direction.WEST) {
-				offset = new Vector3(-1, 0, 0);
-				weapon_pos = new Vector3(-3, 0, 0);
-			}
-			beginPoint += offset;
-			FinalDest = beginPoint + weapon_pos + offset;
 
 			//if (startAgain) Start();
 
@@ -82,12 +60,34 @@ public class Boomerang : Weapon {
 		released = true;
 		this.duration = duration;
 		startAgain = true;
+		half_duration = duration / 2.0f;
+		//float step = speed * Time.deltaTime;
+
+		if (startAgain) Start();
+
+		Vector3 offset = Vector3.zero;
+		Vector3 weapon_pos = Vector3.zero;
+		if (PlayerControl.instance.current_direction == Direction.NORTH) {
+			offset = new Vector3(0, 1, 0);
+			weapon_pos = new Vector3(0, 3, 0);
+		} else if (PlayerControl.instance.current_direction == Direction.EAST) {
+			offset = new Vector3(1, 0, 0);
+			weapon_pos = new Vector3(3, 0, 0);
+		} else if (PlayerControl.instance.current_direction == Direction.SOUTH) {
+			offset = new Vector3(0, -1, 0);
+			weapon_pos = new Vector3(0, -3, 0);
+		} else if (PlayerControl.instance.current_direction == Direction.WEST) {
+			offset = new Vector3(-1, 0, 0);
+			weapon_pos = new Vector3(-3, 0, 0);
+		}
+		beginPoint += offset;
+		FinalDest = beginPoint + weapon_pos + offset;
 	}
 
-	void OnCollisionEnter()
-	{
-		//return
-	}
+//	void OnCollisionEnter()
+//	{
+//		//return
+//	}
 
 //	void OnCollisionEnter() {
 //		print ("don't get here yet"); 

@@ -8,6 +8,7 @@ public class WoodenSword : Weapon {
 	public GameObject weapon_prefab;
 	public GameObject weapon_instance;
 	public bool released;
+	Vector3 weapon_pos = Vector3.zero;
 	//public Vector3 pos;
 
 	// Use this for initialization
@@ -27,7 +28,15 @@ public class WoodenSword : Weapon {
 	// Update is called once per frame
 	void FixedUpdate () {
 		if (released) {
-			Vector3 weapon_pos = Vector3.zero;
+
+			weapon_instance.GetComponent<Rigidbody>().velocity = weapon_pos * 15.0f;
+		}
+	}
+
+	public void ReleaseSword() {
+		if (IsFullHealth ()) {
+			released = true;
+			print ("full health you should leave");
 			if (PlayerControl.instance.current_direction == Direction.NORTH) {
 				weapon_pos = new Vector3(0, 1, 0);
 			} else if (PlayerControl.instance.current_direction == Direction.EAST) {
@@ -37,14 +46,6 @@ public class WoodenSword : Weapon {
 			} else if (PlayerControl.instance.current_direction == Direction.WEST) {
 				weapon_pos = new Vector3(-1, 0, 0);
 			}
-			weapon_instance.GetComponent<Rigidbody>().velocity = weapon_pos * 15.0f;
-		}
-	}
-
-	public void ReleaseSword() {
-		if (IsFullHealth ()) {
-			released = true;
-			print ("full health you should leave");
 		}
 	}
 
