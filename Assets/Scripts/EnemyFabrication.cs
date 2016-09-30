@@ -11,10 +11,11 @@ public class EnemyFabrication : MonoBehaviour {
     public float timeBetweenWallMasterSpawn = 1.0f;
     public float timeBetweenWallMasterSpawnDoor = 0.5f;
 
-    public Vector3[] pushableTileCoords;
-    public Direction[] pushableDirection;
+    public Vector3[] pushableTileCoords; // order of increasing room numbers
+    public Direction[] pushableDirection; // order of increasing room numbers
     public GameObject pushableTilePrefab;
     public GameObject smallKeyPrefab;
+    public Vector3[] eventCoords; // order of increasing room numbers (coordinates to place room event)
 
     private PushableBlock[] pushableBlocks;
 
@@ -165,14 +166,16 @@ public class EnemyFabrication : MonoBehaviour {
             case 1:
                 // first keese room
                 if(numEnemiesInRooms[currentRoom] == 0) {
-                    // FIXME --> make key appear
+                    // make key appear
+                    Instantiate(smallKeyPrefab, eventCoords[0], transform.rotation);
                 }
                 break;
             case 5:
                 // (3rd) trap keese room
                 if(numEnemiesInRooms[currentRoom] == 0) {
-                    // FIXME --> Unlock door
+                    //  Unlock door
                     // (keese room)
+                    ShowMapOnCamera.MAP_TILES[Mathf.RoundToInt(eventCoords[1].x), Mathf.RoundToInt(eventCoords[1].y)].openEventDoor(Direction.EAST);
                 }
                 break;
             case 7:
@@ -185,7 +188,8 @@ public class EnemyFabrication : MonoBehaviour {
             case 14:
                 // Aquamentus
                 if(numEnemiesInRooms[currentRoom] == 0) {
-                    // FIXME --> Unlock door
+                    // Unlock door
+                    ShowMapOnCamera.MAP_TILES[Mathf.RoundToInt(eventCoords[2].x), Mathf.RoundToInt(eventCoords[2].y)].openEventDoor(Direction.EAST);
                 }
                 break;
         }

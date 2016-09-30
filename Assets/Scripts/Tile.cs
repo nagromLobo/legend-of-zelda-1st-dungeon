@@ -16,9 +16,12 @@ public class Tile : MonoBehaviour {
     public Sprite northDoorRight;
     public Sprite eastDoor;
     public Sprite westDoor;
+    public Sprite lockedDoor;
 
 
     // tile numvalues in order of increasing x coordinate
+
+    // door tile values
     private static int northDoorTileNumLeft = 92;
     private static int northDoorTileNumRight = 93;
     private static int westDoorTileNum = 51;
@@ -27,6 +30,8 @@ public class Tile : MonoBehaviour {
     private static int northDoorLockedTileNumRight = 81;
     // private static int westDoorLockedTileNum = 106;
     private static int eastDoorLockedTileNum = 101;
+    // event door tile values
+    private static int lockedDoorNum = 100;
 
     private SpriteRenderer  sprend;
 
@@ -85,13 +90,7 @@ public class Tile : MonoBehaviour {
         char c = ShowMapOnCamera.S.collisionS[tileNum];
         switch (c) {
             case 'S': // Solid
-                bc.enabled = true;
-                rend.sortingOrder = 0;
-                bc.center = Vector3.zero;
-                bc.size = Vector3.one;
-                bc.isTrigger = false;
-                gameObject.layer = LayerMask.NameToLayer("Tiles");
-                bc.tag = "Tile";
+                setUpSolidTile();
                 break;
             case 'T': // Door Threshold
                 setUpThreshold(this);
@@ -143,6 +142,16 @@ public class Tile : MonoBehaviour {
                 break;
         }
 	}
+
+    private void setUpSolidTile() {
+        bc.enabled = true;
+        rend.sortingOrder = 0;
+        bc.center = Vector3.zero;
+        bc.size = Vector3.one;
+        bc.isTrigger = false;
+        gameObject.layer = LayerMask.NameToLayer("Tiles");
+        bc.tag = "Tile";
+    }
     
     public void openDoor() {
         if(tileNum == northDoorLockedTileNumLeft) {
@@ -185,6 +194,33 @@ public class Tile : MonoBehaviour {
             setUpThreshold(this);
             // make this change perminant
             ShowMapOnCamera.MAP[x, y] = westDoorTileNum;
+        }
+    }
+    
+    public void closeEventDoor() {
+        // add check for other directions
+        if(tileNum == eastDoorTileNum) {
+            // make this change immediate
+            SpriteRenderer rend = GetComponent<SpriteRenderer>();
+            rend.sprite = lockedDoor;
+            setUpSolidTile();
+            // make change perminant
+            ShowMapOnCamera.MAP[x, y] = lockedDoorNum;
+        }
+    }
+    
+    public void openEventDoor(Direction d) {
+        if(tileNum == lockedDoorNum) {
+            // make change immediate
+            SpriteRenderer rend = GetComponent<SpriteRenderer>();
+           if(d == Direction.EAST) {
+                rend.sprite = eastDoor;
+                ShowMapOnCamera.MAP[x, y] = eastDoorTileNum;
+            } else if(d == Direction.WEST) {
+                ShowMapOnCamera.MAP[x, y] = westDoorTileNum;
+                rend.sprite = westDoor;
+            }
+            setUpThreshold(this);
         }
     }	
 

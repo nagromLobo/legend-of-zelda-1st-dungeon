@@ -58,7 +58,16 @@ public class Enemy : MonoBehaviour {
     protected virtual void OnTriggerEnter(Collider other) {
         if(other.gameObject.tag == "Threshold" || other.gameObject.tag == "LockedDoor") {
             StartEnemyMovement(true);
-        } else if (other.gameObject.tag == "Weapon") {
+        }
+        OnTriggerDamageHandling(other);
+    }
+
+    protected virtual void OnTriggerDamageHandling(Collider other) {
+        if ((other.gameObject.tag == "BombReleased") ||
+            (other.gameObject.tag == "BoomerangReleased") ||
+            (other.gameObject.tag == "Arrow") ||
+            (other.gameObject.tag == "Sword")) {
+            // then we have a weapon
             EnemyDamaged(other.GetComponent<Weapon>());
         }
     }
@@ -120,18 +129,26 @@ public class Enemy : MonoBehaviour {
 
     public virtual void EnemyDamaged(Weapon w) {
         //int damageHalfHearts = w.damage;
-        int damage = 1;
-        normalColor = spriteRenderer.color;
-        current_state = EntityState.DAMAGED;
-        damageStartTime = Time.time;
-        heartCount -= damage;
-        if (heartCount <= 0) {
-            // update room state (enemy destroyed)
-            OnEnemyDestroyed(this.gameObject);
-            Destroy(this.gameObject);
-            return;
+        //float stun = w.stunCooldown;
+        int stunCooldown = 0;
+        if (stunCooldown > 0) {
+            control_statemachine.ChangeState(new StateEnemyStunned(this, currDirection, turnProbability, stunCooldown));
+
         }
-        // if not destroyed animate enemy
+        int damage = 1;
+        if(damage > 0) {
+            normalColor = spriteRenderer.color;
+            current_state = EntityState.DAMAGED;
+            damageStartTime = Time.time;
+            heartCount -= damage;
+            if (heartCount <= 0) {
+                // update room state (enemy destroyed)
+                OnEnemyDestroyed(this.gameObject);
+                Destroy(this.gameObject);
+                return;
+            }
+            // if not destroyed animate enemy
+        }
     }
 
     private void handleDamaged() {
