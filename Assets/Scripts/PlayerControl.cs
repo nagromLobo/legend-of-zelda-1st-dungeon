@@ -53,7 +53,9 @@ public class PlayerControl : MonoBehaviour {
 
 	public GameObject selected_weapon_prefab;
 
-	//public GameObject BowPrefab;
+    //public GameObject BowPrefab;
+    public delegate void PlayerInRoom();
+    public PlayerInRoom playerInRoom;
 
     private Direction link_doorway_direction;
     private float timeStartDelay = 0.0f;
@@ -87,6 +89,7 @@ public class PlayerControl : MonoBehaviour {
         animation_state_machine = new StateMachine();
         control_state_machine = new StateMachine();
         control_state_machine.ChangeState(new StateLinkNormalMovement(this));
+        normalColor = GetComponent<SpriteRenderer>().color;
 
         CameraControl.S.cameraMovedDelegate += CameraMoved;
 
@@ -103,6 +106,9 @@ public class PlayerControl : MonoBehaviour {
     // Update is called once per frame
     void Update() {
         switch (current_state) {
+            case EntityState.NORMAL:
+                spriteRenderer.color = normalColor;
+                break;
             case EntityState.CAMERA_TRANSITION:
                 handleTransitionMovement();
                 break;
@@ -158,6 +164,9 @@ public class PlayerControl : MonoBehaviour {
                 current_state = EntityState.ENTERING_ROOM;
             } else {
                 current_state = EntityState.NORMAL;
+                if(playerInRoom != null) {
+                    playerInRoom();
+                }
                 // have to set this back to zero so we know if we've started waiting the next time
                 timeStartDelay = 0.0f;
                 return;
@@ -314,7 +323,6 @@ public class PlayerControl : MonoBehaviour {
 
         damageStartTime = Time.time;
         lastDamageFlashTime = damageStartTime;
-        normalColor = GetComponent<SpriteRenderer>().color;
         
     }
 

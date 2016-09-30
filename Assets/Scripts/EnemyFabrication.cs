@@ -10,26 +10,26 @@ public class EnemyFabrication : MonoBehaviour {
     public List<Vector3>[] spawnGrid;
     public float timeBetweenWallMasterSpawn = 1.0f;
     public float timeBetweenWallMasterSpawnDoor = 0.5f;
+    public float doorWaitDuration = 2.0f;
 
-    public Vector3[] pushableTileCoords;
-    public Direction[] pushableDirection;
+    public Vector3[] pushableTileCoords; // order of increasing room numbers
     public GameObject pushableTilePrefab;
     public GameObject smallKeyPrefab;
+    public GameObject boomerangPrefab;
+    public Vector3[] eventCoords; // index is roomnumber
 
     private PushableBlock[] pushableBlocks;
 
 
     private List<GameObject> enemy_instances = new List<GameObject>();// instances in a give room
     private int currentRoom = 0;
-    private static int WALL_MASTER_ROOM;
-    private float timeLastWallMasterSpawn = 0.0f;
     private int prevRoom = 0;
 
 
     // Use this for initialization
     void Start() {
-        spawnGrid = new List<Vector3>[15];
-
+        spawnGrid = new List<Vector3>[enemy_prefabs.Length];
+        PlayerControl.instance.playerInRoom += playerInRoom;
         for(int i = 0; i < spawnGrid.Length; ++i) {
             spawnGrid[i] = new List<Vector3>();
         }
@@ -108,18 +108,24 @@ public class EnemyFabrication : MonoBehaviour {
         pushableBlocks = new PushableBlock[pushableTileCoords.Length];
         for (int i = 0; i < pushableTileCoords.Length; ++i) {
             Vector3 coords = pushableTileCoords[i];
-            Direction direction = pushableDirection[i];
             pushableBlocks[i] = (Instantiate(pushableTilePrefab, coords, transform.rotation) as GameObject).GetComponent<PushableBlock>();
-            pushableBlocks[i].SetUpPushableTile(direction, coords, 0, true);
+            pushableBlocks[i].SetUpPushableTile(true, true, true, true, coords, 0, true);
             pushableBlocks[i].onBlockPushed += OnBlockPushed;
         }
         // need to defeat all enemies in room to push tile
-        pushableBlocks[0].SetUpPushableTile(Direction.NORTH, pushableTileCoords[0], 7, false);
+        pushableBlocks[0].SetUpPushableTile(true, true, true, true, pushableTileCoords[0], 7, false);
+        // pushable in every direction besides from the west
+        pushableBlocks[1].SetUpPushableTile(true, true, true, false, pushableTileCoords[1], 0, true);
     }
 
     void OnBlockPushed(PushableBlock pushedBlock) {
         // in the is case we want to trigger a room event (like unlocking a door)
-        MonoBehaviour.print("Room unlocked");
+        switch (currentRoom) {
+            // Gel locked door room (with three gels)
+            case 7:
+                ShowMapOnCamera.MAP_TILES[Mathf.RoundToInt(eventCoords[currentRoom].x), Mathf.RoundToInt(eventCoords[currentRoom].y)].openEventDoor(Direction.WEST);
+                break;
+        }
     }
 
     void CameraMoveComplete(Vector3 pos) {
@@ -141,53 +147,84 @@ public class EnemyFabrication : MonoBehaviour {
         if(currentRoom != prevRoom) {
             // special case for pushable block rooms
             switch (prevRoom) {
-                // gel pushable block room
                 case 7:
+                    // gel pushable block room
                     bool pushable = false;
                     if (numEnemiesInRooms[prevRoom] == 0) {
                         pushable = true;
                     }
-                    pushableBlocks[0].SetUpPushableTile(pushableDirection[0], pushableTileCoords[0], 7, pushable);
+                    pushableBlocks[0].SetUpPushableTile(true, true, true, true, pushableTileCoords[0], 7, pushable);
+                    // reset door
+                    if(currentRoom != 15) {
+                        ShowMapOnCamera.MAP_TILES[Mathf.RoundToInt(eventCoords[currentRoom].x), Mathf.RoundToInt(eventCoords[currentRoom].y)].closeEventDoor();
+                    }
                     break;
                 case 11:
-                    pushableBlocks[1].SetUpPushableTile(pushableDirection[1], pushableTileCoords[1], 11, true);
+                    // blade trap pushable block room
+                    pushableBlocks[1].SetUpPushableTile(true, true, true, false, pushableTileCoords[1], 11, true);
                     break;
 
             }
         }
     }
 
-    private void OnEnemyDestroyed(GameObject enemy) {
-        // reduce the amount of enemies in the current room
-        --numEnemiesInRooms[currentRoom];
+    private void playerInRoom() {
+        // special case for second keese room
         switch (currentRoom) {
-            // handle room specific enemy killing events
-            case 1:
-                // first keese room
-                if(numEnemiesInRooms[currentRoom] == 0) {
-                    // FIXME --> make key appear
-                }
-                break;
             case 5:
-                // (3rd) trap keese room
-                if(numEnemiesInRooms[currentRoom] == 0) {
-                    // FIXME --> Unlock door
-                    // (keese room)
+                if(numEnemiesInRooms[currentRoom] > 0) {
+                    ShowMapOnCamera.MAP_TILES[Mathf.RoundToInt(eventCoords[currentRoom].x), Mathf.RoundToInt(eventCoords[currentRoom].y)].closeEventDoor();
                 }
                 break;
             case 7:
-                // (1st) pushable block room
-                if(numEnemiesInRooms[currentRoom] == 0) {
+                ShowMapOnCamera.MAP_TILES[Mathf.RoundToInt(eventCoords[currentRoom].x), Mathf.RoundToInt(eventCoords[currentRoom].y)].closeEventDoor();
+                break;
+        }
+    }
+
+    private void OnEnemyDestroyed(GameObject enemy) {
+        // reduce the amount of enemies in the current room
+        --numEnemiesInRooms[currentRoom];
+        if (numEnemiesInRooms[currentRoom] == 0) {
+            switch (currentRoom) {
+                // handle room specific enemy killing events
+                case 1:
+                    // first keese room
+
+                    // make key appear
+                    Instantiate(smallKeyPrefab, eventCoords[currentRoom], transform.rotation);
+
+                    break;
+                case 4:
+                    // Stalfo room (first branching room)                   
+                        Instantiate(smallKeyPrefab, eventCoords[currentRoom], transform.rotation);
+                        break;
+                case 5:
+                    // (3rd) trap keese room
+                    //  Unlock door
+                    // (keese room)
+                    ShowMapOnCamera.MAP_TILES[Mathf.RoundToInt(eventCoords[currentRoom].x), Mathf.RoundToInt(eventCoords[currentRoom].y)].openEventDoor(Direction.EAST);
+                    break;
+                case 7:
+                    // (1st) pushable block room
                     // make block pushable
                     pushableBlocks[0].pushable = true;
-                }
-                break;
-            case 14:
-                // Aquamentus
-                if(numEnemiesInRooms[currentRoom] == 0) {
-                    // FIXME --> Unlock door
-                }
-                break;
+                    break;
+                case 10:
+                    // Goryia water-room
+                    Instantiate(smallKeyPrefab, eventCoords[currentRoom], transform.rotation);
+                    break;
+                case 12:
+                    // (Right before wallmasters) goryia room
+                    // drop boomerang
+                    Instantiate(boomerangPrefab, eventCoords[currentRoom], transform.rotation);
+                    break;
+                case 14:
+                    // Aquamentus
+                    // Unlock door
+                    ShowMapOnCamera.MAP_TILES[Mathf.RoundToInt(eventCoords[currentRoom].x), Mathf.RoundToInt(eventCoords[currentRoom].y)].openEventDoor(Direction.EAST);
+                    break;
+            }
         }
     }
 

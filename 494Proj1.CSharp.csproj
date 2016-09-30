@@ -76,6 +76,8 @@
     <Compile Include="Assets\Scripts\EmptyClass.cs" />
     <Compile Include="Assets\Scripts\Enemy.cs" />
     <Compile Include="Assets\Scripts\EnemyFabrication.cs" />
+    <Compile Include="Assets\Scripts\FixedRatio.cs" />
+    <Compile Include="Assets\Scripts\GameManager.cs" />
     <Compile Include="Assets\Scripts\Gel.cs" />
     <Compile Include="Assets\Scripts\Goriya.cs" />
     <Compile Include="Assets\Scripts\Hud.cs" />
@@ -88,6 +90,7 @@
     <Compile Include="Assets\Scripts\ShowMapOnCamera.cs" />
     <Compile Include="Assets\Scripts\StateMachine.cs" />
     <Compile Include="Assets\Scripts\Tile.cs" />
+    <Compile Include="Assets\Scripts\UIManager.cs" />
     <Compile Include="Assets\Scripts\UtilityFunctions.cs" />
     <Compile Include="Assets\Scripts\WallMasterManager.cs" />
     <Compile Include="Assets\Scripts\WallMasterTrigger.cs" />

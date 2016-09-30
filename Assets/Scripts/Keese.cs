@@ -23,6 +23,7 @@ public class Keese : Enemy {
     }
 
     protected override void OnTriggerEnter(Collider other) {
+        OnTriggerDamageHandling(other);
         MonoBehaviour.print(other.gameObject.tag);
         transform.position = new Vector3(Mathf.Round(transform.position.x), Mathf.Round(transform.position.y), transform.position.z);
         //Vector3 newDirection = other.contacts[0].normal;
