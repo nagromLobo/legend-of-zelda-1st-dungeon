@@ -683,6 +683,32 @@ public class StateEnemyStunned : State {
     }
 }
 
+public class StateAquamentusMovement : StateEnemyMovement {
+    float attackProbability;
+    public StateAquamentusMovement(Enemy enemy, float timeToCrossTile, Direction direction, float turnProbability, float attackProbability) 
+        :base(enemy, timeToCrossTile, direction, turnProbability){
+        this.attackProbability = attackProbability;
+    }
+
+    
+
+    protected override void turnEnemy() {
+        Direction prevDir = direction;
+        Direction newDir = UtilityFunctions.reverseDirection(direction);
+        enemy.OnEnemyTurned(newDir);
+        state_machine.ChangeState(new StateAquamentusMovement(enemy, timeToCrossTile, newDir, turnProbability, attackProbability));
+    }
+
+    protected override bool shouldEnemyAttack() {
+        return Random.value < attackProbability;
+    }
+
+    protected override void enemyAttack() {
+        // throw fireballs
+        enemy.OnEnemyAttack();
+    }
+}
+
 // assumes enemy starts on grid
 public class StateEnemyMovement : State {
     protected Enemy enemy;
@@ -718,9 +744,11 @@ public class StateEnemyMovement : State {
         if (onMainGrid) {
             if (shouldEnemyTurn()) {
                 turnEnemy();
-            } else if (shouldEnemyWait()) {
+            }
+            if (shouldEnemyWait()) {
                 pauseEnemy();
-            } else if (shouldEnemyAttack()) {
+            }
+            if (shouldEnemyAttack()) {
                 enemyAttack();
             }
             setTileLastAndNext();

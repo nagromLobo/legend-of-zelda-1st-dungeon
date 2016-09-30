@@ -10,10 +10,19 @@ public class EnemyFabrication : MonoBehaviour {
     public List<Vector3>[] spawnGrid;
     public float timeBetweenWallMasterSpawn = 1.0f;
     public float timeBetweenWallMasterSpawnDoor = 0.5f;
+
+    public Vector3[] pushableTileCoords;
+    public Direction[] pushableDirection;
+    public GameObject pushableTilePrefab;
+
+    private PushableBlock[] pushableBlocks;
+
+
     private List<GameObject> enemy_instances = new List<GameObject>();// instances in a give room
     private int currentRoom = 0;
     private static int WALL_MASTER_ROOM;
     private float timeLastWallMasterSpawn = 0.0f;
+    private int prevRoom = 0;
 
 
     // Use this for initialization
@@ -93,6 +102,23 @@ public class EnemyFabrication : MonoBehaviour {
         };
         CameraControl.S.cameraMoveCompleteDelegate += CameraMoveComplete;
         CameraControl.S.cameraMovedDelegate += OnCameraMoved;
+
+        // pushable blocks
+        pushableBlocks = new PushableBlock[pushableTileCoords.Length];
+        for (int i = 0; i < pushableTileCoords.Length; ++i) {
+            Vector3 coords = pushableTileCoords[i];
+            Direction direction = pushableDirection[i];
+            pushableBlocks[i] = (Instantiate(pushableTilePrefab, coords, transform.rotation) as GameObject).GetComponent<PushableBlock>();
+            pushableBlocks[i].SetUpPushableTile(direction, coords, 0, true);
+            pushableBlocks[i].onBlockPushed += OnBlockPushed;
+        }
+        // need to defeat all enemies in room to push tile
+        pushableBlocks[0].SetUpPushableTile(Direction.NORTH, pushableTileCoords[0], 7, false);
+    }
+
+    void OnBlockPushed(PushableBlock pushedBlock) {
+        // in the is case we want to trigger a room event (like unlocking a door)
+        MonoBehaviour.print("Room unlocked");
     }
 
     void CameraMoveComplete(Vector3 pos) {
@@ -110,6 +136,23 @@ public class EnemyFabrication : MonoBehaviour {
         for(int i = 0; (i < currSpawnGrid.Count) && (i < numEnemiesInRooms[currentRoom]); ++i) {
             enemy_instances.Add(Instantiate(currEnemy, currSpawnGrid[i], transform.rotation) as GameObject);
             enemy_instances[i].GetComponent<Enemy>().OnEnemyDestroyed += OnEnemyDestroyed;
+        }
+        if(currentRoom != prevRoom) {
+            // special case for pushable block rooms
+            switch (prevRoom) {
+                // gel pushable block room
+                case 7:
+                    bool pushable = false;
+                    if (numEnemiesInRooms[prevRoom] == 0) {
+                        pushable = true;
+                    }
+                    pushableBlocks[0].SetUpPushableTile(pushableDirection[0], pushableTileCoords[0], 7, pushable);
+                    break;
+                case 11:
+                    pushableBlocks[1].SetUpPushableTile(pushableDirection[1], pushableTileCoords[1], 11, true);
+                    break;
+
+            }
         }
     }
 
@@ -131,6 +174,13 @@ public class EnemyFabrication : MonoBehaviour {
                     // (keese room)
                 }
                 break;
+            case 7:
+                // (1st) pushable block room
+                if(numEnemiesInRooms[currentRoom] == 0) {
+                    // make block pushable
+                    pushableBlocks[0].pushable = true;
+                }
+                break;
             case 14:
                 // Aquamentus
                 if(numEnemiesInRooms[currentRoom] == 0) {
@@ -146,5 +196,6 @@ public class EnemyFabrication : MonoBehaviour {
             Destroy(enemy);
         }
         enemy_instances.Clear();
+        prevRoom = currentRoom;
      }
 }

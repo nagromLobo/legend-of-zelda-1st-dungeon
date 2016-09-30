@@ -81,14 +81,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8aa715f6c2f96024dad0fa2c248e2db9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  current_state: 0
   damage: 1
   movementFramesPerSecond: 10
   timeToCrossTile: 0.3
   turnProbability: 0.02
   heartCount: 1
+  damageFlashLength: 1
   spriteAnimation:
   - {fileID: 21300306, guid: ed8d739b8ae50f145b00b1db86c365bf, type: 3}
   - {fileID: 21300308, guid: ed8d739b8ae50f145b00b1db86c365bf, type: 3}
+  enemyDamageColor: {r: 1, g: 0, b: 0, a: 1}
+  damageCooldown: 2
   currDirection: 2
   pauseProbability: 0.2
   pauseSlowdownTime: 0.2

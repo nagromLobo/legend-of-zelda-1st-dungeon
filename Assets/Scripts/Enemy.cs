@@ -47,13 +47,16 @@ public class Enemy : MonoBehaviour {
         control_statemachine.Update();
         if(current_state == EntityState.DAMAGED) {
             handleDamaged();
+        } else if(current_state == EntityState.ATTACKING) {
+            handleAttack();
         }
 	}
+
+    protected virtual void handleAttack() {}
 
 
     protected virtual void OnTriggerEnter(Collider other) {
         if(other.gameObject.tag == "Threshold" || other.gameObject.tag == "LockedDoor") {
-            this.gameObject.transform.position = adjustBackToGrid(currDirection, transform.position);
             StartEnemyMovement(true);
         } else if (other.gameObject.tag == "Weapon") {
             EnemyDamaged(other.GetComponent<Weapon>());
@@ -62,7 +65,6 @@ public class Enemy : MonoBehaviour {
 
     protected virtual void OnCollisionEnter(Collision other) {
         if(other.gameObject.tag == "Tile" || other.gameObject.tag == "LockedDoor" || other.gameObject.tag == "Pushable") {
-            this.gameObject.transform.position = adjustBackToGrid(currDirection, transform.position);
             StartEnemyMovement(true);
         } 
     }
@@ -88,7 +90,9 @@ public class Enemy : MonoBehaviour {
 
     public virtual void StartEnemyMovement(bool disallowCurrentDirection) {
         Direction turnDirection;
+        // used for wall collisions
         if (disallowCurrentDirection) {
+            this.gameObject.transform.position = adjustBackToGrid(currDirection, transform.position);
             turnDirection = UtilityFunctions.randomDirection(currDirection);
         } else {
             turnDirection = UtilityFunctions.randomDirection();
@@ -108,6 +112,10 @@ public class Enemy : MonoBehaviour {
 
     public virtual void OnEnemyTurned(Direction d) {
         currDirection = d;
+    }
+
+    public virtual void OnEnemyAttack() {
+
     }
 
     public virtual void EnemyDamaged(Weapon w) {

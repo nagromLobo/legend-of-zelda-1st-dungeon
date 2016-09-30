@@ -7,6 +7,7 @@ public class Gel : Enemy {
 
     public override void StartEnemyMovement(bool disallowCurrentDirection) {
         if (disallowCurrentDirection) {
+            this.gameObject.transform.position = adjustBackToGrid(currDirection, transform.position);
             control_statemachine.ChangeState(new StateGelMovement(this, timeToCrossTile, UtilityFunctions.randomDirection(currDirection), turnProbability, pauseProbability, timeToPause));
         } else {
             control_statemachine.ChangeState(new StateGelMovement(this, timeToCrossTile, UtilityFunctions.randomDirection(), turnProbability, pauseProbability, timeToPause));

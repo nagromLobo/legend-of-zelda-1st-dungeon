@@ -80,6 +80,7 @@
     <Compile Include="Assets\Scripts\Keese.cs" />
     <Compile Include="Assets\Scripts\ParseZeldaMap.cs" />
     <Compile Include="Assets\Scripts\PlayerControl.cs" />
+    <Compile Include="Assets\Scripts\PushableBlock.cs" />
     <Compile Include="Assets\Scripts\RoomSizedTrigger.cs" />
     <Compile Include="Assets\Scripts\ShowMap.cs" />
     <Compile Include="Assets\Scripts\ShowMapOnCamera.cs" />
@@ -96,6 +97,7 @@
     <None Include="Assets\Resources\Collision.txt" />
     <None Include="Assets\Resources\Destructible.txt" />
     <None Include="Assets\Resources\map_sprites_data.txt" />
+    <None Include="Assets\spriteText.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2015\UnityVS.CSharp.targets" />
 </Project>
