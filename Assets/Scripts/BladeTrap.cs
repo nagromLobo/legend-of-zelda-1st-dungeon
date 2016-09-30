@@ -111,7 +111,7 @@ public class BladeTrap : Enemy {
 
     public override void OnEnemyTurned(Direction d) {}
 
-    public override void EnemyDamaged(Weapon w) {
+    public override void EnemyDamaged(Collider other) {
         // link can't damage blade traps, right?
 
         //    //int damageHalfHearts = w.damage;

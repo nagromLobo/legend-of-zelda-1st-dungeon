@@ -10,11 +10,13 @@ public class EnemyFabrication : MonoBehaviour {
     public List<Vector3>[] spawnGrid;
     public float timeBetweenWallMasterSpawn = 1.0f;
     public float timeBetweenWallMasterSpawnDoor = 0.5f;
+    public float doorWaitDuration = 2.0f;
 
     public Vector3[] pushableTileCoords; // order of increasing room numbers
     public Direction[] pushableDirection; // order of increasing room numbers
     public GameObject pushableTilePrefab;
     public GameObject smallKeyPrefab;
+    public GameObject boomerangPrefab;
     public Vector3[] eventCoords; // order of increasing room numbers (coordinates to place room event)
 
     private PushableBlock[] pushableBlocks;
@@ -22,15 +24,13 @@ public class EnemyFabrication : MonoBehaviour {
 
     private List<GameObject> enemy_instances = new List<GameObject>();// instances in a give room
     private int currentRoom = 0;
-    private static int WALL_MASTER_ROOM;
-    private float timeLastWallMasterSpawn = 0.0f;
     private int prevRoom = 0;
 
 
     // Use this for initialization
     void Start() {
         spawnGrid = new List<Vector3>[15];
-
+        PlayerControl.instance.playerInRoom += playerInRoom;
         for(int i = 0; i < spawnGrid.Length; ++i) {
             spawnGrid[i] = new List<Vector3>();
         }
@@ -142,8 +142,8 @@ public class EnemyFabrication : MonoBehaviour {
         if(currentRoom != prevRoom) {
             // special case for pushable block rooms
             switch (prevRoom) {
-                // gel pushable block room
                 case 7:
+                    // gel pushable block room
                     bool pushable = false;
                     if (numEnemiesInRooms[prevRoom] == 0) {
                         pushable = true;
@@ -151,10 +151,20 @@ public class EnemyFabrication : MonoBehaviour {
                     pushableBlocks[0].SetUpPushableTile(pushableDirection[0], pushableTileCoords[0], 7, pushable);
                     break;
                 case 11:
+                    // blade trap pushable block room
                     pushableBlocks[1].SetUpPushableTile(pushableDirection[1], pushableTileCoords[1], 11, true);
                     break;
 
             }
+        }
+    }
+
+    private void playerInRoom() {
+        // special case for second keese room
+        switch (currentRoom) {
+            case 5:
+                ShowMapOnCamera.MAP_TILES[Mathf.RoundToInt(eventCoords[1].x), Mathf.RoundToInt(eventCoords[1].y)].closeEventDoor();
+                break;
         }
     }
 
@@ -183,6 +193,13 @@ public class EnemyFabrication : MonoBehaviour {
                 if(numEnemiesInRooms[currentRoom] == 0) {
                     // make block pushable
                     pushableBlocks[0].pushable = true;
+                }
+                break;
+            case 12:
+                // (Right before wallmasters) goryia room
+                if(numEnemiesInRooms[currentRoom] == 0) {
+                    // drop boomerang
+                    Instantiate(boomerangPrefab, eventCoords[2], transform.rotation);
                 }
                 break;
             case 14:

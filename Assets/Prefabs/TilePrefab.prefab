@@ -63,6 +63,7 @@ MonoBehaviour:
   northDoorRight: {fileID: 21300186, guid: f0f45c808d9a24081b7e4914ba46fb1f, type: 3}
   eastDoor: {fileID: 21300096, guid: f0f45c808d9a24081b7e4914ba46fb1f, type: 3}
   westDoor: {fileID: 21300102, guid: f0f45c808d9a24081b7e4914ba46fb1f, type: 3}
+  lockedDoor: {fileID: 21300200, guid: f0f45c808d9a24081b7e4914ba46fb1f, type: 3}
 --- !u!212 &21215606
 SpriteRenderer:
   m_ObjectHideFlags: 1

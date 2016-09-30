@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Enemy : MonoBehaviour {
     public EntityState current_state = EntityState.NORMAL;
-    public int damage;
+    public int damage = 1;
     public int movementFramesPerSecond = 4;
     public float timeToCrossTile = 0.0f;
     public float turnProbability = 0.02f;
@@ -12,6 +12,7 @@ public class Enemy : MonoBehaviour {
     public Sprite[] spriteAnimation;
     public Color enemyDamageColor = Color.red;
     public float damageCooldown = 2.0f;
+    public float damageDistancePushback = 3.0f;
     public bool stunable = false;
 
     public delegate void onEnemyDestroyed(GameObject enemy);
@@ -35,6 +36,7 @@ public class Enemy : MonoBehaviour {
     void Awake() {
         animation_statemachine = new StateMachine();
         control_statemachine = new StateMachine();
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 	// Use this for initialization
 	protected virtual void Start () {
@@ -69,7 +71,7 @@ public class Enemy : MonoBehaviour {
             (other.gameObject.tag == "Arrow") ||
             (other.gameObject.tag == "Sword")) {
             // then we have a weapon
-            EnemyDamaged(other.GetComponent<Weapon>());
+            EnemyDamaged(other);
         }
     }
 
@@ -128,8 +130,8 @@ public class Enemy : MonoBehaviour {
 
     }
 
-    public virtual void EnemyDamaged(Weapon w) {
-        Destroy(w.gameObject);
+    public virtual void EnemyDamaged(Collider other) {
+        Weapon w = other.GetComponent<Weapon>();
         int damageHalfHearts = w.damage;
         float stunCoolDown = w.stunCoolDown;
         int stunCooldown = 0;
@@ -147,7 +149,11 @@ public class Enemy : MonoBehaviour {
                 Destroy(this.gameObject);
                 return;
             }
-            // if not destroyed animate enemy
+            else {
+                Vector3 pushback = (this.transform.position - other.transform.position).normalized;
+                pushback.Set(Mathf.Round(pushback.x), Mathf.Round(pushback.y), Mathf.Round(pushback.z));
+                control_statemachine.ChangeState(new StateEnemyDamaged(this, currDirection, turnProbability, damageCooldown / 2,  damageDistancePushback, pushback));
+            }
         }
     }
 

@@ -721,6 +721,7 @@ public class StateEnemyStunned : State {
     float turnProbability;
     float stunCooldown;
     float timeStart;
+
     public StateEnemyStunned(Enemy enemy, Direction direction, float turnProbability, float stunCooldown) {
         this.enemy = enemy;
         this.direction = direction;
@@ -730,11 +731,52 @@ public class StateEnemyStunned : State {
 
     public override void OnStart() {
         timeStart = Time.time;
+       
     }
 
     public override void OnUpdate(float time_delta_fraction) {
+        // if we are done
         if((Time.time - timeStart) > stunCooldown) {
             enemy.StartEnemyMovement(direction);
+        }
+    }
+}
+
+
+public class StateEnemyDamaged : State {
+    Enemy enemy;
+    Direction direction;
+    float turnProbability;
+    float cooldown;
+    float timeStart;
+    Vector3 startPosition;
+    Vector3 pushback;
+    Vector3 endPosition;
+
+    public StateEnemyDamaged(Enemy enemy, Direction direction, float turnProbability, float cooldown, float distancePushback, Vector3 pushback) {
+        this.enemy = enemy;
+        this.direction = direction;
+        this.turnProbability = turnProbability;
+        this.cooldown = cooldown;
+        this.pushback = pushback;
+        this.startPosition = enemy.transform.position;
+        endPosition = startPosition + (pushback * distancePushback);
+    }
+
+    public override void OnStart() {
+        timeStart = Time.time;
+
+    }
+
+    public override void OnUpdate(float time_delta_fraction) {
+        // if we are done
+        if ((Time.time - timeStart) > cooldown) {
+            enemy.StartEnemyMovement(direction);
+        } else if (pushback != Vector3.zero) {
+            float u = (Time.time - timeStart) / cooldown;
+            if (u < 1) {
+                enemy.transform.position = Vector3.Lerp(startPosition, endPosition, u);
+            }
         }
     }
 }
