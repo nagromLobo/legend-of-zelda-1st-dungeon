@@ -309,8 +309,10 @@ public class StateLinkAttack : State {
 		if (weapon_prefab.name == "Arrow") {
 			GameObject.FindWithTag ("Arrow").GetComponent<Arrow> ().ReleaseArrow ();
 			GameObject.FindWithTag ("Arrow").GetComponent<Arrow> ().released = true;
+			pc.rupee_count -= 1;
+			Hud.UpdateRupees ();
 			//MonoBehaviour.Destroy (BowInstance);
-		} else if (weapon_instance.tag != "Boomerang") {
+		} else if (weapon_prefab.name != "Boomerang") {
 
 			GameObject.FindWithTag ("Sword").GetComponent<WoodenSword> ().ReleaseSword ();
 			GameObject.FindWithTag ("Sword").GetComponent<WoodenSword> ().released = true;
@@ -322,6 +324,8 @@ public class StateLinkAttack : State {
 		} else {
 			MonoBehaviour.Destroy (weapon_instance);
 		}
+
+		MonoBehaviour.print ("conclude the damn state"); 
 			
     }
 }
@@ -509,8 +513,8 @@ public class StateLinkStunnedSprite : State {
 	            if ((pc.selected_weapon_prefab.name == "Bomb") && (pc.bomb_count > 0))
 	                state_machine.ChangeState(new StateLinkBombAttack(pc, pc.selected_weapon_prefab, 6));
 				else if (pc.selected_weapon_prefab.name == "Boomerang")
-					state_machine.ChangeState(new StateLinkAttack(pc, pc.selected_weapon_prefab, 30));
-				else if (pc.selected_weapon_prefab.name == "Arrow")
+					state_machine.ChangeState(new StateLinkAttack(pc, pc.selected_weapon_prefab, 70));
+				else if (pc.selected_weapon_prefab.name == "Arrow" && pc.rupee_count > 0)
 					state_machine.ChangeState(new StateLinkAttack(pc, pc.selected_weapon_prefab, 30));
 			}
         }
