@@ -129,6 +129,17 @@ Prefab:
       propertyPath: m_RootOrder
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 114000012568473420, guid: 7feb558bd6ecec046ba0006fd192aa0c,
+        type: 2}
+      propertyPath: eventCoords.Array.data[7].y
+      value: 38
+      objectReference: {fileID: 0}
+    - target: {fileID: 114000012568473420, guid: 7feb558bd6ecec046ba0006fd192aa0c,
+        type: 2}
+      propertyPath: boomerangPrefab
+      value: 
+      objectReference: {fileID: 1000011314384716, guid: 198c3837c99eee84982db4451c5cc7cc,
+        type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 7feb558bd6ecec046ba0006fd192aa0c, type: 2}
   m_IsPrefabParent: 0

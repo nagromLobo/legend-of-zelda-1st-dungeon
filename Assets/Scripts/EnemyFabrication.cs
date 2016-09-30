@@ -120,7 +120,12 @@ public class EnemyFabrication : MonoBehaviour {
 
     void OnBlockPushed(PushableBlock pushedBlock) {
         // in the is case we want to trigger a room event (like unlocking a door)
-        MonoBehaviour.print("Room unlocked");
+        switch (currentRoom) {
+            // Gel locked door room (with three gels)
+            case 7:
+                ShowMapOnCamera.MAP_TILES[Mathf.RoundToInt(eventCoords[currentRoom].x), Mathf.RoundToInt(eventCoords[currentRoom].y)].openEventDoor(Direction.WEST);
+                break;
+        }
     }
 
     void CameraMoveComplete(Vector3 pos) {
@@ -149,6 +154,8 @@ public class EnemyFabrication : MonoBehaviour {
                         pushable = true;
                     }
                     pushableBlocks[0].SetUpPushableTile(pushableDirection[0], pushableTileCoords[0], 7, pushable);
+                    // reset door
+                    ShowMapOnCamera.MAP_TILES[Mathf.RoundToInt(eventCoords[currentRoom].x), Mathf.RoundToInt(eventCoords[currentRoom].y)].closeEventDoor();
                     break;
                 case 11:
                     // blade trap pushable block room
@@ -163,7 +170,9 @@ public class EnemyFabrication : MonoBehaviour {
         // special case for second keese room
         switch (currentRoom) {
             case 5:
-                ShowMapOnCamera.MAP_TILES[Mathf.RoundToInt(eventCoords[1].x), Mathf.RoundToInt(eventCoords[1].y)].closeEventDoor();
+                if(numEnemiesInRooms[currentRoom] > 0) {
+                    ShowMapOnCamera.MAP_TILES[Mathf.RoundToInt(eventCoords[currentRoom].x), Mathf.RoundToInt(eventCoords[currentRoom].y)].closeEventDoor();
+                }
                 break;
         }
     }
@@ -177,7 +186,7 @@ public class EnemyFabrication : MonoBehaviour {
                 // first keese room
                 if(numEnemiesInRooms[currentRoom] == 0) {
                     // make key appear
-                    Instantiate(smallKeyPrefab, eventCoords[0], transform.rotation);
+                    Instantiate(smallKeyPrefab, eventCoords[currentRoom], transform.rotation);
                 }
                 break;
             case 5:
@@ -185,7 +194,7 @@ public class EnemyFabrication : MonoBehaviour {
                 if(numEnemiesInRooms[currentRoom] == 0) {
                     //  Unlock door
                     // (keese room)
-                    ShowMapOnCamera.MAP_TILES[Mathf.RoundToInt(eventCoords[1].x), Mathf.RoundToInt(eventCoords[1].y)].openEventDoor(Direction.EAST);
+                    ShowMapOnCamera.MAP_TILES[Mathf.RoundToInt(eventCoords[currentRoom].x), Mathf.RoundToInt(eventCoords[currentRoom].y)].openEventDoor(Direction.EAST);
                 }
                 break;
             case 7:
@@ -199,14 +208,14 @@ public class EnemyFabrication : MonoBehaviour {
                 // (Right before wallmasters) goryia room
                 if(numEnemiesInRooms[currentRoom] == 0) {
                     // drop boomerang
-                    Instantiate(boomerangPrefab, eventCoords[2], transform.rotation);
+                    Instantiate(boomerangPrefab, eventCoords[currentRoom], transform.rotation);
                 }
                 break;
             case 14:
                 // Aquamentus
                 if(numEnemiesInRooms[currentRoom] == 0) {
                     // Unlock door
-                    ShowMapOnCamera.MAP_TILES[Mathf.RoundToInt(eventCoords[2].x), Mathf.RoundToInt(eventCoords[2].y)].openEventDoor(Direction.EAST);
+                    ShowMapOnCamera.MAP_TILES[Mathf.RoundToInt(eventCoords[currentRoom].x), Mathf.RoundToInt(eventCoords[currentRoom].y)].openEventDoor(Direction.EAST);
                 }
                 break;
         }

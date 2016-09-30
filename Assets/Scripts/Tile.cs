@@ -199,14 +199,16 @@ public class Tile : MonoBehaviour {
     
     public void closeEventDoor() {
         // add check for other directions
-        if(tileNum == eastDoorTileNum) {
+        if ((tileNum == eastDoorTileNum) || tileNum == westDoorTileNum) {
             // make this change immediate
             SpriteRenderer rend = GetComponent<SpriteRenderer>();
             rend.sprite = lockedDoor;
             setUpSolidTile();
+            tileNum = lockedDoorNum;
             // make change perminant
             ShowMapOnCamera.MAP[x, y] = lockedDoorNum;
         }
+        
     }
     
     public void openEventDoor(Direction d) {
@@ -215,10 +217,12 @@ public class Tile : MonoBehaviour {
             SpriteRenderer rend = GetComponent<SpriteRenderer>();
            if(d == Direction.EAST) {
                 rend.sprite = eastDoor;
+                tileNum = eastDoorTileNum;
                 ShowMapOnCamera.MAP[x, y] = eastDoorTileNum;
             } else if(d == Direction.WEST) {
                 ShowMapOnCamera.MAP[x, y] = westDoorTileNum;
                 rend.sprite = westDoor;
+                tileNum = westDoorTileNum;
             }
             setUpThreshold(this);
         }

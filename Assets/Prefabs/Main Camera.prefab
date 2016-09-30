@@ -188,11 +188,24 @@ MonoBehaviour:
     type: 2}
   smallKeyPrefab: {fileID: 1000011815822468, guid: 34251d4bbf2821c4db490834030f5683,
     type: 2}
-  boomerangPrefab: {fileID: 0}
+  boomerangPrefab: {fileID: 1000011314384716, guid: 198c3837c99eee84982db4451c5cc7cc,
+    type: 2}
   eventCoords:
+  - {x: 0, y: 0, z: 0}
   - {x: 26, y: 2, z: 0}
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
   - {x: 30, y: 27, z: 0}
-  - {x: 17, y: 32, z: 0}
+  - {x: 0, y: 0, z: 0}
+  - {x: 17, y: 38, z: 0}
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
+  - {x: 56, y: 40, z: 0}
+  - {x: 0, y: 0, z: 0}
+  - {x: 78, y: 49, z: 0}
 --- !u!114 &114000013806003404
 MonoBehaviour:
   m_ObjectHideFlags: 1
