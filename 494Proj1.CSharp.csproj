@@ -67,8 +67,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\Aquamentus.cs" />
+    <Compile Include="Assets\Scripts\Arrow.cs" />
     <Compile Include="Assets\Scripts\BladeTrap.cs" />
     <Compile Include="Assets\Scripts\Bomb.cs" />
+    <Compile Include="Assets\Scripts\Boomerang.cs" />
     <Compile Include="Assets\Scripts\CameraControl.cs" />
     <Compile Include="Assets\Scripts\CameraFollow.cs" />
     <Compile Include="Assets\Scripts\EmptyClass.cs" />

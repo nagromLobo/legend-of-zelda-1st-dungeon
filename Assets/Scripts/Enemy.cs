@@ -12,6 +12,7 @@ public class Enemy : MonoBehaviour {
     public Sprite[] spriteAnimation;
     public Color enemyDamageColor = Color.red;
     public float damageCooldown = 2.0f;
+    public bool stunable = false;
 
     public delegate void onEnemyDestroyed(GameObject enemy);
     public onEnemyDestroyed OnEnemyDestroyed;
@@ -128,19 +129,18 @@ public class Enemy : MonoBehaviour {
     }
 
     public virtual void EnemyDamaged(Weapon w) {
-        //int damageHalfHearts = w.damage;
-        //float stun = w.stunCooldown;
+        Destroy(w.gameObject);
+        int damageHalfHearts = w.damage;
+        float stunCoolDown = w.stunCoolDown;
         int stunCooldown = 0;
         if (stunCooldown > 0) {
             control_statemachine.ChangeState(new StateEnemyStunned(this, currDirection, turnProbability, stunCooldown));
-
         }
-        int damage = 1;
-        if(damage > 0) {
+        if(damageHalfHearts > 0) {
             normalColor = spriteRenderer.color;
             current_state = EntityState.DAMAGED;
             damageStartTime = Time.time;
-            heartCount -= damage;
+            heartCount -= damageHalfHearts;
             if (heartCount <= 0) {
                 // update room state (enemy destroyed)
                 OnEnemyDestroyed(this.gameObject);
