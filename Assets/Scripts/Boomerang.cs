@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Security.AccessControl;
 
-public class Boomerang : MonoBehaviour {
+public class Boomerang : Weapon {
 
 	public GameObject weapon_prefab;
 	public GameObject weapon_instance;

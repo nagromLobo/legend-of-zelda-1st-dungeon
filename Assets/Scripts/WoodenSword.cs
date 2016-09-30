@@ -3,7 +3,7 @@ using System.Collections;
 
 //Implement time pause for weapon release
 
-public class WoodenSword : MonoBehaviour {
+public class WoodenSword : Weapon {
 
 	public GameObject weapon_prefab;
 	public GameObject weapon_instance;

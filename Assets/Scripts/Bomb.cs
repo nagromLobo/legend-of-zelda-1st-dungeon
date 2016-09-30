@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEditor;
 
-public class Bomb: MonoBehaviour {
+public class Bomb: Weapon {
 
 	public float timer = 3.0f;
 	PlayerControl pc;
