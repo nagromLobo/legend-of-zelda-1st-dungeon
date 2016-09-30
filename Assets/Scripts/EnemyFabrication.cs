@@ -180,44 +180,46 @@ public class EnemyFabrication : MonoBehaviour {
     private void OnEnemyDestroyed(GameObject enemy) {
         // reduce the amount of enemies in the current room
         --numEnemiesInRooms[currentRoom];
-        switch (currentRoom) {
-            // handle room specific enemy killing events
-            case 1:
-                // first keese room
-                if(numEnemiesInRooms[currentRoom] == 0) {
+        if (numEnemiesInRooms[currentRoom] == 0) {
+            switch (currentRoom) {
+                // handle room specific enemy killing events
+                case 1:
+                    // first keese room
+
                     // make key appear
                     Instantiate(smallKeyPrefab, eventCoords[currentRoom], transform.rotation);
-                }
-                break;
-            case 5:
-                // (3rd) trap keese room
-                if(numEnemiesInRooms[currentRoom] == 0) {
+
+                    break;
+                case 4:
+                    // Stalfo room (first branching room)                   
+                        Instantiate(smallKeyPrefab, eventCoords[currentRoom], transform.rotation);
+                        break;
+                case 5:
+                    // (3rd) trap keese room
                     //  Unlock door
                     // (keese room)
                     ShowMapOnCamera.MAP_TILES[Mathf.RoundToInt(eventCoords[currentRoom].x), Mathf.RoundToInt(eventCoords[currentRoom].y)].openEventDoor(Direction.EAST);
-                }
-                break;
-            case 7:
-                // (1st) pushable block room
-                if(numEnemiesInRooms[currentRoom] == 0) {
+                    break;
+                case 7:
+                    // (1st) pushable block room
                     // make block pushable
                     pushableBlocks[0].pushable = true;
-                }
-                break;
-            case 12:
-                // (Right before wallmasters) goryia room
-                if(numEnemiesInRooms[currentRoom] == 0) {
+                    break;
+                case 10:
+                    // Goryia water-room
+                    Instantiate(smallKeyPrefab, eventCoords[currentRoom], transform.rotation);
+                    break;
+                case 12:
+                    // (Right before wallmasters) goryia room
                     // drop boomerang
                     Instantiate(boomerangPrefab, eventCoords[currentRoom], transform.rotation);
-                }
-                break;
-            case 14:
-                // Aquamentus
-                if(numEnemiesInRooms[currentRoom] == 0) {
+                    break;
+                case 14:
+                    // Aquamentus
                     // Unlock door
                     ShowMapOnCamera.MAP_TILES[Mathf.RoundToInt(eventCoords[currentRoom].x), Mathf.RoundToInt(eventCoords[currentRoom].y)].openEventDoor(Direction.EAST);
-                }
-                break;
+                    break;
+            }
         }
     }
 

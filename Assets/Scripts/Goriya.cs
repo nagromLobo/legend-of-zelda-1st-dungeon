@@ -10,12 +10,16 @@ public class Goriya : Enemy {
     public Sprite[] goriya_right_prefabs;
 
     public override void StartEnemyMovement(bool disallowCurrentDirection) {
+        Direction turnDirection;
+        // used for wall collisions
         if (disallowCurrentDirection) {
-            control_statemachine.ChangeState(new StateGoriyaMovement(this, timeToCrossTile, UtilityFunctions.randomDirection(currDirection), turnProbability, throwBoomerangProbability, boomerangCoolDown));
+            this.gameObject.transform.position = adjustBackToGrid(currDirection, transform.position);
+            turnDirection = UtilityFunctions.randomDirection(currDirection);
         } else {
-            control_statemachine.ChangeState(new StateGoriyaMovement(this, timeToCrossTile, UtilityFunctions.randomDirection(), turnProbability, throwBoomerangProbability, boomerangCoolDown));
+            turnDirection = UtilityFunctions.randomDirection();
         }
-        
+        OnEnemyTurned(turnDirection);
+        control_statemachine.ChangeState(new StateGoriyaMovement(this, timeToCrossTile, turnDirection, turnProbability, throwBoomerangProbability, boomerangCoolDown));
     }
 
     public override void StartEnemyMovement(Direction d) {
