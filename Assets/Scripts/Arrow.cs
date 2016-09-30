@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Arrow : MonoBehaviour {
+public class Arrow : Weapon {
 
 	public GameObject weapon_prefab;
 	public GameObject weapon_instance;

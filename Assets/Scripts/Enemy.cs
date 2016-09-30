@@ -12,6 +12,7 @@ public class Enemy : MonoBehaviour {
     public Sprite[] spriteAnimation;
     public Color enemyDamageColor = Color.red;
     public float damageCooldown = 2.0f;
+    public bool stunable = false;
 
     public delegate void onEnemyDestroyed(GameObject enemy);
     public onEnemyDestroyed OnEnemyDestroyed;
@@ -119,8 +120,11 @@ public class Enemy : MonoBehaviour {
     }
 
     public virtual void EnemyDamaged(Weapon w) {
-        //int damageHalfHearts = w.damage;
-        int damage = 1;
+        int damageHalfHearts = w.damage;
+        float stunCooldown = w.stunCoolDown;
+        if((stunCooldown > 0) && stunable) {
+
+        }
         normalColor = spriteRenderer.color;
         current_state = EntityState.DAMAGED;
         damageStartTime = Time.time;

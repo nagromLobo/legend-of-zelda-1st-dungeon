@@ -81,6 +81,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d1f1643cfd2042259e8e600764186b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  damage: 1
+  stunCoolDown: 0
   weapon_prefab: {fileID: 1000012755623840}
   weapon_instance: {fileID: 0}
   released: 0
