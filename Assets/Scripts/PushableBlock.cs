@@ -3,7 +3,7 @@ using System.Collections;
 
 public class PushableBlock : MonoBehaviour {
     public Direction pushableDirection = Direction.NORTH;
-    public bool stillPushable = true;
+    public bool pushable = false;
     // how much time until it counts as pushing
     public float timeToPush = 0.5f;
     // length of time for tile movement
@@ -27,9 +27,12 @@ public class PushableBlock : MonoBehaviour {
 
     }
 
-    public void SetUpPushableTile(Direction d, int roomNumber) {
+    public void SetUpPushableTile(Direction d, Vector3 startPosition, int roomNumber, bool pushable) {
         this.pushableDirection = d;
         this.roomNumber = roomNumber;
+        transform.position = startPosition;
+        this.pushable = pushable;
+        currState = PushableBlockState.NORMAL;
         SetUpPushableTile();
     }
 
@@ -112,7 +115,7 @@ public class PushableBlock : MonoBehaviour {
 
     void OnCollisionStay(Collision other) {
         if(other.gameObject.tag == "Link") {
-            if (currState == PushableBlockState.NORMAL) {
+            if ((currState == PushableBlockState.NORMAL) && pushable) {
                 currState = PushableBlockState.LINK_PUSHING;
                 startPushTime = Time.time;
             }
