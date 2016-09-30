@@ -12,8 +12,8 @@ public class PushableBlock : MonoBehaviour {
     public delegate void OnBlockPushed(PushableBlock pushableBlock);
     public OnBlockPushed onBlockPushed;
 
-    enum PushableBlockState {NORMAL, LINK_PUSHING, PUSHED, DONE}
-    private PushableBlockState currState = PushableBlockState.NORMAL;
+    public enum PushableBlockState {NORMAL, LINK_PUSHING, PUSHED, DONE}
+    public PushableBlockState currState = PushableBlockState.NORMAL;
     private float startPushTime = 0.0f;
     private float startMovementTime = 0.0f;
     private Vector3 startPosition;
@@ -112,7 +112,7 @@ public class PushableBlock : MonoBehaviour {
 
     void OnCollisionStay(Collision other) {
         if(other.gameObject.tag == "Link") {
-            if (other.gameObject.tag == "Link") {
+            if (currState == PushableBlockState.NORMAL) {
                 currState = PushableBlockState.LINK_PUSHING;
                 startPushTime = Time.time;
             }
