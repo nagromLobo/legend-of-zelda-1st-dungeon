@@ -13,11 +13,10 @@ public class EnemyFabrication : MonoBehaviour {
     public float doorWaitDuration = 2.0f;
 
     public Vector3[] pushableTileCoords; // order of increasing room numbers
-    public Direction[] pushableDirection; // order of increasing room numbers
     public GameObject pushableTilePrefab;
     public GameObject smallKeyPrefab;
     public GameObject boomerangPrefab;
-    public Vector3[] eventCoords; // order of increasing room numbers (coordinates to place room event)
+    public Vector3[] eventCoords; // index is roomnumber
 
     private PushableBlock[] pushableBlocks;
 
@@ -29,7 +28,7 @@ public class EnemyFabrication : MonoBehaviour {
 
     // Use this for initialization
     void Start() {
-        spawnGrid = new List<Vector3>[15];
+        spawnGrid = new List<Vector3>[enemy_prefabs.Length];
         PlayerControl.instance.playerInRoom += playerInRoom;
         for(int i = 0; i < spawnGrid.Length; ++i) {
             spawnGrid[i] = new List<Vector3>();
@@ -109,13 +108,14 @@ public class EnemyFabrication : MonoBehaviour {
         pushableBlocks = new PushableBlock[pushableTileCoords.Length];
         for (int i = 0; i < pushableTileCoords.Length; ++i) {
             Vector3 coords = pushableTileCoords[i];
-            Direction direction = pushableDirection[i];
             pushableBlocks[i] = (Instantiate(pushableTilePrefab, coords, transform.rotation) as GameObject).GetComponent<PushableBlock>();
-            pushableBlocks[i].SetUpPushableTile(direction, coords, 0, true);
+            pushableBlocks[i].SetUpPushableTile(true, true, true, true, coords, 0, true);
             pushableBlocks[i].onBlockPushed += OnBlockPushed;
         }
         // need to defeat all enemies in room to push tile
-        pushableBlocks[0].SetUpPushableTile(Direction.NORTH, pushableTileCoords[0], 7, false);
+        pushableBlocks[0].SetUpPushableTile(true, true, true, true, pushableTileCoords[0], 7, false);
+        // pushable in every direction besides from the west
+        pushableBlocks[1].SetUpPushableTile(true, true, true, false, pushableTileCoords[1], 0, true);
     }
 
     void OnBlockPushed(PushableBlock pushedBlock) {
@@ -153,13 +153,15 @@ public class EnemyFabrication : MonoBehaviour {
                     if (numEnemiesInRooms[prevRoom] == 0) {
                         pushable = true;
                     }
-                    pushableBlocks[0].SetUpPushableTile(pushableDirection[0], pushableTileCoords[0], 7, pushable);
+                    pushableBlocks[0].SetUpPushableTile(true, true, true, true, pushableTileCoords[0], 7, pushable);
                     // reset door
-                    ShowMapOnCamera.MAP_TILES[Mathf.RoundToInt(eventCoords[currentRoom].x), Mathf.RoundToInt(eventCoords[currentRoom].y)].closeEventDoor();
+                    if(currentRoom != 15) {
+                        ShowMapOnCamera.MAP_TILES[Mathf.RoundToInt(eventCoords[currentRoom].x), Mathf.RoundToInt(eventCoords[currentRoom].y)].closeEventDoor();
+                    }
                     break;
                 case 11:
                     // blade trap pushable block room
-                    pushableBlocks[1].SetUpPushableTile(pushableDirection[1], pushableTileCoords[1], 11, true);
+                    pushableBlocks[1].SetUpPushableTile(true, true, true, false, pushableTileCoords[1], 11, true);
                     break;
 
             }
@@ -173,6 +175,9 @@ public class EnemyFabrication : MonoBehaviour {
                 if(numEnemiesInRooms[currentRoom] > 0) {
                     ShowMapOnCamera.MAP_TILES[Mathf.RoundToInt(eventCoords[currentRoom].x), Mathf.RoundToInt(eventCoords[currentRoom].y)].closeEventDoor();
                 }
+                break;
+            case 7:
+                ShowMapOnCamera.MAP_TILES[Mathf.RoundToInt(eventCoords[currentRoom].x), Mathf.RoundToInt(eventCoords[currentRoom].y)].closeEventDoor();
                 break;
         }
     }

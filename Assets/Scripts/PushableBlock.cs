@@ -2,8 +2,8 @@
 using System.Collections;
 
 public class PushableBlock : MonoBehaviour {
-    public Direction pushableDirection = Direction.NORTH;
     public bool pushable = false;
+    public Direction pushableDirection = Direction.NORTH;
     // how much time until it counts as pushing
     public float timeToPush = 0.5f;
     // length of time for tile movement
@@ -18,6 +18,11 @@ public class PushableBlock : MonoBehaviour {
     private float startMovementTime = 0.0f;
     private Vector3 startPosition;
     private Vector3 endPosition;
+    private bool pushable_north;
+    private bool pushable_east;
+    private bool pushable_west;
+    private bool pushable_south;
+
 
 
 	// Use this for initialization
@@ -27,13 +32,15 @@ public class PushableBlock : MonoBehaviour {
 
     }
 
-    public void SetUpPushableTile(Direction d, Vector3 startPosition, int roomNumber, bool pushable) {
-        this.pushableDirection = d;
+    public void SetUpPushableTile(bool pushable_north, bool pushable_south, bool pushable_east, bool pushable_west, Vector3 startPosition, int roomNumber, bool pushable) {
+        this.pushable_north = pushable_north;
+        this.pushable_south = pushable_south;
+        this.pushable_east = pushable_east;
+        this.pushable_west = pushable_west;
         this.roomNumber = roomNumber;
         transform.position = startPosition;
         this.pushable = pushable;
         currState = PushableBlockState.NORMAL;
-        SetUpPushableTile();
     }
 
     private void SetUpPushableTile() {
@@ -91,7 +98,7 @@ public class PushableBlock : MonoBehaviour {
                     }
                     break;
                 case Direction.WEST:
-                    if (linkRigidBody.velocity.y <= 0) {
+                    if (linkRigidBody.velocity.x <= 0) {
                         currState = PushableBlockState.NORMAL;
                     }
                     break;
@@ -116,8 +123,33 @@ public class PushableBlock : MonoBehaviour {
     void OnCollisionStay(Collision other) {
         if(other.gameObject.tag == "Link") {
             if ((currState == PushableBlockState.NORMAL) && pushable) {
+                Direction d = UtilityFunctions.reverseDirection(UtilityFunctions.DirectionFromNormal(other.contacts[0].normal));
+                switch (d) {
+                    case Direction.NORTH:
+                        if (!pushable_north) {
+                            return;
+                        }
+                        break;
+                    case Direction.EAST:
+                        if (!pushable_east) {
+                            return;
+                        }
+                        break;
+                    case Direction.SOUTH:
+                        if (!pushable_south) {
+                            return;
+                        }
+                        break;
+                    case Direction.WEST:
+                        if (!pushable_west) {
+                            return;
+                        }
+                        break;
+                }
                 currState = PushableBlockState.LINK_PUSHING;
+                pushableDirection = d;
                 startPushTime = Time.time;
+                SetUpPushableTile();
             }
         }
     }

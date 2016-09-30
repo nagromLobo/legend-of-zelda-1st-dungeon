@@ -159,7 +159,8 @@ MonoBehaviour:
   - {x: 55.51, y: 39.41, z: -10}
   - {x: 71.51, y: 39.41, z: -10}
   - {x: 71.51, y: 50.41, z: -10}
-  numEnemiesInRooms: 010000000300000005000000030000000500000006000000080000000300000004000000030000000300000004000000030000000100000001000000
+  - {x: 7.51, y: 39.41, z: -10}
+  numEnemiesInRooms: 01000000030000000500000003000000050000000600000008000000030000000400000003000000030000000400000003000000010000000100000000000000
   enemy_prefabs:
   - {fileID: 1000014059354290, guid: 997b551be0ad7864c913270cc97f6161, type: 2}
   - {fileID: 1000012053100012, guid: 472e2daafbce35644ae7ecef9de5e05b, type: 2}
@@ -176,6 +177,7 @@ MonoBehaviour:
   - {fileID: 1000012233601454, guid: 8ebbf67e20b339e49947a3c50aef4770, type: 2}
   - {fileID: 1000013547112128, guid: debcb57aac9346e43afe67e36f4099f5, type: 2}
   - {fileID: 1000014059354290, guid: 997b551be0ad7864c913270cc97f6161, type: 2}
+  - {fileID: 1000014059354290, guid: 997b551be0ad7864c913270cc97f6161, type: 2}
   timeBetweenWallMasterSpawn: 1
   timeBetweenWallMasterSpawnDoor: 0.5
   doorWaitDuration: 2
@@ -183,7 +185,6 @@ MonoBehaviour:
   - {x: 23, y: 38, z: 0}
   - {x: 22, y: 60, z: 0}
   - {x: 39, y: 4, z: 0}
-  pushableDirection: 000000000000000000000000
   pushableTilePrefab: {fileID: 1000012912163634, guid: 102bd2c809d038e499d5aab9d5a58de4,
     type: 2}
   smallKeyPrefab: {fileID: 1000011815822468, guid: 34251d4bbf2821c4db490834030f5683,
@@ -201,7 +202,7 @@ MonoBehaviour:
   - {x: 17, y: 38, z: 0}
   - {x: 0, y: 0, z: 0}
   - {x: 0, y: 0, z: 0}
-  - {x: 0, y: 0, z: 0}
+  - {x: 40, y: 62, z: 0}
   - {x: 0, y: 0, z: 0}
   - {x: 56, y: 40, z: 0}
   - {x: 0, y: 0, z: 0}
