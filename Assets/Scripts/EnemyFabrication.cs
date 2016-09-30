@@ -10,6 +10,14 @@ public class EnemyFabrication : MonoBehaviour {
     public List<Vector3>[] spawnGrid;
     public float timeBetweenWallMasterSpawn = 1.0f;
     public float timeBetweenWallMasterSpawnDoor = 0.5f;
+
+    public Vector3[] pushableTileCoords;
+    public Direction[] pushableDirection;
+    public GameObject pushableTilePrefab;
+
+    private PushableBlock[] pushableBlocks;
+
+
     private List<GameObject> enemy_instances = new List<GameObject>();// instances in a give room
     private int currentRoom = 0;
     private static int WALL_MASTER_ROOM;
@@ -93,6 +101,20 @@ public class EnemyFabrication : MonoBehaviour {
         };
         CameraControl.S.cameraMoveCompleteDelegate += CameraMoveComplete;
         CameraControl.S.cameraMovedDelegate += OnCameraMoved;
+
+        // pushable blocks
+        pushableBlocks = new PushableBlock[pushableTileCoords.Length];
+        for (int i = 0; i < pushableTileCoords.Length; ++i) {
+            Vector3 coords = pushableTileCoords[i];
+            Direction direction = pushableDirection[i];
+            pushableBlocks[i] = (Instantiate(pushableTilePrefab, coords, transform.rotation) as GameObject).GetComponent<PushableBlock>();
+            pushableBlocks[i].onBlockPushed += OnBlockPushed;
+        }
+    }
+
+    void OnBlockPushed(PushableBlock pushedBlock) {
+        // in the is case we want to trigger a room event (like unlocking a door)
+        MonoBehaviour.print("Room unlocked");
     }
 
     void CameraMoveComplete(Vector3 pos) {
