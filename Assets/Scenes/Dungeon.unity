@@ -148,7 +148,7 @@ Prefab:
     - target: {fileID: 114000012568473420, guid: 7feb558bd6ecec046ba0006fd192aa0c,
         type: 2}
       propertyPath: eventCoords.Array.data[15].x
-      value: 78.5
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 114000012568473420, guid: 7feb558bd6ecec046ba0006fd192aa0c,
         type: 2}
@@ -339,55 +339,10 @@ Prefab:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 114000011991573116, guid: 5f150b3a19cd4944d957234287342d2d,
-        type: 2}
-      propertyPath: m_Text
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 114000012466115236, guid: 5f150b3a19cd4944d957234287342d2d,
         type: 2}
       propertyPath: delayBetweenLetters
-      value: 0.25
-      objectReference: {fileID: 0}
-    - target: {fileID: 114000012466115236, guid: 5f150b3a19cd4944d957234287342d2d,
-        type: 2}
-      propertyPath: fullString
-      value: EASTMOST PENNINSULA IS THE SECRET.
-      objectReference: {fileID: 0}
-    - target: {fileID: 114000012466115236, guid: 5f150b3a19cd4944d957234287342d2d,
-        type: 2}
-      propertyPath: animateText
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 114000011991573116, guid: 5f150b3a19cd4944d957234287342d2d,
-        type: 2}
-      propertyPath: m_Color.r
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114000011991573116, guid: 5f150b3a19cd4944d957234287342d2d,
-        type: 2}
-      propertyPath: m_Color.g
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114000011991573116, guid: 5f150b3a19cd4944d957234287342d2d,
-        type: 2}
-      propertyPath: m_Color.b
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114000011991573116, guid: 5f150b3a19cd4944d957234287342d2d,
-        type: 2}
-      propertyPath: m_FontData.m_FontSize
-      value: 14
-      objectReference: {fileID: 0}
-    - target: {fileID: 114000011991573116, guid: 5f150b3a19cd4944d957234287342d2d,
-        type: 2}
-      propertyPath: m_FontData.m_MinSize
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114000011991573116, guid: 5f150b3a19cd4944d957234287342d2d,
-        type: 2}
-      propertyPath: m_FontData.m_Alignment
-      value: 1
+      value: 0.15
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 5f150b3a19cd4944d957234287342d2d, type: 2}

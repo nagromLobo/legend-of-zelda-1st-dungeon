@@ -148,7 +148,9 @@ public class EnemyFabrication : MonoBehaviour {
         // if there are stil enemies in the room to spawn, spawn them
         for(int i = 0; (i < currSpawnGrid.Count) && (i < numEnemiesInRooms[currentRoom]); ++i) {
             enemy_instances.Add(Instantiate(currEnemy, currSpawnGrid[i], transform.rotation) as GameObject);
-            enemy_instances[i].GetComponent<Enemy>().OnEnemyDestroyed += OnEnemyDestroyed;
+            if(enemy_instances[i].name != "Flame(Clone)") {
+                enemy_instances[i].GetComponent<Enemy>().OnEnemyDestroyed += OnEnemyDestroyed;
+            }
         }
         if(currentRoom != prevRoom) {
             // special case for pushable block rooms
@@ -193,7 +195,6 @@ public class EnemyFabrication : MonoBehaviour {
             case 15:
                 // then we entered the room with the text engine. have to start it
                 room15TextEngine.GetComponent<TextEngine>().AnimateText();
-                // spawn flames and NPC
                 break;
         }
     }
