@@ -2,6 +2,7 @@
 using System.Collections;
 using System;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 public enum Direction {NORTH, EAST, SOUTH, WEST};
 public enum EntityState {NORMAL, ATTACKING, DAMAGED, CAMERA_TRANSITION, ENTERING_ROOM, GAME_OVER, GRABBED};
@@ -109,8 +110,12 @@ public class PlayerControl : MonoBehaviour {
             case EntityState.ENTERING_ROOM:
                 handleTransitionMovement();
                 break;
-            case EntityState.DAMAGED:
-                handleDamaged();
+			case EntityState.DAMAGED:
+				if (half_heart_count <= 0) {
+					//animate death sequence
+					SceneManager.LoadScene ("Dungeon");
+				}
+	            handleDamaged();
                 break;
             case EntityState.GRABBED:
                 handleGrabbed();
@@ -279,6 +284,12 @@ public class PlayerControl : MonoBehaviour {
                     GetComponent<Rigidbody>().velocity = Vector3.zero;
                 }
                 break;
+			case "EnemyProjectiles":
+				//TO DO: Test me!!
+				Vector3 EnemyProjectilePos = coll.gameObject.transform.position.normalized;
+				if(current_direction == UtilityFunctions.DirectionFromNormal(EnemyProjectilePos)) //LOL!!
+					Destroy (coll.gameObject); 
+				break;
             default:
                 break;
         }

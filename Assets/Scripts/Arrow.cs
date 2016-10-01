@@ -26,13 +26,14 @@ public class Arrow : Weapon {
 	// Update is called once per frame
 	void FixedUpdate () {
 		if (released) {
-
+			//print ("I am doing something");
 			weapon_instance.GetComponent<Rigidbody>().velocity = weapon_pos * 15.0f;
 		}
 	}
 
 	public void ReleaseArrow() {
 		released = true;
+		print ("released");
 		if (PlayerControl.instance.current_direction == Direction.NORTH) {
 			weapon_pos = new Vector3(0, 1, 0);
 		} else if (PlayerControl.instance.current_direction == Direction.EAST) {
@@ -44,12 +45,26 @@ public class Arrow : Weapon {
 		}
 	}
 
-	void OnCollisionEnter() {
-		//print ("don't get here yet"); 
+	void OnTriggernEnter(Collider col) {
+		print ("I have been triggered");
+		print (col.gameObject.tag);
+//		if (col.gameObject.tag == "Enemy") {
+//			Destroy (col.gameObject);
+//		}
 		if (released) {
 			//print("destroy already"); 
 			Destroy (weapon_instance);
 			Destroy (BowInstance);
 		}
 	}
+
+//	void OnCollisionEnter() {
+//
+//		if (released) {
+//			//print("destroy already"); 
+//			Destroy (weapon_instance);
+//			Destroy (BowInstance);
+//		}
+//
+//	}
 }

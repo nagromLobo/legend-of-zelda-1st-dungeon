@@ -23,7 +23,7 @@ GameObject:
   - 114: {fileID: 114000014132037418}
   - 54: {fileID: 54000011659632260}
   - 65: {fileID: 65000013705563098}
-  m_Layer: 13
+  m_Layer: 14
   m_Name: Arrow
   m_TagString: Arrow
   m_Icon: {fileID: 0}
@@ -65,10 +65,10 @@ BoxCollider:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000013872525264}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 0.3125, z: 0.2}
+  m_Size: {x: 1, y: 0.32, z: 0}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &114000014132037418
 MonoBehaviour:
@@ -84,7 +84,7 @@ MonoBehaviour:
   damage: 1
   stunCoolDown: 0
   weapon_prefab: {fileID: 1000013872525264}
-  weapon_instance: {fileID: 1000013872525264}
+  weapon_instance: {fileID: 0}
   released: 0
   BowInstance: {fileID: 1000011072288296, guid: 05db943342c3051429fc8ea8e2d4aad9,
     type: 2}

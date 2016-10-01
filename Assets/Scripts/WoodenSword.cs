@@ -49,8 +49,12 @@ public class WoodenSword : Weapon {
 		}
 	}
 
-	void OnCollisionEnter() {
+	void OnTriggerEnter(Collider col) {
 		print ("don't get here yet"); 
+		print (col.gameObject.tag);
+//		if (col.gameObject.tag == "Enemy") {
+//			Destroy (col.gameObject);
+//		}
 		if (IsFullHealth () && released) {
 			print("destroy already"); 
 			Destroy (weapon_instance);

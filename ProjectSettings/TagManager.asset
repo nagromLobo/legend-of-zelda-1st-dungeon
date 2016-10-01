@@ -25,6 +25,9 @@ TagManager:
   - Sword
   - BombReleased
   - Arrow
+  - BladeTrapTrigger
+  - Wallmaster
+  - EnemyProjectiles
   layers:
   - Default
   - TransparentFX
@@ -36,11 +39,11 @@ TagManager:
   - 
   - Item
   - Enemies
-  - 
+  - Link
   - Tiles
   - MiddleBlocks
   - Flying
-  - 
+  - Projectiles
   - 
   - 
   - 
