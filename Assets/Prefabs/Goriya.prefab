@@ -86,13 +86,14 @@ MonoBehaviour:
   movementFramesPerSecond: 7
   timeToCrossTile: 0.5
   turnProbability: 0.2
-  heartCount: 2
+  heartCount: 3
   damageFlashLength: 1
   spriteAnimation:
   - {fileID: 0}
   - {fileID: 0}
   enemyDamageColor: {r: 1, g: 0, b: 0, a: 1}
   damageCooldown: 2
+  stunable: 0
   currDirection: 2
   throwBoomerangProbability: 0.1
   boomerangCoolDown: 3

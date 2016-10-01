@@ -86,13 +86,14 @@ MonoBehaviour:
   movementFramesPerSecond: 6
   timeToCrossTile: 0.5
   turnProbability: 0.3
-  heartCount: 1
+  heartCount: 2
   damageFlashLength: 1
   spriteAnimation:
   - {fileID: 21300148, guid: 8e8a9669d1c0c6943a69f3bf099f7b4b, type: 3}
   - {fileID: 21300178, guid: 8e8a9669d1c0c6943a69f3bf099f7b4b, type: 3}
   enemyDamageColor: {r: 1, g: 0, b: 0, a: 1}
   damageCooldown: 2
+  stunable: 0
   currDirection: 2
 --- !u!212 &212000010675581394
 SpriteRenderer:
