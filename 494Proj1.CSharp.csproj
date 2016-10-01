@@ -77,6 +77,7 @@
     <Compile Include="Assets\Scripts\Enemy.cs" />
     <Compile Include="Assets\Scripts\EnemyFabrication.cs" />
     <Compile Include="Assets\Scripts\FixedRatio.cs" />
+    <Compile Include="Assets\Scripts\Flame.cs" />
     <Compile Include="Assets\Scripts\GameManager.cs" />
     <Compile Include="Assets\Scripts\Gel.cs" />
     <Compile Include="Assets\Scripts\Goriya.cs" />
@@ -89,6 +90,7 @@
     <Compile Include="Assets\Scripts\ShowMap.cs" />
     <Compile Include="Assets\Scripts\ShowMapOnCamera.cs" />
     <Compile Include="Assets\Scripts\StateMachine.cs" />
+    <Compile Include="Assets\Scripts\TextEngine.cs" />
     <Compile Include="Assets\Scripts\Tile.cs" />
     <Compile Include="Assets\Scripts\UIManager.cs" />
     <Compile Include="Assets\Scripts\UtilityFunctions.cs" />
@@ -102,7 +104,7 @@
     <None Include="Assets\Resources\Collision.txt" />
     <None Include="Assets\Resources\Destructible.txt" />
     <None Include="Assets\Resources\map_sprites_data.txt" />
-    <None Include="Assets\spriteText.txt" />
+    <None Include="Assets\Resources\spriteText.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2015\UnityVS.CSharp.targets" />
 </Project>
