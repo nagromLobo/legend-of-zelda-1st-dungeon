@@ -211,6 +211,7 @@ public class EnemyFabrication : MonoBehaviour {
     private void playerInRoom() {
         List<Vector3> currSpawnGrid = spawnGrid[currentRoom];
         GameObject currEnemy = enemy_prefabs[currentRoom];
+        print(currentRoom);
         // if there are stil enemies in the room to spawn, spawn them
         for (int i = 0; (i < currSpawnGrid.Count) && (i < numEnemiesInRooms[currentRoom]); ++i) {
             enemy_instances.Add(Instantiate(currEnemy, currSpawnGrid[i], transform.rotation) as GameObject);
