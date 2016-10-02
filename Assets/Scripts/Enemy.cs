@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Enemy : MonoBehaviour {
     public EntityState current_state = EntityState.NORMAL;
-    public int damage;
+    public int damage = 1;
     public int movementFramesPerSecond = 4;
     public float timeToCrossTile = 0.0f;
     public float turnProbability = 0.02f;
@@ -12,6 +12,7 @@ public class Enemy : MonoBehaviour {
     public Sprite[] spriteAnimation;
     public Color enemyDamageColor = Color.red;
     public float damageCooldown = 2.0f;
+    public float damageDistancePushback = 3.0f;
     public bool stunable = false;
 
     public delegate void onEnemyDestroyed(GameObject enemy);
@@ -25,6 +26,9 @@ public class Enemy : MonoBehaviour {
     protected float lastDamageFlashTime = 0.0f;
     public Direction currDirection = Direction.SOUTH;
 
+	public int kill_type = 0; //0, 1, or 3
+	public float ItemDropFrequency = 0.3f;
+
     public Enemy() {
         return;
     }
@@ -35,6 +39,7 @@ public class Enemy : MonoBehaviour {
     void Awake() {
         animation_statemachine = new StateMachine();
         control_statemachine = new StateMachine();
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 	// Use this for initialization
 	protected virtual void Start () {
@@ -59,8 +64,17 @@ public class Enemy : MonoBehaviour {
     protected virtual void OnTriggerEnter(Collider other) {
         if(other.gameObject.tag == "Threshold" || other.gameObject.tag == "LockedDoor") {
             StartEnemyMovement(true);
-        } else if (other.gameObject.tag == "Weapon") {
-            EnemyDamaged(other.GetComponent<Weapon>());
+        }
+        OnTriggerDamageHandling(other);
+    }
+
+    protected virtual void OnTriggerDamageHandling(Collider other) {
+        if ((other.gameObject.tag == "BombReleased") ||
+            (other.gameObject.tag == "BoomerangReleased") ||
+            (other.gameObject.tag == "Arrow") ||
+            (other.gameObject.tag == "Sword")) {
+            // then we have a weapon
+            EnemyDamaged(other);
         }
     }
 
@@ -119,23 +133,34 @@ public class Enemy : MonoBehaviour {
 
     }
 
-    public virtual void EnemyDamaged(Weapon w) {
+    public virtual void EnemyDamaged(Collider other) {
+        Weapon w = other.GetComponent<Weapon>();
         int damageHalfHearts = w.damage;
-        float stunCooldown = w.stunCoolDown;
-        if((stunCooldown > 0) && stunable) {
-
+        float stunCoolDown = w.stunCoolDown;
+        int stunCooldown = 0;
+        if (stunCooldown > 0) {
+            control_statemachine.ChangeState(new StateEnemyStunned(this, currDirection, turnProbability, stunCooldown));
         }
-        normalColor = spriteRenderer.color;
-        current_state = EntityState.DAMAGED;
-        damageStartTime = Time.time;
-        heartCount -= damage;
-        if (heartCount <= 0) {
-            // update room state (enemy destroyed)
-            OnEnemyDestroyed(this.gameObject);
-            Destroy(this.gameObject);
-            return;
+        if(damageHalfHearts > 0) {
+            normalColor = spriteRenderer.color;
+            current_state = EntityState.DAMAGED;
+            damageStartTime = Time.time;
+            heartCount -= damageHalfHearts;
+            if (heartCount <= 0) {
+                // update room state (enemy destroyed)
+				//PlayerControl. count up kills;
+                OnEnemyDestroyed(this.gameObject);
+				PlayerControl.instance.KillCount (this);
+				PlayerControl.instance.EnemyDestroyed (this);
+                Destroy(this.gameObject);
+                return;
+            }
+            else {
+                Vector3 pushback = (this.transform.position - other.transform.position).normalized;
+                pushback.Set(Mathf.Round(pushback.x), Mathf.Round(pushback.y), Mathf.Round(pushback.z));
+                control_statemachine.ChangeState(new StateEnemyDamaged(this, currDirection, turnProbability, damageCooldown / 2,  damageDistancePushback, pushback));
+            }
         }
-        // if not destroyed animate enemy
     }
 
     private void handleDamaged() {

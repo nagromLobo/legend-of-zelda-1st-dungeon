@@ -54,7 +54,16 @@ public class PlayerControl : MonoBehaviour {
 
 	public GameObject selected_weapon_prefab;
 
-	//public GameObject BowPrefab;
+	public bool ________________________;
+	public GameObject rupee_prefab; // set prefab
+	public GameObject bomb_prefab; //set
+	public GameObject heart_prefab;
+	public GameObject clock_prefab;
+	public bool ___________________;
+
+    //public GameObject BowPrefab;
+    public delegate void PlayerInRoom();
+    public PlayerInRoom playerInRoom;
 
     private Direction link_doorway_direction;
     private float timeStartDelay = 0.0f;
@@ -69,15 +78,36 @@ public class PlayerControl : MonoBehaviour {
     private Vector3 startPosition;
     private Wallmaster linkGrabber;
 
+	public int enemy_kill_count = 0; //mod 10
+	public GameObject[,] ItemDrops; //10 by 3 array
+	//Item drop chart from here: http://www.zeldaspeedruns.com/loz/generalknowledge/item-drops-chart
     public static PlayerControl instance;
 
     // runs before any start function gets called
     void Awake() {
+		ItemDrops = new GameObject[10,3];
         if (instance != null) {
             Debug.LogError("Mutiple Link objects detected:");
         }
         instance = this;
-        //print("in start"); 
+        //print("in start");
+		for(int i = 0; i < 10; i++) {
+			for(int j = 1; j < 3; j++) {
+				ItemDrops[i,j] = rupee_prefab;
+			}
+		}
+		ItemDrops [1, 1] = bomb_prefab;
+		//ItemDrops [1] [0] = heart_prefab;
+		ItemDrops [2, 2] = heart_prefab;
+		ItemDrops [3, 1] = clock_prefab;
+		ItemDrops [5, 1] = heart_prefab;
+		ItemDrops [5, 2] = heart_prefab;
+		ItemDrops [6, 1] = bomb_prefab;
+		ItemDrops [6, 2] = clock_prefab;
+		ItemDrops [8, 1] = bomb_prefab;
+		ItemDrops [9, 1] = heart_prefab;
+		ItemDrops [0, 1] = heart_prefab;
+
     }
 
     // Use this for initialization
@@ -88,6 +118,7 @@ public class PlayerControl : MonoBehaviour {
         animation_state_machine = new StateMachine();
         control_state_machine = new StateMachine();
         control_state_machine.ChangeState(new StateLinkNormalMovement(this));
+        normalColor = GetComponent<SpriteRenderer>().color;
 
         CameraControl.S.cameraMovedDelegate += CameraMoved;
 
@@ -104,6 +135,9 @@ public class PlayerControl : MonoBehaviour {
     // Update is called once per frame
     void Update() {
         switch (current_state) {
+            case EntityState.NORMAL:
+                spriteRenderer.color = normalColor;
+                break;
             case EntityState.CAMERA_TRANSITION:
                 handleTransitionMovement();
                 break;
@@ -163,6 +197,9 @@ public class PlayerControl : MonoBehaviour {
                 current_state = EntityState.ENTERING_ROOM;
             } else {
                 current_state = EntityState.NORMAL;
+                if(playerInRoom != null) {
+                    playerInRoom();
+                }
                 // have to set this back to zero so we know if we've started waiting the next time
                 timeStartDelay = 0.0f;
                 return;
@@ -325,7 +362,6 @@ public class PlayerControl : MonoBehaviour {
 
         damageStartTime = Time.time;
         lastDamageFlashTime = damageStartTime;
-        normalColor = GetComponent<SpriteRenderer>().color;
         
     }
 
@@ -404,4 +440,20 @@ public class PlayerControl : MonoBehaviour {
         control_state_machine.ChangeState(new StateLinkNormalMovement(this));
         current_state = EntityState.NORMAL;
     }
+
+	public void KillCount(Enemy e) {
+		enemy_kill_count = (enemy_kill_count + 1) % 10;
+
+	}
+
+	public void EnemyDestroyed(Enemy e) {
+		//enemy 0 doesn't drop any items
+		if (e.kill_type != 0) {
+			if (UnityEngine.Random.value <= e.ItemDropFrequency) {
+				GameObject prefab = ItemDrops [enemy_kill_count, e.kill_type];
+				GameObject new_item_drop = Instantiate (prefab, e.gameObject.transform.position, Quaternion.identity) as GameObject;
+				//could do this properly but I won't
+			}
+		}
+	}
 }

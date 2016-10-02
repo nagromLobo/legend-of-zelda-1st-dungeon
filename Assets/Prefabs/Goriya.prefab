@@ -93,8 +93,11 @@ MonoBehaviour:
   - {fileID: 0}
   enemyDamageColor: {r: 1, g: 0, b: 0, a: 1}
   damageCooldown: 2
+  damageDistancePushback: 3
   stunable: 0
   currDirection: 2
+  kill_type: 1
+  ItemDropFrequency: 0.3
   throwBoomerangProbability: 0.1
   boomerangCoolDown: 3
   goriya_up_prefabs:

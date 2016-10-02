@@ -14,12 +14,12 @@ public class Arrow : Weapon {
 	// Use this for initialization
 	void Awake () {
 		weapon_instance = weapon_prefab;
-		BowInstance = MonoBehaviour.Instantiate (BowPrefab, PlayerControl.instance.transform.position, Quaternion.identity) as GameObject;
+		BowInstance = Instantiate (BowPrefab, PlayerControl.instance.transform.position, Quaternion.identity) as GameObject;
 		released = false;
 	}
 
 	public void Instantiate() {
-		weapon_instance = MonoBehaviour.Instantiate(weapon_prefab, PlayerControl.instance.transform.position, Quaternion.identity) as GameObject;
+		weapon_instance = Instantiate(PlayerControl.instance.selected_weapon_prefab, PlayerControl.instance.transform.position, Quaternion.identity) as GameObject;
 		//BowInstance = MonoBehaviour.Instantiate (BowPrefab, PlayerControl.instance.transform.position, Quaternion.identity) as GameObject;
 	}
 

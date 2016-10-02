@@ -38,7 +38,7 @@ public class Bomb: Weapon {
 	void Awake() { this.weapon_instance = weapon_prefab; }
 
 	public void Initiate() {
-		weapon_instance = MonoBehaviour.Instantiate( PlayerControl.instance.selected_weapon_prefab, PlayerControl.instance.transform.position, Quaternion.identity) as GameObject;
+		weapon_instance = Instantiate( PlayerControl.instance.selected_weapon_prefab, PlayerControl.instance.transform.position, Quaternion.identity) as GameObject;
 	}
 
 	void FixedUpdate() {

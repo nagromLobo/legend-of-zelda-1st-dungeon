@@ -52,14 +52,18 @@ public class CameraControl : MonoBehaviour {
                 transform.position = currCameraPos;
             } else {
                 current_state = CameraState.NORMAL;
-				cameraMoveCompleteDelegate(transform.position);
+                if(cameraMoveCompleteDelegate != null) {
+                    cameraMoveCompleteDelegate(transform.position);
+                }
             }
         }
 
     }
 
     public void MoveCamera(Direction d) {
-        cameraMovedDelegate(d, transitionTime);
+        if(cameraMovedDelegate != null) {
+            cameraMovedDelegate(d, transitionTime);
+        }
         cameraStartPos = this.gameObject.transform.position;
         transitionDir = d;
         cameraMoveStart = Time.time;
