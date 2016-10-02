@@ -451,6 +451,16 @@ Prefab:
       propertyPath: m_RootOrder
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 114000010072219278, guid: 42b152bcb9cc5224c9c8ae884547c623,
+        type: 2}
+      propertyPath: numEnemiesInRooms.Array.data[1]
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 114000010072219278, guid: 42b152bcb9cc5224c9c8ae884547c623,
+        type: 2}
+      propertyPath: numEnemiesInRooms.Array.data[2]
+      value: 5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 42b152bcb9cc5224c9c8ae884547c623, type: 2}
   m_IsPrefabParent: 0
