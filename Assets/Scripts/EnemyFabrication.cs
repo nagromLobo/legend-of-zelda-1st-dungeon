@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using UnityEngine.SceneManagement;
 
 public class EnemyFabrication : MonoBehaviour {
     public Vector3[] roomCameraPositions = new Vector3[14]; // an array containing the set camera positions for rooms
@@ -16,6 +17,9 @@ public class EnemyFabrication : MonoBehaviour {
     public GameObject pushableTilePrefab;
     public GameObject smallKeyPrefab;
     public GameObject boomerangPrefab;
+    public GameObject room15TextEngine;
+    public GameObject flamePrefab;
+    public GameObject NPCprefab;
     public Vector3[] eventCoords; // index is roomnumber
 
     private PushableBlock[] pushableBlocks;
@@ -101,8 +105,11 @@ public class EnemyFabrication : MonoBehaviour {
         spawnGrid[13] = new List<Vector3> { new Vector3(71.5f, 38.0f, 0.0f) };
         spawnGrid[14] = new List<Vector3> { new Vector3(75.0f, 49.0f, 0.0f)
         };
+        spawnGrid[15] = new List<Vector3> { new Vector3(4.0f, 38.0f, 0.0f),
+                                            new Vector3(10.0f, 38.0f, 0.0f)
+        };
         CameraControl.S.cameraMoveCompleteDelegate += CameraMoveComplete;
-        CameraControl.S.cameraMovedDelegate += OnCameraMoved;
+        CameraControl.S.cameraMovedDelegate += OnStartCameraMovement;
 
         // pushable blocks
         pushableBlocks = new PushableBlock[pushableTileCoords.Length];
@@ -116,6 +123,14 @@ public class EnemyFabrication : MonoBehaviour {
         pushableBlocks[0].SetUpPushableTile(true, true, true, true, pushableTileCoords[0], 7, false);
         // pushable in every direction besides from the west
         pushableBlocks[1].SetUpPushableTile(true, true, true, false, pushableTileCoords[1], 0, true);
+    }
+
+    void Update() {
+        if (Input.GetKeyDown("f5")) {
+            SceneManager.LoadScene("Dungeon");
+        } else if (Input.GetKeyDown("f6")) {
+            SceneManager.LoadScene("Custom");
+        }
     }
 
     void OnBlockPushed(PushableBlock pushedBlock) {
@@ -142,7 +157,9 @@ public class EnemyFabrication : MonoBehaviour {
         // if there are stil enemies in the room to spawn, spawn them
         for(int i = 0; (i < currSpawnGrid.Count) && (i < numEnemiesInRooms[currentRoom]); ++i) {
             enemy_instances.Add(Instantiate(currEnemy, currSpawnGrid[i], transform.rotation) as GameObject);
-            enemy_instances[i].GetComponent<Enemy>().OnEnemyDestroyed += OnEnemyDestroyed;
+            if(enemy_instances[i].name != "Flame(Clone)") {
+                enemy_instances[i].GetComponent<Enemy>().OnEnemyDestroyed += OnEnemyDestroyed;
+            }
         }
         if(currentRoom != prevRoom) {
             // special case for pushable block rooms
@@ -163,7 +180,12 @@ public class EnemyFabrication : MonoBehaviour {
                     // blade trap pushable block room
                     pushableBlocks[1].SetUpPushableTile(true, true, true, false, pushableTileCoords[1], 11, true);
                     break;
-
+            }
+            switch (currentRoom) {
+                case 15:
+                    // then we have to instantiate the oldman
+                    enemy_instances.Add((Instantiate(NPCprefab, eventCoords[15], transform.rotation)) as GameObject);
+                    break;
             }
         }
     }
@@ -178,6 +200,10 @@ public class EnemyFabrication : MonoBehaviour {
                 break;
             case 7:
                 ShowMapOnCamera.MAP_TILES[Mathf.RoundToInt(eventCoords[currentRoom].x), Mathf.RoundToInt(eventCoords[currentRoom].y)].closeEventDoor();
+                break;
+            case 15:
+                // then we entered the room with the text engine. have to start it
+                room15TextEngine.GetComponent<TextEngine>().AnimateText();
                 break;
         }
     }
@@ -228,12 +254,18 @@ public class EnemyFabrication : MonoBehaviour {
         }
     }
 
-    private void OnCameraMoved(Direction d, float transitionTime) {
+    private void OnStartCameraMovement(Direction d, float transitionTime) {
         // destroy all of the enemy instances when offscreen
         foreach (GameObject enemy in enemy_instances) {
             Destroy(enemy);
         }
         enemy_instances.Clear();
         prevRoom = currentRoom;
+        switch (prevRoom) {
+            case 15:
+                room15TextEngine.GetComponent<TextEngine>().ClearText();
+                // then we have to clear the text from the room
+                break;
+        }
      }
 }
