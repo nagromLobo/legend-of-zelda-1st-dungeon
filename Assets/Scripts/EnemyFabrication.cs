@@ -5,6 +5,7 @@ using System;
 using UnityEngine.SceneManagement;
 
 public class EnemyFabrication : MonoBehaviour {
+    public bool customLevel = false;
     public Vector3[] roomCameraPositions = new Vector3[14]; // an array containing the set camera positions for rooms
     public int[] numEnemiesInRooms = new int[14]; // an array of the number of enemies in a given room
     public GameObject[] enemy_prefabs; // refers to what enemy to show in thier respective room
@@ -152,16 +153,18 @@ public class EnemyFabrication : MonoBehaviour {
 
     void OnBlockPushed(PushableBlock pushedBlock) {
         // in the is case we want to trigger a room event (like unlocking a door)
-        switch (currentRoom) {
-            // Gel locked door room (with three gels)
-            case 7:
-                ShowMapOnCamera.MAP_TILES[Mathf.RoundToInt(eventCoords[currentRoom].x), Mathf.RoundToInt(eventCoords[currentRoom].y)].openEventDoor(Direction.WEST);
-                PuzzleSolved();
-                break;
-            case 11:
-                // blade trap room
-                PuzzleSolved();
-                break;
+        if (!customLevel) {
+            switch (currentRoom) {
+                // Gel locked door room (with three gels)
+                case 7:
+                    ShowMapOnCamera.MAP_TILES[Mathf.RoundToInt(eventCoords[currentRoom].x), Mathf.RoundToInt(eventCoords[currentRoom].y)].openEventDoor(Direction.WEST);
+                    PuzzleSolved();
+                    break;
+                case 11:
+                    // blade trap room
+                    PuzzleSolved();
+                    break;
+            }
         }
     }
 
@@ -174,31 +177,33 @@ public class EnemyFabrication : MonoBehaviour {
                 break;
             }
         }
-        if(currentRoom != prevRoom) {
-            // special case for pushable block rooms
-            switch (prevRoom) {
-                case 7:
-                    // gel pushable block room
-                    bool pushable = false;
-                    if (numEnemiesInRooms[prevRoom] == 0) {
-                        pushable = true;
-                    }
-                    pushableBlocks[0].SetUpPushableTile(true, true, true, true, pushableTileCoords[0], 7, pushable);
-                    // reset door
-                    if(currentRoom != 15) {
-                        ShowMapOnCamera.MAP_TILES[Mathf.RoundToInt(eventCoords[currentRoom].x), Mathf.RoundToInt(eventCoords[currentRoom].y)].closeEventDoor();
-                    }
-                    break;
-                case 11:
-                    // blade trap pushable block room
-                    pushableBlocks[1].SetUpPushableTile(true, true, true, false, pushableTileCoords[1], 11, true);
-                    break;
-            }
-            switch (currentRoom) {
-                case 15:
-                    // then we have to instantiate the oldman
-                    enemy_instances.Add((Instantiate(NPCprefab, eventCoords[15], transform.rotation)) as GameObject);
-                    break;
+        if (!customLevel) {
+            if (currentRoom != prevRoom) {
+                // special case for pushable block rooms
+                switch (prevRoom) {
+                    case 7:
+                        // gel pushable block room
+                        bool pushable = false;
+                        if (numEnemiesInRooms[prevRoom] == 0) {
+                            pushable = true;
+                        }
+                        pushableBlocks[0].SetUpPushableTile(true, true, true, true, pushableTileCoords[0], 7, pushable);
+                        // reset door
+                        if (currentRoom != 15) {
+                            ShowMapOnCamera.MAP_TILES[Mathf.RoundToInt(eventCoords[currentRoom].x), Mathf.RoundToInt(eventCoords[currentRoom].y)].closeEventDoor();
+                        }
+                        break;
+                    case 11:
+                        // blade trap pushable block room
+                        pushableBlocks[1].SetUpPushableTile(true, true, true, false, pushableTileCoords[1], 11, true);
+                        break;
+                }
+                switch (currentRoom) {
+                    case 15:
+                        // then we have to instantiate the oldman
+                        enemy_instances.Add((Instantiate(NPCprefab, eventCoords[15], transform.rotation)) as GameObject);
+                        break;
+                }
             }
         }
     }
@@ -213,67 +218,72 @@ public class EnemyFabrication : MonoBehaviour {
                 enemy_instances[i].GetComponent<Enemy>().OnEnemyDestroyed += OnEnemyDestroyed;
             }
         }
-        // special case for second keese room
-        switch (currentRoom) {
-            case 5:
-                if(numEnemiesInRooms[currentRoom] > 0) {
+        if (!customLevel) {
+            // special case for second keese room
+            switch (currentRoom) {
+                case 5:
+                    if (numEnemiesInRooms[currentRoom] > 0) {
+                        ShowMapOnCamera.MAP_TILES[Mathf.RoundToInt(eventCoords[currentRoom].x), Mathf.RoundToInt(eventCoords[currentRoom].y)].closeEventDoor();
+                        DoorStateChanged();
+                    }
+                    break;
+                case 7:
                     ShowMapOnCamera.MAP_TILES[Mathf.RoundToInt(eventCoords[currentRoom].x), Mathf.RoundToInt(eventCoords[currentRoom].y)].closeEventDoor();
-                    DoorStateChanged();
-                }
-                break;
-            case 7:
-                ShowMapOnCamera.MAP_TILES[Mathf.RoundToInt(eventCoords[currentRoom].x), Mathf.RoundToInt(eventCoords[currentRoom].y)].closeEventDoor();
-                break;
-            case 15:
-                // then we entered the room with the text engine. have to start it
-                room15TextEngine.GetComponent<TextEngine>().AnimateText();
-                break;
+                    break;
+                case 15:
+                    // then we entered the room with the text engine. have to start it
+                    room15TextEngine.GetComponent<TextEngine>().AnimateText();
+                    break;
+            }
         }
     }
 
     private void OnEnemyDestroyed(GameObject enemy) {
         // reduce the amount of enemies in the current room
         --numEnemiesInRooms[currentRoom];
-        if (numEnemiesInRooms[currentRoom] == 0) {
-            switch (currentRoom) {
-                // handle room specific enemy killing events
-                case 1:
-                    // first keese room
-                    KeyAppeared();
-                    break;
-                case 4:
-                    // Stalfo room (first branching room)                   
-                    KeyAppeared();
-                    break;
-                case 5:
-                    // (3rd) trap keese room
-                    //  Unlock door
-                    // (keese room)
-                    ShowMapOnCamera.MAP_TILES[Mathf.RoundToInt(eventCoords[currentRoom].x), Mathf.RoundToInt(eventCoords[currentRoom].y)].openEventDoor(Direction.EAST);
-                    DoorStateChanged();
-                    break;
-                case 7:
-                    // (1st) pushable block room
-                    // make block pushable
-                    pushableBlocks[0].pushable = true;
-                    break;
-                case 10:
-                    // Goryia water-room
-                    KeyAppeared();
-                    break;
-                case 12:
-                    // (Right before wallmasters) goryia room
-                    // drop boomerang
-                    Instantiate(boomerangPrefab, eventCoords[currentRoom], transform.rotation);
-                    break;
-                case 14:
-                    // Aquamentus
-                    // Unlock door
-                    ShowMapOnCamera.MAP_TILES[Mathf.RoundToInt(eventCoords[currentRoom].x), Mathf.RoundToInt(eventCoords[currentRoom].y)].openEventDoor(Direction.EAST);
-                    DoorStateChanged();
-                    break;
+        if (!customLevel) {
+            if (numEnemiesInRooms[currentRoom] == 0) {
+                switch (currentRoom) {
+                    // handle room specific enemy killing events
+                    case 1:
+                        // first keese room
+                        KeyAppeared();
+                        break;
+                    case 4:
+                        // Stalfo room (first branching room)                   
+                        KeyAppeared();
+                        break;
+                    case 5:
+                        // (3rd) trap keese room
+                        //  Unlock door
+                        // (keese room)
+                        ShowMapOnCamera.MAP_TILES[Mathf.RoundToInt(eventCoords[currentRoom].x), Mathf.RoundToInt(eventCoords[currentRoom].y)].openEventDoor(Direction.EAST);
+                        DoorStateChanged();
+                        break;
+                    case 7:
+                        // (1st) pushable block room
+                        // make block pushable
+                        pushableBlocks[0].pushable = true;
+                        break;
+                    case 10:
+                        // Goryia water-room
+                        KeyAppeared();
+                        break;
+                    case 12:
+                        // (Right before wallmasters) goryia room
+                        // drop boomerang
+                        Instantiate(boomerangPrefab, eventCoords[currentRoom], transform.rotation);
+                        break;
+                    case 14:
+                        // Aquamentus
+                        // Unlock door
+                        ShowMapOnCamera.MAP_TILES[Mathf.RoundToInt(eventCoords[currentRoom].x), Mathf.RoundToInt(eventCoords[currentRoom].y)].openEventDoor(Direction.EAST);
+                        DoorStateChanged();
+                        break;
+                }
             }
         }
+       
     }
 
     private void PuzzleSolved() {
@@ -299,11 +309,13 @@ public class EnemyFabrication : MonoBehaviour {
         }
         enemy_instances.Clear();
         prevRoom = currentRoom;
-        switch (prevRoom) {
-            case 15:
-                room15TextEngine.GetComponent<TextEngine>().ClearText();
-                // then we have to clear the text from the room
-                break;
+        if (!customLevel) {
+            switch (prevRoom) {
+                case 15:
+                    room15TextEngine.GetComponent<TextEngine>().ClearText();
+                    // then we have to clear the text from the room
+                    break;
+            }
         }
      }
 }
