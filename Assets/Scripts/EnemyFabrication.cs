@@ -209,7 +209,7 @@ public class EnemyFabrication : MonoBehaviour {
         // if there are stil enemies in the room to spawn, spawn them
         for (int i = 0; (i < currSpawnGrid.Count) && (i < numEnemiesInRooms[currentRoom]); ++i) {
             enemy_instances.Add(Instantiate(currEnemy, currSpawnGrid[i], transform.rotation) as GameObject);
-            if (enemy_instances[i].name != "Flame(Clone)" && enemy_instances[i].name != "OldMan(Clone)") {
+            if (enemy_instances[i].GetComponent<Enemy>() != null) {
                 enemy_instances[i].GetComponent<Enemy>().OnEnemyDestroyed += OnEnemyDestroyed;
             }
         }

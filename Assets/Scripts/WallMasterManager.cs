@@ -25,22 +25,22 @@ public class WallMasterManager : MonoBehaviour {
         // North trigger
         triggerPosition = new Vector3(transform.position.x, transform.position.y + halfHeight, transform.position.z);
         triggers[0] = (Instantiate(triggerPrefab, triggerPosition, Quaternion.identity) as GameObject).GetComponent<WallMasterTrigger>();
-        triggers[0].SetTriggerType(RoomSizedTrigger.TriggerType.VERTICAL);
+        triggers[0].SetTriggerType(RoomSizedTrigger.TriggerType.HORIZONTIAL);
         triggers[0].SetDirection(Direction.NORTH);
         // East trigger
         triggerPosition = new Vector3(transform.position.x + halfWidth, transform.position.y, transform.position.z);
         triggers[1] = (Instantiate(triggerPrefab, triggerPosition, Quaternion.identity) as GameObject).GetComponent<WallMasterTrigger>();
-        triggers[1].SetTriggerType(RoomSizedTrigger.TriggerType.HORIZONTIAL);
+        triggers[1].SetTriggerType(RoomSizedTrigger.TriggerType.VERTICAL);
         triggers[1].SetDirection(Direction.EAST);
         // South trigger
         triggerPosition = new Vector3(transform.position.x, transform.position.y - halfHeight, transform.position.z);
         triggers[2] = (Instantiate(triggerPrefab, triggerPosition, Quaternion.identity) as GameObject).GetComponent<WallMasterTrigger>();
-        triggers[2].SetTriggerType(RoomSizedTrigger.TriggerType.VERTICAL);
+        triggers[2].SetTriggerType(RoomSizedTrigger.TriggerType.HORIZONTIAL);
         triggers[2].SetDirection(Direction.SOUTH);
         // West trigger
         triggerPosition = new Vector3(transform.position.x - halfWidth, transform.position.y, transform.position.z);
         triggers[3] = (Instantiate(triggerPrefab, triggerPosition, Quaternion.identity) as GameObject).GetComponent<WallMasterTrigger>();
-        triggers[3].SetTriggerType(RoomSizedTrigger.TriggerType.HORIZONTIAL);
+        triggers[3].SetTriggerType(RoomSizedTrigger.TriggerType.VERTICAL);
         triggers[3].SetDirection(Direction.WEST);
 
         for (int i = 0; i < triggers.Length; ++i) {
@@ -117,7 +117,9 @@ public class WallMasterManager : MonoBehaviour {
             Destroy(triggers[i].gameObject);
         }
         foreach(var instance in instances) {
-            Destroy(instance.gameObject);
+            if(instance != null) {
+                Destroy(instance.gameObject);
+            }
         }
     }
 }
