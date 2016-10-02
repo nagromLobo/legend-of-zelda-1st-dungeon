@@ -26,6 +26,9 @@ public class Enemy : MonoBehaviour {
     protected float lastDamageFlashTime = 0.0f;
     public Direction currDirection = Direction.SOUTH;
 
+	public int kill_type = 0; //0, 1, or 3
+	public float ItemDropFrequency = 0.3f;
+
     public Enemy() {
         return;
     }
@@ -145,7 +148,10 @@ public class Enemy : MonoBehaviour {
             heartCount -= damageHalfHearts;
             if (heartCount <= 0) {
                 // update room state (enemy destroyed)
+				//PlayerControl. count up kills;
                 OnEnemyDestroyed(this.gameObject);
+				PlayerControl.instance.KillCount (this);
+				PlayerControl.instance.EnemyDestroyed (this);
                 Destroy(this.gameObject);
                 return;
             }

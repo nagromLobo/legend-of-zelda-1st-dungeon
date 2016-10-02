@@ -23,7 +23,7 @@ GameObject:
   - 114: {fileID: 114000013607889968}
   - 54: {fileID: 54000013054054500}
   - 65: {fileID: 65000011768858218}
-  m_Layer: 10
+  m_Layer: 14
   m_Name: Wooden Sword
   m_TagString: Sword
   m_Icon: {fileID: 0}
