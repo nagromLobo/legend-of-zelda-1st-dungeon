@@ -22,6 +22,15 @@ public class EnemyFabrication : MonoBehaviour {
     public GameObject NPCprefab;
     public Vector3[] eventCoords; // index is roomnumber
 
+    // room based audio events
+    public AudioClip puzzleSolvedAudio;
+    public AudioClip doorClosedAudio;
+    public AudioClip keyAppearedAudio;
+    public AudioClip dungeonMusic;
+    private AudioSource roomEventAudioSrc;
+    private AudioSource dungeonMusicSrc;
+
+
     private PushableBlock[] pushableBlocks;
 
 
@@ -32,6 +41,14 @@ public class EnemyFabrication : MonoBehaviour {
 
     // Use this for initialization
     void Start() {
+        // set up audio
+        AudioSource[] audioSources = GetComponents<AudioSource>();
+        dungeonMusicSrc = audioSources[0];
+        roomEventAudioSrc = audioSources[1];
+        dungeonMusicSrc.clip = dungeonMusic;
+        dungeonMusicSrc.playOnAwake = true;
+        dungeonMusicSrc.Play();
+
         spawnGrid = new List<Vector3>[enemy_prefabs.Length];
         PlayerControl.instance.playerInRoom += playerInRoom;
         for(int i = 0; i < spawnGrid.Length; ++i) {
@@ -139,6 +156,11 @@ public class EnemyFabrication : MonoBehaviour {
             // Gel locked door room (with three gels)
             case 7:
                 ShowMapOnCamera.MAP_TILES[Mathf.RoundToInt(eventCoords[currentRoom].x), Mathf.RoundToInt(eventCoords[currentRoom].y)].openEventDoor(Direction.WEST);
+                PuzzleSolved();
+                break;
+            case 11:
+                // blade trap room
+                PuzzleSolved();
                 break;
         }
     }
@@ -187,7 +209,7 @@ public class EnemyFabrication : MonoBehaviour {
         // if there are stil enemies in the room to spawn, spawn them
         for (int i = 0; (i < currSpawnGrid.Count) && (i < numEnemiesInRooms[currentRoom]); ++i) {
             enemy_instances.Add(Instantiate(currEnemy, currSpawnGrid[i], transform.rotation) as GameObject);
-            if (enemy_instances[i].name != "Flame(Clone)") {
+            if (enemy_instances[i].name != "Flame(Clone)" && enemy_instances[i].name != "OldMan(Clone)") {
                 enemy_instances[i].GetComponent<Enemy>().OnEnemyDestroyed += OnEnemyDestroyed;
             }
         }
@@ -196,6 +218,7 @@ public class EnemyFabrication : MonoBehaviour {
             case 5:
                 if(numEnemiesInRooms[currentRoom] > 0) {
                     ShowMapOnCamera.MAP_TILES[Mathf.RoundToInt(eventCoords[currentRoom].x), Mathf.RoundToInt(eventCoords[currentRoom].y)].closeEventDoor();
+                    DoorStateChanged();
                 }
                 break;
             case 7:
@@ -216,20 +239,18 @@ public class EnemyFabrication : MonoBehaviour {
                 // handle room specific enemy killing events
                 case 1:
                     // first keese room
-
-                    // make key appear
-                    Instantiate(smallKeyPrefab, eventCoords[currentRoom], transform.rotation);
-
+                    KeyAppeared();
                     break;
                 case 4:
                     // Stalfo room (first branching room)                   
-                        Instantiate(smallKeyPrefab, eventCoords[currentRoom], transform.rotation);
-                        break;
+                    KeyAppeared();
+                    break;
                 case 5:
                     // (3rd) trap keese room
                     //  Unlock door
                     // (keese room)
                     ShowMapOnCamera.MAP_TILES[Mathf.RoundToInt(eventCoords[currentRoom].x), Mathf.RoundToInt(eventCoords[currentRoom].y)].openEventDoor(Direction.EAST);
+                    DoorStateChanged();
                     break;
                 case 7:
                     // (1st) pushable block room
@@ -238,7 +259,7 @@ public class EnemyFabrication : MonoBehaviour {
                     break;
                 case 10:
                     // Goryia water-room
-                    Instantiate(smallKeyPrefab, eventCoords[currentRoom], transform.rotation);
+                    KeyAppeared();
                     break;
                 case 12:
                     // (Right before wallmasters) goryia room
@@ -249,9 +270,26 @@ public class EnemyFabrication : MonoBehaviour {
                     // Aquamentus
                     // Unlock door
                     ShowMapOnCamera.MAP_TILES[Mathf.RoundToInt(eventCoords[currentRoom].x), Mathf.RoundToInt(eventCoords[currentRoom].y)].openEventDoor(Direction.EAST);
+                    DoorStateChanged();
                     break;
             }
         }
+    }
+
+    private void PuzzleSolved() {
+        roomEventAudioSrc.clip = puzzleSolvedAudio;
+        roomEventAudioSrc.Play();
+    }
+
+    private void KeyAppeared() {
+        roomEventAudioSrc.clip = keyAppearedAudio;
+        roomEventAudioSrc.Play();
+        Instantiate(smallKeyPrefab, eventCoords[currentRoom], transform.rotation);
+    }
+
+    private void DoorStateChanged() {
+        roomEventAudioSrc.clip = doorClosedAudio;
+        roomEventAudioSrc.Play();
     }
 
     private void OnStartCameraMovement(Direction d, float transitionTime) {

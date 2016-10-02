@@ -319,7 +319,10 @@ public class StateLinkAttack : State {
 			if (pc.half_heart_count != pc.max_half_heart_count) {
 				//MonoBehaviour.print ("if full you should not be here");
 				MonoBehaviour.Destroy (weapon_instance);
-			} 
+                pc.OnAttack(AttackType.MAGIC_SWORD);
+			} else {
+                pc.OnAttack(AttackType.SWORD);
+            }
 		} else {
 			MonoBehaviour.print ("Arrow should not be in here");
 			// MonoBehaviour.Destroy (weapon_instance);
@@ -510,14 +513,17 @@ public class StateLinkStunnedSprite : State {
         //handle no weapon selection
         if (Input.GetKeyDown(KeyCode.S)) {
 			if(pc.selected_weapon_prefab != null) {
-				if ((pc.selected_weapon_prefab.name == "Bomb") && (pc.bomb_count > 0))
-					state_machine.ChangeState (new StateLinkBombAttack (pc, pc.selected_weapon_prefab, 6));
-				else if (pc.selected_weapon_prefab.name == "Boomerang")
-					state_machine.ChangeState (new StateLinkAttack (pc, pc.selected_weapon_prefab, 30));
-				else if (pc.selected_weapon_prefab.name == "Arrow" && pc.rupee_count > 0) {
-					MonoBehaviour.print ("hello???");
-					state_machine.ChangeState (new StateLinkAttack (pc, pc.selected_weapon_prefab, 30));
-				}
+                if ((pc.selected_weapon_prefab.name == "Bomb") && (pc.bomb_count > 0)) {
+                    pc.OnAttack(AttackType.BOMB);
+                    state_machine.ChangeState(new StateLinkBombAttack(pc, pc.selected_weapon_prefab, 6));
+                } else if (pc.selected_weapon_prefab.name == "Boomerang") {
+                    state_machine.ChangeState(new StateLinkAttack(pc, pc.selected_weapon_prefab, 30));
+                    pc.OnAttack(AttackType.PROJECTILE);
+                } else if (pc.selected_weapon_prefab.name == "Arrow" && pc.rupee_count > 0) {
+                    MonoBehaviour.print("hello???");
+                    state_machine.ChangeState(new StateLinkAttack(pc, pc.selected_weapon_prefab, 30));
+                    pc.OnAttack(AttackType.PROJECTILE);
+                }
 			}
         }
 
