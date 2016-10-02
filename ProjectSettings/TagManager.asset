@@ -25,6 +25,9 @@ TagManager:
   - Sword
   - BombReleased
   - Arrow
+  - BladeTrapTrigger
+  - Wallmaster
+  - Clock
   layers:
   - Default
   - TransparentFX

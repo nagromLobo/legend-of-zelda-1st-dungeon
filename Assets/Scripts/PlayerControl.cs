@@ -11,7 +11,7 @@ public class PlayerControl : MonoBehaviour {
     public float walkingVelocity = 1.0f;
     public Color LinkDamageColor;
     public float damageCooldown = 1;
-    public float damageFlashLength = 0.2f;
+    public float flashLength = 0.2f;
     public float timeToEnterThreshold = 1.0f;
     public float delayInThreshold = 1.0f;
     public float timeToLeaveThreshold = 1.0f;
@@ -28,6 +28,10 @@ public class PlayerControl : MonoBehaviour {
     public bool triforce_retrieved = false;
     public bool bow_retrieved = false;
     public bool boomerang_retrieved = false;
+    public bool invincibleCheat = false;
+    public bool invincible = false;
+    public float invincablityCooldown = 2.0f;
+    public Color invincablityColor;
 
     public int threshold_width = 2;
 
@@ -69,6 +73,8 @@ public class PlayerControl : MonoBehaviour {
     private Color normalColor;
     private Vector3 startPosition;
     private Wallmaster linkGrabber;
+    private float lastInvincibilityStartTime;
+    private float invincibilityStartTime;
 
     public static PlayerControl instance;
 
@@ -105,6 +111,14 @@ public class PlayerControl : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
+        // handle cheat code 
+        if (Input.GetKeyDown("f1")) {
+            if (!invincibleCheat) {
+                invincibleCheat = true;
+            } else {
+                invincibleCheat = false;
+            }
+        }
         switch (current_state) {
             case EntityState.NORMAL:
                 spriteRenderer.color = normalColor;
@@ -121,6 +135,10 @@ public class PlayerControl : MonoBehaviour {
             case EntityState.GRABBED:
                 handleGrabbed();
                 break;
+        }
+
+        if(invincible) {
+            handleLinkInvincable();
         }
         
 		animation_state_machine.Update ();
@@ -191,10 +209,10 @@ public class PlayerControl : MonoBehaviour {
 
     private void handleDamaged() {
         // then we should show damaged color in the flash
-        if((Time.time - lastDamageFlashTime) < (damageFlashLength)) {
+        if((Time.time - lastDamageFlashTime) < (flashLength)) {
             spriteRenderer.color = LinkDamageColor;
           // else if the amount of time passed is less than 2 times the flash rate, stay normal
-        } else if((Time.time - lastDamageFlashTime) < (2* damageFlashLength)) {
+        } else if((Time.time - lastDamageFlashTime) < (2* flashLength)) {
             spriteRenderer.color = normalColor;
         // else start the cycle over
         } else {
@@ -206,6 +224,21 @@ public class PlayerControl : MonoBehaviour {
             spriteRenderer.color = normalColor;
         }
         
+    }
+
+    private void handleLinkInvincable() {
+        if((Time.time - lastInvincibilityStartTime) < flashLength) {
+            spriteRenderer.color = invincablityColor;
+        } else if ((Time.time - lastInvincibilityStartTime) < (2 * flashLength)) {
+            spriteRenderer.color = normalColor;
+        } else {
+            lastInvincibilityStartTime = Time.time;
+            spriteRenderer.color = invincablityColor;
+        }
+        if((Time.time - invincibilityStartTime) > invincablityCooldown) {
+            invincible = false;
+            spriteRenderer.color = normalColor;
+        }
     }
 
     void OnTriggerEnter(Collider coll) {
@@ -239,6 +272,10 @@ public class PlayerControl : MonoBehaviour {
 				small_key_count++;
 				Hud.UpdateKeys();
 				break;
+            case "Clock":
+                MakePlayerInvincible();
+                Destroy(coll.gameObject);
+                break;
             // Weapon Collectables
             case "Bow":
 				//cannot use bow unless you have arrows 
@@ -277,13 +314,12 @@ public class PlayerControl : MonoBehaviour {
                 half_heart_count = max_half_heart_count;
                 break;
             case "Door":
-                if (current_state == EntityState.NORMAL) {
+                if ((current_state == EntityState.NORMAL) || (current_state == EntityState.DAMAGED)) {
                     CameraControl.S.MoveCamera(current_direction);
                 }
                 break;
                 // dont let link get damaged into a door
-            case "DoorThreshold":
-                //FIXME --> SET UP DOOR THRESHOLD
+            case "Threshold":
                 if(current_state == EntityState.DAMAGED) {
                     GetComponent<Rigidbody>().velocity = Vector3.zero;
                 }
@@ -293,37 +329,56 @@ public class PlayerControl : MonoBehaviour {
         }
     }
 
+    void OnTriggerStay(Collider coll) {
+        switch (coll.gameObject.tag) {
+            case "Threshold":
+                if(current_state == EntityState.DAMAGED) {
+                    GetComponent<Rigidbody>().velocity = Vector3.zero;
+                }
+                break;
+        }
+    }
+
+    public void MakePlayerInvincible() {
+        invincible = true;
+        lastInvincibilityStartTime = Time.time;
+        invincibilityStartTime = lastInvincibilityStartTime;
+        spriteRenderer.color = invincablityColor;
+    }
+
+
     public void linkDamaged(int damage, Vector3 normal) {
-        normal = Vector3.Normalize(normal);
-        // turns off player control
-        control_state_machine.ChangeState(new StateLinkStunnedMovement(this, damageCooldown / 2, normal));
-        Sprite[] animation = new Sprite[2];
-        switch (current_direction) {
-            case Direction.NORTH:
-                animation = link_run_up;
-                break;
-            case Direction.EAST:
-                animation = link_run_right;
-                break;
-            case Direction.SOUTH:
-                animation = link_run_down;
-                break;
-            case Direction.WEST:
-                animation = link_run_left;
-                break;
-        }
-        animation_state_machine.ChangeState(new StateLinkDoorMovementAnimation(this, spriteRenderer, animation, 6, damageCooldown / 2));
+        if(!invincibleCheat && !invincible) {
+            normal = Vector3.Normalize(normal);
+            // turns off player control
+            control_state_machine.ChangeState(new StateLinkStunnedMovement(this, damageCooldown / 2, normal));
+            Sprite[] animation = new Sprite[2];
+            switch (current_direction) {
+                case Direction.NORTH:
+                    animation = link_run_up;
+                    break;
+                case Direction.EAST:
+                    animation = link_run_right;
+                    break;
+                case Direction.SOUTH:
+                    animation = link_run_down;
+                    break;
+                case Direction.WEST:
+                    animation = link_run_left;
+                    break;
+            }
+            animation_state_machine.ChangeState(new StateLinkDoorMovementAnimation(this, spriteRenderer, animation, 6, damageCooldown / 2));
 
-        current_state = EntityState.DAMAGED;
-        half_heart_count -= damage;
-        Hud.UpdateLives();
-        if(half_heart_count <= 0) {
-            current_state = EntityState.GAME_OVER;
-        }
+            current_state = EntityState.DAMAGED;
+            half_heart_count -= damage;
+            Hud.UpdateLives();
+            if (half_heart_count <= 0) {
+                current_state = EntityState.GAME_OVER;
+            }
 
-        damageStartTime = Time.time;
-        lastDamageFlashTime = damageStartTime;
-        
+            damageStartTime = Time.time;
+            lastDamageFlashTime = damageStartTime;
+        } 
     }
 
     public void CameraMoved(Direction d, float cameraTransitionTime) {

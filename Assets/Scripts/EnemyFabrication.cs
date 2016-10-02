@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using UnityEngine.SceneManagement;
 
 public class EnemyFabrication : MonoBehaviour {
     public Vector3[] roomCameraPositions = new Vector3[14]; // an array containing the set camera positions for rooms
@@ -122,6 +123,14 @@ public class EnemyFabrication : MonoBehaviour {
         pushableBlocks[0].SetUpPushableTile(true, true, true, true, pushableTileCoords[0], 7, false);
         // pushable in every direction besides from the west
         pushableBlocks[1].SetUpPushableTile(true, true, true, false, pushableTileCoords[1], 0, true);
+    }
+
+    void Update() {
+        if (Input.GetKeyDown("f5")) {
+            SceneManager.LoadScene("Dungeon");
+        } else if (Input.GetKeyDown("f6")) {
+            SceneManager.LoadScene("Custom");
+        }
     }
 
     void OnBlockPushed(PushableBlock pushedBlock) {

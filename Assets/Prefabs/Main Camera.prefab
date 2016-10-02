@@ -160,7 +160,7 @@ MonoBehaviour:
   - {x: 71.51, y: 39.41, z: -10}
   - {x: 71.51, y: 50.41, z: -10}
   - {x: 7.51, y: 39.41, z: -10}
-  numEnemiesInRooms: 01000000030000000500000003000000050000000600000008000000030000000400000003000000030000000400000003000000010000000100000000000000
+  numEnemiesInRooms: 01000000030000000500000003000000050000000600000008000000030000000400000003000000030000000400000003000000010000000100000002000000
   enemy_prefabs:
   - {fileID: 1000014059354290, guid: 997b551be0ad7864c913270cc97f6161, type: 2}
   - {fileID: 1000012053100012, guid: 472e2daafbce35644ae7ecef9de5e05b, type: 2}
@@ -177,7 +177,7 @@ MonoBehaviour:
   - {fileID: 1000012233601454, guid: 8ebbf67e20b339e49947a3c50aef4770, type: 2}
   - {fileID: 1000013547112128, guid: debcb57aac9346e43afe67e36f4099f5, type: 2}
   - {fileID: 1000014059354290, guid: 997b551be0ad7864c913270cc97f6161, type: 2}
-  - {fileID: 1000014059354290, guid: 997b551be0ad7864c913270cc97f6161, type: 2}
+  - {fileID: 1000010660467810, guid: edba1c1d4278e7f45bf265882dbec22e, type: 2}
   timeBetweenWallMasterSpawn: 1
   timeBetweenWallMasterSpawnDoor: 0.5
   doorWaitDuration: 2
@@ -191,6 +191,10 @@ MonoBehaviour:
     type: 2}
   boomerangPrefab: {fileID: 1000011314384716, guid: 198c3837c99eee84982db4451c5cc7cc,
     type: 2}
+  room15TextEngine: {fileID: 0}
+  flamePrefab: {fileID: 1000010660467810, guid: edba1c1d4278e7f45bf265882dbec22e,
+    type: 2}
+  NPCprefab: {fileID: 1000012669693750, guid: 85629f8c84941d243ad9a1a569e92188, type: 2}
   eventCoords:
   - {x: 0, y: 0, z: 0}
   - {x: 26, y: 2, z: 0}
@@ -207,6 +211,7 @@ MonoBehaviour:
   - {x: 56, y: 40, z: 0}
   - {x: 0, y: 0, z: 0}
   - {x: 78, y: 49, z: 0}
+  - {x: 7, y: 37.5, z: 0}
 --- !u!114 &114000013806003404
 MonoBehaviour:
   m_ObjectHideFlags: 1
