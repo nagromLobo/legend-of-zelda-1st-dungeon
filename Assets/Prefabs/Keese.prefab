@@ -87,13 +87,17 @@ MonoBehaviour:
   timeToCrossTile: 0.3
   turnProbability: 0.02
   heartCount: 1
-  damageFlashLength: 1
+  damageFlashLength: 0.2
   spriteAnimation:
   - {fileID: 21300306, guid: ed8d739b8ae50f145b00b1db86c365bf, type: 3}
   - {fileID: 21300308, guid: ed8d739b8ae50f145b00b1db86c365bf, type: 3}
   enemyDamageColor: {r: 1, g: 0, b: 0, a: 1}
   damageCooldown: 2
+  damageDistancePushback: 3
+  stunable: 0
   currDirection: 2
+  kill_type: 0
+  ItemDropFrequency: 0.3
   pauseProbability: 0.2
   pauseSlowdownTime: 0.2
   maxFlyRadius: 15

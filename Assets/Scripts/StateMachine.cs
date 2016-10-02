@@ -311,6 +311,7 @@ public class StateLinkAttack : State {
 			GameObject.FindWithTag ("Arrow").GetComponent<Arrow> ().released = true;
 			pc.rupee_count -= 1;
 			Hud.UpdateRupees ();
+			MonoBehaviour.print ("decrement rupee");
 			//MonoBehaviour.Destroy (BowInstance);
 		} else if (weapon_prefab.name != "Boomerang") {
 
@@ -322,6 +323,7 @@ public class StateLinkAttack : State {
 				MonoBehaviour.Destroy (weapon_instance);
 			} 
 		} else {
+			MonoBehaviour.print ("Arrow should not be in here");
 			MonoBehaviour.Destroy (weapon_instance);
 		}
 
@@ -510,12 +512,14 @@ public class StateLinkStunnedSprite : State {
         //handle no weapon selection
         if (Input.GetKeyDown(KeyCode.S)) {
 			if(pc.selected_weapon_prefab != null) {
-	            if ((pc.selected_weapon_prefab.name == "Bomb") && (pc.bomb_count > 0))
-	                state_machine.ChangeState(new StateLinkBombAttack(pc, pc.selected_weapon_prefab, 6));
+				if ((pc.selected_weapon_prefab.name == "Bomb") && (pc.bomb_count > 0))
+					state_machine.ChangeState (new StateLinkBombAttack (pc, pc.selected_weapon_prefab, 6));
 				else if (pc.selected_weapon_prefab.name == "Boomerang")
-					state_machine.ChangeState(new StateLinkAttack(pc, pc.selected_weapon_prefab, 70));
-				else if (pc.selected_weapon_prefab.name == "Arrow" && pc.rupee_count > 0)
-					state_machine.ChangeState(new StateLinkAttack(pc, pc.selected_weapon_prefab, 30));
+					state_machine.ChangeState (new StateLinkAttack (pc, pc.selected_weapon_prefab, 30));
+				else if (pc.selected_weapon_prefab.name == "Arrow" && pc.rupee_count > 0) {
+					MonoBehaviour.print ("hello???");
+					state_machine.ChangeState (new StateLinkAttack (pc, pc.selected_weapon_prefab, 30));
+				}
 			}
         }
 

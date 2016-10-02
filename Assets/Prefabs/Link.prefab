@@ -68,8 +68,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.72, y: 0.35, z: 0.2}
-  m_Center: {x: 0, y: -0.3, z: 0}
+  m_Size: {x: 0.66, y: 0.3, z: 0.2}
+  m_Center: {x: 0, y: -0.24, z: 0}
 --- !u!114 &114000011983498478
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -84,26 +84,22 @@ MonoBehaviour:
   walkingVelocity: 4
   LinkDamageColor: {r: 0.9117647, g: 0.23464532, b: 0.23464532, a: 1}
   damageCooldown: 1.5
-  flashLength: 0.2
+  damageFlashLength: 0.1
   timeToEnterThreshold: 0.5
   delayInThreshold: 1.5
   timeToLeaveThreshold: 1
-  distanceToLeaveThreshold: 2.5
+  distanceToLeaveThreshold: 1.5
   distanceToEnterThreshold: 1
   rupee_count: 0
   bomb_count: 0
   max_half_heart_count: 6
-  half_heart_count: 1000
+  half_heart_count: 6
   small_key_count: 4
   map_retrieved: 0
   compass_retrieved: 0
   triforce_retrieved: 0
   bow_retrieved: 0
   boomerang_retrieved: 0
-  invincibleCheat: 0
-  invincible: 0
-  invincablityCooldown: 15
-  invincablityColor: {r: 0, g: 0.41110554, b: 0.8897059, a: 1}
   threshold_width: 4
   link_run_down:
   - {fileID: 21300000, guid: 45afd34443b96473598b76e2b1778b4e, type: 3}
@@ -126,7 +122,7 @@ MonoBehaviour:
   Inventory: []
   Sword_prefab: {fileID: 1000012755623840, guid: dde012012b86747cabe96058f1e2424d,
     type: 2}
-  selected_weapon_prefab: {fileID: 1000013872525264, guid: 213a0da10235c40b29a3110c930b64e9,
+  selected_weapon_prefab: {fileID: 1000012755623840, guid: dde012012b86747cabe96058f1e2424d,
     type: 2}
 --- !u!212 &212000013295226446
 SpriteRenderer:

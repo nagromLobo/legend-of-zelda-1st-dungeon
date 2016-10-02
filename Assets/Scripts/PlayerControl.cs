@@ -2,6 +2,7 @@
 using System.Collections;
 using System;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 public enum Direction {NORTH, EAST, SOUTH, WEST};
 public enum EntityState {NORMAL, ATTACKING, DAMAGED, CAMERA_TRANSITION, ENTERING_ROOM, GAME_OVER, GRABBED};
@@ -57,6 +58,13 @@ public class PlayerControl : MonoBehaviour {
 
 	public GameObject selected_weapon_prefab;
 
+	public bool ________________________;
+	public GameObject rupee_prefab; // set prefab
+	public GameObject bomb_prefab; //set
+	public GameObject heart_prefab;
+	public GameObject clock_prefab;
+	public bool ___________________;
+
     //public GameObject BowPrefab;
     public delegate void PlayerInRoom();
     public PlayerInRoom playerInRoom;
@@ -76,15 +84,36 @@ public class PlayerControl : MonoBehaviour {
     private float lastInvincibilityStartTime;
     private float invincibilityStartTime;
 
+	public int enemy_kill_count = 0; //mod 10
+	public GameObject[,] ItemDrops; //10 by 3 array
+	//Item drop chart from here: http://www.zeldaspeedruns.com/loz/generalknowledge/item-drops-chart
     public static PlayerControl instance;
 
     // runs before any start function gets called
     void Awake() {
+		ItemDrops = new GameObject[10,3];
         if (instance != null) {
             Debug.LogError("Mutiple Link objects detected:");
         }
         instance = this;
-        //print("in start"); 
+        //print("in start");
+		for(int i = 0; i < 10; i++) {
+			for(int j = 1; j < 3; j++) {
+				ItemDrops[i,j] = rupee_prefab;
+			}
+		}
+		ItemDrops [1, 1] = bomb_prefab;
+		//ItemDrops [1] [0] = heart_prefab;
+		ItemDrops [2, 2] = heart_prefab;
+		ItemDrops [3, 1] = clock_prefab;
+		ItemDrops [5, 1] = heart_prefab;
+		ItemDrops [5, 2] = heart_prefab;
+		ItemDrops [6, 1] = bomb_prefab;
+		ItemDrops [6, 2] = clock_prefab;
+		ItemDrops [8, 1] = bomb_prefab;
+		ItemDrops [9, 1] = heart_prefab;
+		ItemDrops [0, 1] = heart_prefab;
+
     }
 
     // Use this for initialization
@@ -129,8 +158,12 @@ public class PlayerControl : MonoBehaviour {
             case EntityState.ENTERING_ROOM:
                 handleTransitionMovement();
                 break;
-            case EntityState.DAMAGED:
-                handleDamaged();
+			case EntityState.DAMAGED:
+				if (half_heart_count <= 0) {
+					//animate death sequence
+					SceneManager.LoadScene ("Dungeon");
+				}
+	            handleDamaged();
                 break;
             case EntityState.GRABBED:
                 handleGrabbed();
@@ -324,6 +357,12 @@ public class PlayerControl : MonoBehaviour {
                     GetComponent<Rigidbody>().velocity = Vector3.zero;
                 }
                 break;
+			case "EnemyProjectiles":
+				//TO DO: Test me!!
+				Vector3 EnemyProjectilePos = coll.gameObject.transform.position.normalized;
+				if(current_direction == UtilityFunctions.DirectionFromNormal(EnemyProjectilePos)) //LOL!!
+					Destroy (coll.gameObject); 
+				break;
             default:
                 break;
         }
@@ -456,4 +495,20 @@ public class PlayerControl : MonoBehaviour {
         control_state_machine.ChangeState(new StateLinkNormalMovement(this));
         current_state = EntityState.NORMAL;
     }
+
+	public void KillCount(Enemy e) {
+		enemy_kill_count = (enemy_kill_count + 1) % 10;
+
+	}
+
+	public void EnemyDestroyed(Enemy e) {
+		//enemy 0 doesn't drop any items
+		if (e.kill_type != 0) {
+			if (UnityEngine.Random.value <= e.ItemDropFrequency) {
+				GameObject prefab = ItemDrops [enemy_kill_count, e.kill_type];
+				GameObject new_item_drop = Instantiate (prefab, e.gameObject.transform.position, Quaternion.identity) as GameObject;
+				//could do this properly but I won't
+			}
+		}
+	}
 }
