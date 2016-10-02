@@ -12,7 +12,7 @@ public class Enemy : MonoBehaviour {
     public Sprite[] spriteAnimation;
     public Color enemyDamageColor = Color.red;
     public float damageCooldown = 2.0f;
-    public float damageDistancePushback = 3.0f;
+    public float damageDistancePushback = 4.0f;
     public bool stunable = false;
 
     public delegate void onEnemyDestroyed(GameObject enemy);
@@ -156,8 +156,10 @@ public class Enemy : MonoBehaviour {
                 return;
             }
             else {
-                Vector3 pushback = (this.transform.position - other.transform.position).normalized;
+                // find the nearest axis for pushback
+                Vector3 pushback = UtilityFunctions.roundToNearestAxis((this.transform.position - other.transform.position).normalized);
                 pushback.Set(Mathf.Round(pushback.x), Mathf.Round(pushback.y), Mathf.Round(pushback.z));
+                currDirection = UtilityFunctions.DirectionFromNormal(pushback);
                 control_statemachine.ChangeState(new StateEnemyDamaged(this, currDirection, turnProbability, damageCooldown / 2,  damageDistancePushback, pushback));
             }
         }

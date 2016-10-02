@@ -239,4 +239,10 @@ public class Tile : MonoBehaviour {
         bc.isTrigger = true;
         bc.tag = "Threshold";
     }
+
+    void OnTriggerEnter(Collider other) {
+        if(other.gameObject.tag == "Arrow") {
+            Destroy(other.gameObject);
+        }
+    }
 }

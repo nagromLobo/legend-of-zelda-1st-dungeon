@@ -37,7 +37,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44692534, g: 0.49678725, b: 0.5750856, a: 1}
+  m_IndirectSpecularColor: {r: 0.44692492, g: 0.4967869, b: 0.57508546, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -303,38 +303,14 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 114000011983498478, guid: c97bfe769aefea44ab78bf8352a110c3,
         type: 2}
-      propertyPath: walkingVelocity
-      value: 4
+      propertyPath: distanceToLeaveThreshold
+      value: 2.5
       objectReference: {fileID: 0}
     - target: {fileID: 114000011983498478, guid: c97bfe769aefea44ab78bf8352a110c3,
         type: 2}
       propertyPath: selected_weapon_prefab
       value: 
       objectReference: {fileID: 1000013872525264, guid: 213a0da10235c40b29a3110c930b64e9,
-        type: 2}
-    - target: {fileID: 114000011983498478, guid: c97bfe769aefea44ab78bf8352a110c3,
-        type: 2}
-      propertyPath: rupee_prefab
-      value: 
-      objectReference: {fileID: 1000013996505824, guid: b6f36fa3f01f3af4283c53d830a454a7,
-        type: 2}
-    - target: {fileID: 114000011983498478, guid: c97bfe769aefea44ab78bf8352a110c3,
-        type: 2}
-      propertyPath: bomb_prefab
-      value: 
-      objectReference: {fileID: 1000010690206656, guid: 47e5d1908535e1d43a847712bbd36dd0,
-        type: 2}
-    - target: {fileID: 114000011983498478, guid: c97bfe769aefea44ab78bf8352a110c3,
-        type: 2}
-      propertyPath: heart_prefab
-      value: 
-      objectReference: {fileID: 1000010487066540, guid: bcd4c86912591a14c97ab134f636d640,
-        type: 2}
-    - target: {fileID: 114000011983498478, guid: c97bfe769aefea44ab78bf8352a110c3,
-        type: 2}
-      propertyPath: clock_prefab
-      value: 
-      objectReference: {fileID: 1000011643158080, guid: 3d8c5c0c72ef87f41a5d65928c809cf8,
         type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: c97bfe769aefea44ab78bf8352a110c3, type: 2}

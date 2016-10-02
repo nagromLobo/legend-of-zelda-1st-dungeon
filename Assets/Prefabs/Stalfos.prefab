@@ -93,7 +93,7 @@ MonoBehaviour:
   - {fileID: 21300178, guid: 8e8a9669d1c0c6943a69f3bf099f7b4b, type: 3}
   enemyDamageColor: {r: 1, g: 0, b: 0, a: 1}
   damageCooldown: 2
-  damageDistancePushback: 3
+  damageDistancePushback: 4
   stunable: 0
   currDirection: 2
   kill_type: 2

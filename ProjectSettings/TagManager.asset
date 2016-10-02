@@ -28,6 +28,7 @@ TagManager:
   - BladeTrapTrigger
   - Wallmaster
   - Clock
+  - BoomerangGoriya
   layers:
   - Default
   - TransparentFX

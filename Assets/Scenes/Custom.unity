@@ -579,6 +579,12 @@ Prefab:
       propertyPath: m_RootOrder
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 114000011983498478, guid: c97bfe769aefea44ab78bf8352a110c3,
+        type: 2}
+      propertyPath: selected_weapon_prefab
+      value: 
+      objectReference: {fileID: 1000011314384716, guid: 198c3837c99eee84982db4451c5cc7cc,
+        type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: c97bfe769aefea44ab78bf8352a110c3, type: 2}
   m_IsPrefabParent: 0

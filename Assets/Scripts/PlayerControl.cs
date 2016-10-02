@@ -41,11 +41,6 @@ public class PlayerControl : MonoBehaviour {
     public Sprite[] link_run_right;
     public Sprite[] link_run_left;
 
-    public Sprite northDoorLeft;
-    public Sprite northDoorRight;
-    public Sprite eastDoor;
-    public Sprite westDoor;
-
     StateMachine animation_state_machine;
 	StateMachine control_state_machine;
 
@@ -317,6 +312,7 @@ public class PlayerControl : MonoBehaviour {
                 break;
             case "Boomerang":
                 Destroy(coll.gameObject);
+                MonoBehaviour.print("Detroy collect Boomerang");
                 boomerang_retrieved = true;
                 break;
             case "Bomb":

@@ -100,6 +100,8 @@ MonoBehaviour:
   ItemDropFrequency: 0.3
   throwBoomerangProbability: 0.1
   boomerangCoolDown: 3
+  boomerangPrefab: {fileID: 1000011314384716, guid: 198c3837c99eee84982db4451c5cc7cc,
+    type: 2}
   goriya_up_prefabs:
   - {fileID: 21300064, guid: ed8d739b8ae50f145b00b1db86c365bf, type: 3}
   - {fileID: 21300094, guid: ed8d739b8ae50f145b00b1db86c365bf, type: 3}

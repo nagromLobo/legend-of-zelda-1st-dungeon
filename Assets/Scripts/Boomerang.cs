@@ -4,8 +4,6 @@ using System.Security.AccessControl;
 
 public class Boomerang : Weapon {
 
-	public GameObject weapon_prefab;
-	public GameObject weapon_instance;
 	public bool released;
 	private bool startAgain = false;
 	private Vector3 FinalDest;
@@ -19,7 +17,6 @@ public class Boomerang : Weapon {
 
 	// Use this for initialization
 	void Awake () {
-		weapon_instance = weapon_prefab;
 		released = false;
 	}
 	void Start() {
@@ -27,31 +24,20 @@ public class Boomerang : Weapon {
 		beginPoint = PlayerControl.instance.transform.position;
 	}
 
-	public void Instantiate() {
-		weapon_instance = MonoBehaviour.Instantiate(weapon_prefab, PlayerControl.instance.transform.position, Quaternion.identity) as GameObject;
-	}
-
 	// Update is called once per frame
 	void Update () {
 		if (released) {
-
 			//if (startAgain) Start();
-
 			float u = (Time.time - StartTime) / half_duration;
 			//weapon_instance.transform.position = Vector3.MoveTowards(beginPoint, FinalDest, step);
 			if (u >= 1) {
-
-				weapon_instance.transform.position = FinalDest;
-
+				transform.position = FinalDest;
 			} else {
-				
-				weapon_instance.transform.position = Vector3.Lerp(beginPoint, FinalDest, u);
+				transform.position = Vector3.Lerp(beginPoint, FinalDest, u);
 
-			}	
-			
+			}
 			//Start ();
 			//weapon_instance.transform.position = Vector3.Lerp(FinalDest, beginPoint - offset, (Time.time/* - StartTime*/) / half_duration);
-
 			//Destroy(weapon_instance);
 		}
 	}

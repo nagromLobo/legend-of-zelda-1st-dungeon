@@ -52,9 +52,8 @@ public class Arrow : Weapon {
 //			Destroy (col.gameObject);
 //		}
 		if (released) {
-			//print("destroy already"); 
-			Destroy (weapon_instance);
-			Destroy (BowInstance);
+            //print("destroy already"); 
+            Destroy(weapon_instance);
 		}
 	}
 
