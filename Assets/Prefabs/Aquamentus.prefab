@@ -54,7 +54,7 @@ Rigidbody:
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 0
-  m_IsKinematic: 1
+  m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 120
   m_CollisionDetection: 0
@@ -93,8 +93,13 @@ MonoBehaviour:
   - {fileID: 21300002, guid: 41c64873aaf27c1488ec3ee32b8e9bee, type: 3}
   enemyDamageColor: {r: 1, g: 0, b: 0, a: 1}
   damageCooldown: 2
+  damageDistancePushback: 3
   stunable: 0
+  enemyHurtAudio: {fileID: 8300000, guid: eb8ae756a4419384581847aa91089e40, type: 3}
+  enemyDiesAudio: {fileID: 8300000, guid: 868213c41352b0a48b342ff24d984a57, type: 3}
   currDirection: 2
+  kill_type: 0
+  ItemDropFrequency: 0.3
   attackProbability: 0.8
   attackAnimation:
   - {fileID: 21300004, guid: 41c64873aaf27c1488ec3ee32b8e9bee, type: 3}

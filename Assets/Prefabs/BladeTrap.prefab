@@ -91,9 +91,16 @@ MonoBehaviour:
   spriteAnimation: []
   enemyDamageColor: {r: 1, g: 0, b: 0, a: 1}
   damageCooldown: 2
+  damageDistancePushback: 3
+  stunable: 0
+  enemyHurtAudio: {fileID: 8300000, guid: eb8ae756a4419384581847aa91089e40, type: 3}
+  enemyDiesAudio: {fileID: 8300000, guid: 868213c41352b0a48b342ff24d984a57, type: 3}
   currDirection: 2
+  kill_type: 0
+  ItemDropFrequency: 0.3
   bladeTrapTriggerPrefab: {fileID: 1000011697571830, guid: 9677b9a276a240b4eb27569e076cd1ac,
     type: 2}
+  trigerRatioToTravel: 0.5
   bladeTrapState: 2
 --- !u!212 &212000013448983884
 SpriteRenderer:

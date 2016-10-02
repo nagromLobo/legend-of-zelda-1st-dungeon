@@ -18,6 +18,11 @@ public class Enemy : MonoBehaviour {
     public delegate void onEnemyDestroyed(GameObject enemy);
     public onEnemyDestroyed OnEnemyDestroyed;
 
+    private AudioSource enemyAudio;
+    public AudioClip enemyHurtAudio;
+    public AudioClip enemyDiesAudio;
+
+
     protected Color normalColor;
     protected float damageStartTime = 0.0f;
     protected SpriteRenderer spriteRenderer;
@@ -45,6 +50,7 @@ public class Enemy : MonoBehaviour {
 	protected virtual void Start () {
         StartEnemyAnimation(currDirection);
         StartEnemyMovement(false);
+        enemyAudio = GetComponent<AudioSource>();
     }
 	
 	// Update is called once per frame
@@ -153,14 +159,19 @@ public class Enemy : MonoBehaviour {
 				PlayerControl.instance.KillCount (this);
 				PlayerControl.instance.EnemyDestroyed (this);
                 Destroy(this.gameObject);
+                enemyAudio.clip = enemyDiesAudio;
+                enemyAudio.Play();
                 return;
             }
+                
             else {
                 // find the nearest axis for pushback
                 Vector3 pushback = UtilityFunctions.roundToNearestAxis((this.transform.position - other.transform.position).normalized);
                 pushback.Set(Mathf.Round(pushback.x), Mathf.Round(pushback.y), Mathf.Round(pushback.z));
                 currDirection = UtilityFunctions.DirectionFromNormal(pushback);
                 control_statemachine.ChangeState(new StateEnemyDamaged(this, currDirection, turnProbability, damageCooldown / 2,  damageDistancePushback, pushback));
+                enemyAudio.clip = enemyHurtAudio;
+                enemyAudio.Play();
             }
         }
     }
