@@ -65,5 +65,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 0
-  horizontialSize: 20
-  verticalSize: 25
+  horizontialSize: 23
+  verticalSize: 13

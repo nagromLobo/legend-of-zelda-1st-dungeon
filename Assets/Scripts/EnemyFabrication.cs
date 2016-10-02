@@ -152,15 +152,6 @@ public class EnemyFabrication : MonoBehaviour {
                 break;
             }
         }
-        List<Vector3> currSpawnGrid = spawnGrid[currentRoom];
-        GameObject currEnemy = enemy_prefabs[currentRoom];
-        // if there are stil enemies in the room to spawn, spawn them
-        for(int i = 0; (i < currSpawnGrid.Count) && (i < numEnemiesInRooms[currentRoom]); ++i) {
-            enemy_instances.Add(Instantiate(currEnemy, currSpawnGrid[i], transform.rotation) as GameObject);
-            if(enemy_instances[i].name != "Flame(Clone)") {
-                enemy_instances[i].GetComponent<Enemy>().OnEnemyDestroyed += OnEnemyDestroyed;
-            }
-        }
         if(currentRoom != prevRoom) {
             // special case for pushable block rooms
             switch (prevRoom) {
@@ -191,6 +182,15 @@ public class EnemyFabrication : MonoBehaviour {
     }
 
     private void playerInRoom() {
+        List<Vector3> currSpawnGrid = spawnGrid[currentRoom];
+        GameObject currEnemy = enemy_prefabs[currentRoom];
+        // if there are stil enemies in the room to spawn, spawn them
+        for (int i = 0; (i < currSpawnGrid.Count) && (i < numEnemiesInRooms[currentRoom]); ++i) {
+            enemy_instances.Add(Instantiate(currEnemy, currSpawnGrid[i], transform.rotation) as GameObject);
+            if (enemy_instances[i].name != "Flame(Clone)") {
+                enemy_instances[i].GetComponent<Enemy>().OnEnemyDestroyed += OnEnemyDestroyed;
+            }
+        }
         // special case for second keese room
         switch (currentRoom) {
             case 5:

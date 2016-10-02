@@ -48,7 +48,7 @@ public class Enemy : MonoBehaviour {
     }
 	
 	// Update is called once per frame
-	void Update () {
+	protected virtual void Update () {
         animation_statemachine.Update();
         control_statemachine.Update();
         if(current_state == EntityState.DAMAGED) {
