@@ -103,7 +103,10 @@
   <ItemGroup>
     <None Include="Assets\Resources\Collision.txt" />
     <None Include="Assets\Resources\Destructible.txt" />
+    <None Include="Assets\Resources\blankRoom.txt" />
+    <None Include="Assets\Resources\customSpriteData.txt" />
     <None Include="Assets\Resources\map_sprites_data.txt" />
+    <None Include="Assets\Resources\newRoom.txt" />
     <None Include="Assets\Resources\spriteText.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2015\UnityVS.CSharp.targets" />
