@@ -123,12 +123,12 @@ public class Hud : MonoBehaviour {
 			if (Input.GetKeyDown (KeyCode.RightArrow)) {
 				print ("no here yet");
 				slots [spot].color = Color.white;
-				spot = (spot + 1) % PlayerControl.instance.Inventory.Count;
+				spot = (spot + 1) % weapon_sprites.Count;
 				//slots [spot].color = Color.red;
 			} else if (Input.GetKeyDown (KeyCode.LeftArrow) && spot > 0) {
 				print ("no not here either");
 				slots [spot].color = Color.white;
-				spot = (spot - 1) % PlayerControl.instance.Inventory.Count;
+				spot = (spot - 1) % weapon_sprites.Count;
 				//slots [spot].color = Color.red;
 			} else if (Input.GetKeyDown (KeyCode.A)) {
 				print (spot);

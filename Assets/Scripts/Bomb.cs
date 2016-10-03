@@ -58,7 +58,6 @@ public class Bomb: Weapon {
 		bomb_dropped = true;
 
 		//onUpdate = true;
-
 		//if (weapon_instance != null) {
 		//if (weapon_instance.gameObject.tag == "BombReleased") { 
 		//print ("released"); 
@@ -67,13 +66,22 @@ public class Bomb: Weapon {
 //			SphereCollider myCollider = weapon_instance.transform.GetComponent<SphereCollider> ();
 //			myCollider.radius = 1.0f; 
 //			//print ("hello"); 
-			Collider[] hitColliders = Physics.OverlapSphere(weapon_instance.transform.position, 1.0f);
-			int i = 0;
-			while (i < hitColliders.Length) {
-				//hitColliders [i].EnemyDamaged( weapon_instance.transform.GetComponent<SphereCollider> ());
-				i++;
+//			Collider[] hitColliders = Physics.OverlapSphere(weapon_instance.transform.position, 1.0f);
+//			int i = 0;
+//			while (i < hitColliders.Length) {
+//				//hitColliders [i].EnemyDamaged( weapon_instance.transform.GetComponent<SphereCollider> ());
+//				i++;
+//			}
+			GameObject[] enemies = GameObject.FindGameObjectsWithTag ("Enemy");
+			if (enemies.Length >= 1) {
+				for(int i = 0; i < enemies.Length; ++i){
+					if (Vector3.Distance (enemies[i].transform.position, weapon_instance.transform.position) <= 2.0f) {
+						//Destroy (enemies [i]);
+						enemies[i].GetComponent<Enemy> ().EnemyDamagedByBomb (damage, 0, weapon_instance.transform.position);
+					}
+				}
 			}
-			Destroy (weapon_instance, 3.0f);
+			Destroy (weapon_instance);
 		}
 		//}
 		//}
@@ -83,18 +91,31 @@ public class Bomb: Weapon {
 
 		if (coll.gameObject.tag == "Enemy") {
 
-			Collider[] hitColliders = Physics.OverlapSphere(weapon_instance.transform.position, 1.0f);
-			int i = 0;
-			while (i < hitColliders.Length) {
-				//hitColliders [i].SendMessage ("EnemyDamaged", weapon_instance.transform.GetComponent<SphereCollider> ());
-				i++;
-			}
+//			Collider[] hitColliders = Physics.OverlapSphere(weapon_instance.transform.position, 1.0f);
+//			int i = 0;
+//			while (i < hitColliders.Length) {
+//				//hitColliders [i].SendMessage ("EnemyDamaged", weapon_instance.transform.GetComponent<SphereCollider> ());
+//				i++;
+//			}
 
 //			SphereCollider myCollider = weapon_instance.transform.GetComponent<SphereCollider> ();
 //			myCollider.radius = 1.0f; 
 //			//print ("hello"); 
 //			Destroy (weapon_instance, 3.0f);
 //			//Destroy (coll.gameObject);
+
+			GameObject[] enemies = GameObject.FindGameObjectsWithTag ("Enemy");
+			if (enemies.Length >= 1) {
+				for(int i = 0; i < enemies.Length; ++i){
+					if (Vector3.Distance (enemies[i].transform.position, weapon_instance.transform.position) <= 2.0f) {
+						//PlayerControl.instance.bomb_count -= 1;
+						//Hud.UpdateBombs ();
+						//Destroy (enemies [i]);
+						enemies[i].GetComponent<Enemy> ().EnemyDamagedByBomb (damage, 0, weapon_instance.transform.position);
+						Destroy (weapon_instance);
+					}
+				}
+			}
 		}
 	}
 } 

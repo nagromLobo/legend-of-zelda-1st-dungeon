@@ -287,7 +287,7 @@ public class StateLinkAttack : State {
 		if (weapon_instance.tag == "Boomerang") {
 
 			MonoBehaviour.print ("in Boomerang");
-			//weapon_instance.GetComponent<Boomerang> ().DirectionGo (pc.current_direction);
+			weapon_instance.GetComponent<Boomerang> ().DirectionGo (pc.current_direction);
 
 			weapon_instance.GetComponent<Boomerang> ().ReleaseBoomerang ();
 			weapon_instance.tag = "BoomerangReleased";
@@ -299,6 +299,8 @@ public class StateLinkAttack : State {
     }
 
     public override void OnUpdate(float time_delta_fraction) {
+		//if (weapon_instance.tag == "Boomerang")
+			//weapon_instance.GetComponent<Boomerang> ().Position (pc.transform.position);
         coolDown -= time_delta_fraction;
         if (coolDown <= 0) {
             ConcludeState();
@@ -738,6 +740,7 @@ public class StateEnemyStunned : State {
     }
 
     public override void OnStart() {
+		MonoBehaviour.print ("I am stunned");
         timeStart = Time.time;
        
     }

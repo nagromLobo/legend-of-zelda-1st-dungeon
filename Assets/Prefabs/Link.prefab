@@ -166,7 +166,7 @@ MonoBehaviour:
   distanceToLeaveThreshold: 2.5
   distanceToEnterThreshold: 1
   rupee_count: 0
-  bomb_count: 1
+  bomb_count: 3
   max_half_heart_count: 6
   half_heart_count: 6
   small_key_count: 3
@@ -194,11 +194,14 @@ MonoBehaviour:
   - {fileID: 21300026, guid: 45afd34443b96473598b76e2b1778b4e, type: 3}
   current_state: 0
   current_direction: 0
+  weapon_prefabs:
+  - {fileID: 1000010690206656, guid: 47e5d1908535e1d43a847712bbd36dd0, type: 2}
+  - {fileID: 1000011314384716, guid: 198c3837c99eee84982db4451c5cc7cc, type: 2}
+  - {fileID: 1000013872525264, guid: 213a0da10235c40b29a3110c930b64e9, type: 2}
   Inventory: []
   Sword_prefab: {fileID: 1000012755623840, guid: dde012012b86747cabe96058f1e2424d,
     type: 2}
-  selected_weapon_prefab: {fileID: 1000011314384716, guid: 198c3837c99eee84982db4451c5cc7cc,
-    type: 2}
+  selected_weapon_prefab: {fileID: 0}
   ________________________: 0
   rupee_prefab: {fileID: 1000013996505824, guid: b6f36fa3f01f3af4283c53d830a454a7,
     type: 2}

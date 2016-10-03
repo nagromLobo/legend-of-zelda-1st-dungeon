@@ -351,25 +351,25 @@ public class PlayerControl : MonoBehaviour {
                 playerAudio.Play();
                 break;
             // Weapon Collectables
-		case "Bow":
+			case "Bow":
 
-				//Hud.AddWeapon (weapon_prefabs [2]);
-				/*if (Inventory.Count == 0) {
-					for (int i = 0; i < weapon_prefabs.Length; ++i) {
-						if (weapon_prefabs [i].name == coll.gameObject.name) {
-							selected_weapon_prefab = weapon_prefabs [i];
-							Inventory.Add (weapon_prefabs [i]);
-						}
-					}
-				} else  {
-					for (int i = 0; i < weapon_prefabs.Length; ++i) {
-						if (weapon_prefabs [i].name == coll.gameObject.name) {
-							if(!Inventory.Contains (coll.gameObject))
+					//Hud.AddWeapon (weapon_prefabs [2]);
+					/*if (Inventory.Count == 0) {
+						for (int i = 0; i < weapon_prefabs.Length; ++i) {
+							if (weapon_prefabs [i].name == coll.gameObject.name) {
+								selected_weapon_prefab = weapon_prefabs [i];
 								Inventory.Add (weapon_prefabs [i]);
-
+							}
 						}
-					}
-				}*/
+					} else  {
+						for (int i = 0; i < weapon_prefabs.Length; ++i) {
+							if (weapon_prefabs [i].name == coll.gameObject.name) {
+								if(!Inventory.Contains (coll.gameObject))
+									Inventory.Add (weapon_prefabs [i]);
+
+							}
+						}
+					}*/
 				Inventory.Add (weapon_prefabs [2]);
 				//cannot use bow unless you have arrows 
                 Destroy(coll.gameObject);
@@ -377,7 +377,8 @@ public class PlayerControl : MonoBehaviour {
                 playerAudio.clip = itemRetrievedAudio;
                 playerAudio.Play();
                 break;
-            case "Boomerang":
+			case "Boomerang":
+				print ("boom");
 				Hud.AddWeapon (coll.gameObject);
 				if (Inventory.Count == 0) {
 					for (int i = 0; i < weapon_prefabs.Length; ++i) {
@@ -390,10 +391,10 @@ public class PlayerControl : MonoBehaviour {
 				} else  {
 					for (int i = 0; i < weapon_prefabs.Length; ++i) {
 						if (weapon_prefabs [i].name == coll.gameObject.name) {
-							if (!Inventory.Contains (coll.gameObject)) {
+							//if (!Inventory.Contains (coll.gameObject)) {
 								//Hud.AddWeapon (weapon_prefabs [i]);
 								Inventory.Add (weapon_prefabs [i]);
-							}
+							//}
 
 						}
 					}
@@ -404,32 +405,32 @@ public class PlayerControl : MonoBehaviour {
                 playerAudio.clip = itemRetrievedAudio;
                 playerAudio.Play();
                 break;
-		case "Bomb":
-			bomb_count++;
-					//update weapon selection
-					//if(bomb_count>=1) ; //add to weapons list
-				/*if (Inventory.Count == 0) {
-					for (int i = 0; i < weapon_prefabs.Length; ++i) {
-						if (weapon_prefabs [i].name == coll.gameObject.name) {
-							selected_weapon_prefab = weapon_prefabs [i];
-							Inventory.Add (weapon_prefabs [i]);
-						}
-					}
-				} else  {
-					for (int i = 0; i < weapon_prefabs.Length; ++i) {
-						if (weapon_prefabs [i].name == coll.gameObject.name) {
-							if(!Inventory.Contains (coll.gameObject))
+			case "Bomb":
+				bomb_count++;
+						//update weapon selection
+						//if(bomb_count>=1) ; //add to weapons list
+					/*if (Inventory.Count == 0) {
+						for (int i = 0; i < weapon_prefabs.Length; ++i) {
+							if (weapon_prefabs [i].name == coll.gameObject.name) {
+								selected_weapon_prefab = weapon_prefabs [i];
 								Inventory.Add (weapon_prefabs [i]);
-							
+							}
 						}
-					}
+					} else  {
+						for (int i = 0; i < weapon_prefabs.Length; ++i) {
+							if (weapon_prefabs [i].name == coll.gameObject.name) {
+								if(!Inventory.Contains (coll.gameObject))
+									Inventory.Add (weapon_prefabs [i]);
+								
+							}
+						}
 				}*/
 				//Inventory.Add (weapon_prefabs [0]);
 				Hud.UpdateBombs ();
 				//Hud.AddWeapon (weapon_prefabs [0]);
 				Destroy(coll.gameObject);
                 break;
-            // Dungeon State Collectables
+	            // Dungeon State Collectables
             case "Map":
                 Destroy(coll.gameObject);
                 map_retrieved = true;
@@ -465,14 +466,16 @@ public class PlayerControl : MonoBehaviour {
                     GetComponent<Rigidbody>().velocity = Vector3.zero;
                 }
                 break;
-            case "EnemyProjectiles":
-                //TO DO: Test me!!
-                Vector3 EnemyProjectilePos = coll.gameObject.transform.position.normalized;
-                if (current_direction == UtilityFunctions.reverseDirection(UtilityFunctions.DirectionFromNormal(EnemyProjectilePos))) //LOL!!
-                    Destroy(coll.gameObject);
-                else {
-                    linkDamaged(1, EnemyProjectilePos);
-                }
+			case "EnemyProjectiles":
+	                //TO DO: Test me!!
+				Vector3 EnemyProjectilePos = coll.gameObject.transform.position.normalized;
+				if (current_direction == UtilityFunctions.reverseDirection (UtilityFunctions.DirectionFromNormal (EnemyProjectilePos)) && coll.gameObject.name != "fireball") //LOL!!
+		                    Destroy (coll.gameObject);
+				else if (coll.gameObject.name != "fireball") {
+					linkDamaged (2, EnemyProjectilePos);
+				} else {
+					linkDamaged (1, EnemyProjectilePos);
+				}
                 break;
             default:
                 break;

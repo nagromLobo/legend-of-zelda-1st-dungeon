@@ -18,14 +18,13 @@ public class Boomerang : Weapon {
 	private float StartTime;
 	float duration;
 	float half_duration;
-	float u = 0.0f;
+	//float u = 0.0f;
 	private bool _isLerping;
-	//private float _timeStartedLerping;
-	//float timer;
-
-	//float second_timer;
+	Vector3 p;
+	Direction d;
 
 	BoomerangState state;
+	float percentageComplete;
 	// Use this for initialization
 	void Awake () {
 		print ("I am awake");
@@ -37,31 +36,36 @@ public class Boomerang : Weapon {
 		//second_timer = -1.0f;
 	}
 
-	Vector3 Position () {
-		return PlayerControl.instance.transform.position;
+//	Vector3 Position () {
+//		return PlayerControl.instance.transform.position;
+//	}
+//
+//	Direction DirectionGo () {
+//		return PlayerControl.instance.current_direction;
+//	}
+
+	public void Position(Vector3 p) {
+		this.p = p;
 	}
 
-	Direction DirectionGo () {
-		return PlayerControl.instance.current_direction;
+	public void DirectionGo(Direction d) {
+		this.d = d;
 	}
 
 	void StartLerp () {
 		//print ("start was called");
 		_isLerping = true;
 		StartTime = Time.time;
-		beginPoint = Position();
+		beginPoint = PlayerControl.instance.transform.position;
 	}
 
 	public void Instantiate () {
-		weapon_instance = MonoBehaviour.Instantiate(weapon_prefab, Position(), Quaternion.identity) as GameObject;
+		weapon_instance = MonoBehaviour.Instantiate(weapon_prefab, PlayerControl.instance.transform.position, Quaternion.identity) as GameObject;
 	}
 
 	// Update is called once per frame
 	void Update () {
 
-		u = (Time.time - StartTime) / half_duration;
-
-		//weapon_instance.transform.position = Vector3.Lerp (beginPoint, FinalDest, u);
 		GameObject[] rupees = GameObject.FindGameObjectsWithTag ("Rupee");
 		if (rupees.Length >= 1) {
 			for(int i = 0; i < rupees.Length; ++i){
@@ -72,13 +76,34 @@ public class Boomerang : Weapon {
 				}
 			}
 		}
+		GameObject[] bombs = GameObject.FindGameObjectsWithTag ("Bomb");
+		if (bombs.Length >= 1) {
+			for(int i = 0; i < bombs.Length; ++i){
+				if (Vector3.Distance (bombs[i].transform.position, weapon_instance.transform.position) <= 0.5) {
+					PlayerControl.instance.bomb_count += 1;
+					Hud.UpdateBombs ();
+					Destroy (bombs [i]);
+				}
+			}
+		}
+
+		GameObject[] hearts = GameObject.FindGameObjectsWithTag ("Heart");
+		if (hearts.Length >= 1) {
+			for(int i = 0; i < hearts.Length; ++i){
+				if (Vector3.Distance (hearts [i].transform.position, weapon_instance.transform.position) <= 0.5) {
+					PlayerControl.instance.rupee_count += 1;
+					Hud.UpdateRupees ();
+					Destroy (hearts [i]);
+				}
+			}
+		}
 
 		if(_isLerping)
 		{
 			if(state == BoomerangState.RELEASED) {
 
 				float timeSinceStarted = Time.time - StartTime;
-				float percentageComplete = timeSinceStarted / half_duration;
+				percentageComplete = timeSinceStarted / half_duration;
 
 				transform.position = Vector3.Lerp (beginPoint, FinalDest, percentageComplete);
 
@@ -87,12 +112,13 @@ public class Boomerang : Weapon {
 					//_isLerping = false;
 					StartTime = Time.time;
 					state = BoomerangState.COMEBACK;
+					percentageComplete = 0.0f;
 				}
 			}
 			if (state == BoomerangState.COMEBACK) {
 				
 				float timeSinceStarted = Time.time - StartTime;
-				float percentageComplete = timeSinceStarted / half_duration;
+				percentageComplete = timeSinceStarted / half_duration;
 
 				transform.position = Vector3.Lerp (FinalDest, PlayerControl.instance.transform.position, percentageComplete);
 
@@ -173,16 +199,16 @@ public class Boomerang : Weapon {
 
 		//Vector3 offset = Vector3.zero;
 		Vector3 weapon_pos = Vector3.zero;
-		if (DirectionGo() == Direction.NORTH) {
+		if (d == Direction.NORTH) {
 			//offset = new Vector3(0, 1, 0);
 			weapon_pos = new Vector3(0, 4, 0);
-		} else if (DirectionGo() == Direction.EAST) {
+		} else if (PlayerControl.instance.current_direction == Direction.EAST) {
 			//offset = new Vector3(1, 0, 0);
 			weapon_pos = new Vector3(4, 0, 0);
-		} else if (DirectionGo() == Direction.SOUTH) {
+		} else if (PlayerControl.instance.current_direction == Direction.SOUTH) {
 			//offset = new Vector3(0, -1, 0);
 			weapon_pos = new Vector3(0, -4, 0);
-		} else if (DirectionGo() == Direction.WEST) {
+		} else if (PlayerControl.instance.current_direction == Direction.WEST) {
 			//offset = new Vector3(-1, 0, 0);
 			weapon_pos = new Vector3(-4, 0, 0);
 		}
@@ -202,8 +228,9 @@ public class Boomerang : Weapon {
 				//Destroy (weapon_instance);
 			} else if (this.state == BoomerangState.RELEASED && coll.gameObject.tag != "Enemy") {
 				FinalDest = weapon_instance.transform.position;
-				u = 1.0f;
+				//u = 1.0f;
 				//timer = 0;
+				percentageComplete = 1.0f;
 			}
 		}
 //		void OnCollisionEnter(Collision coll) {

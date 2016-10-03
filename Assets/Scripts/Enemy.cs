@@ -150,9 +150,9 @@ public class Enemy : MonoBehaviour {
         Weapon w = other.GetComponent<Weapon>();
         int damageHalfHearts = w.damage;
         float stunCoolDown = w.stunCoolDown;
-        int stunCooldown = 0;
-        if (stunCooldown > 0) {
-            control_statemachine.ChangeState(new StateEnemyStunned(this, currDirection, turnProbability, stunCooldown));
+        //int stunCooldown = 0;
+        if (stunCoolDown > 0) {
+            control_statemachine.ChangeState(new StateEnemyStunned(this, currDirection, turnProbability, stunCoolDown));
         }
         if(damageHalfHearts > 0) {
             normalColor = spriteRenderer.color;
@@ -182,6 +182,32 @@ public class Enemy : MonoBehaviour {
             }
         }
     }
+
+	public virtual void EnemyDamagedByBomb(int damage, float cooldown, Vector3 pos) {
+		normalColor = spriteRenderer.color;
+		current_state = EntityState.DAMAGED;
+		damageStartTime = Time.time;
+		heartCount -= damage;
+		if (heartCount <= 0) {
+			// update room state (enemy destroyed)
+			//PlayerControl. count up kills;
+			OnEnemyDestroyed(this.gameObject);
+			PlayerControl.instance.KillCount (this);
+			PlayerControl.instance.EnemyDestroyed (this);
+			Destroy(this.gameObject);
+			enemyAudio.clip = enemyDiesAudio;
+			enemyAudio.Play();
+			return;
+		} else {
+			// find the nearest axis for pushback
+			Vector3 pushback = UtilityFunctions.roundToNearestAxis((this.transform.position - pos).normalized);
+			pushback.Set(Mathf.Round(pushback.x), Mathf.Round(pushback.y), Mathf.Round(pushback.z));
+			currDirection = UtilityFunctions.DirectionFromNormal(pushback);
+			control_statemachine.ChangeState(new StateEnemyDamaged(this, currDirection, turnProbability, damageCooldown / 2,  damageDistancePushback, pushback));
+			enemyAudio.clip = enemyHurtAudio;
+			enemyAudio.Play();
+		}
+	}
 
     private void handleDamaged() {
         // then we should show damaged color in the flash
