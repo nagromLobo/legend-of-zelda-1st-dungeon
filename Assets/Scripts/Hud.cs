@@ -19,8 +19,8 @@ public class Hud : MonoBehaviour {
 	public Text heart_text;
 	public Text key_text;
 	public Text bomb_text;
-	public List<GameObject> weapons = new List<GameObject> (); //these are prefabs
-	static List<GameObject> canSelect = new List<GameObject> ();
+	//public List<GameObject> weapons = new List<GameObject> (); //these are prefabs
+	//static List<GameObject> canSelect = new List<GameObject> ();
 	//public static List<GameObject> weapon_instances = new List<GameObject> ();
 	public static List<Sprite> weapon_sprites = new List<Sprite> ();
 	public static Image [] slots = new Image[3];
@@ -136,11 +136,11 @@ public class Hud : MonoBehaviour {
 				//slots [spot].color = Color.red;
 			} else if (Input.GetKeyDown (KeyCode.A)) {
 				print (spot);
-				print ("how many " + canSelect.Count);
+				//print ("how many " + canSelect.Count);
 				//print (weapons [0].name);
-				print(canSelect [spot].name);
-				pc.Select( canSelect [spot].name);
-				print (pc.selected_weapon_prefab.name);
+//				print(canSelect [spot].name);
+				PlayerControl.instance.Select( spot);
+				//print (pc.selected_weapon_prefab.name);
 			}
 		}
 		// partially sourced from: http://www.blueraja.com/blog/404/how-to-use-unity-3ds-linear-interpolation-vector3-lerp-correctly
@@ -232,20 +232,20 @@ public class Hud : MonoBehaviour {
 
 	public static void AddWeapon(GameObject weapon_prefab) {
 				
-		if (!instance.weapons.Contains (weapon_prefab)) {
+//		if (!instance.weapons.Contains (weapon_prefab)) {
 			print ("added");
 			//GameObject tempingot = Instantiate(weapon_prefab) as GameObject;
 			//weapons.Add (weapon_prefab);
-			foreach (GameObject weapon in instance.weapons) {
-				if (weapon.name == weapon_prefab.name) {
-					print ("I was added " + weapon.name);
-					canSelect.Add (weapon);
-				}
-			}
+//			foreach (GameObject weapon in instance.weapons) {
+//				if (weapon.name == weapon_prefab.name) {
+//					print ("I was added " + weapon.name);
+//					canSelect.Add (weapon);
+//				}
+//			}
 			weapon_sprites.Add (weapon_prefab.GetComponent<SpriteRenderer> ().sprite);
 			//print (weapon_prefab.name); 
-			print ("actually though " + instance.weapons [0]);
-		}
+			//print ("actually though " + instance.weapons [0]);
+//		}
 	}
 
 	public static void RenderWeaponSelection(){

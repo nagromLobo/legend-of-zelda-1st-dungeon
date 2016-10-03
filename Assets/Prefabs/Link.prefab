@@ -123,11 +123,14 @@ MonoBehaviour:
   westDoor: {fileID: 0}
   current_state: 0
   current_direction: 0
+  weapon_prefabs:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   Inventory: []
   Sword_prefab: {fileID: 1000012755623840, guid: dde012012b86747cabe96058f1e2424d,
     type: 2}
-  selected_weapon_prefab: {fileID: 1000013872525264, guid: 213a0da10235c40b29a3110c930b64e9,
-    type: 2}
+  selected_weapon_prefab: {fileID: 0}
   ________________________: 0
   rupee_prefab: {fileID: 1000013996505824, guid: b6f36fa3f01f3af4283c53d830a454a7,
     type: 2}

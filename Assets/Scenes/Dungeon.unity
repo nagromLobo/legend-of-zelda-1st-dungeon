@@ -605,11 +605,6 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 114000011983498478, guid: c97bfe769aefea44ab78bf8352a110c3,
-        type: 2}
-      propertyPath: Inventory.Array.size
-      value: 3
-      objectReference: {fileID: 0}
     - target: {fileID: 4000014209406202, guid: c97bfe769aefea44ab78bf8352a110c3, type: 2}
       propertyPath: m_LocalPosition.x
       value: 39.5
@@ -644,25 +639,19 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 114000011983498478, guid: c97bfe769aefea44ab78bf8352a110c3,
         type: 2}
-      propertyPath: selected_weapon_prefab
+      propertyPath: weapon_prefabs.Array.data[0]
       value: 
       objectReference: {fileID: 1000010690206656, guid: 47e5d1908535e1d43a847712bbd36dd0,
         type: 2}
     - target: {fileID: 114000011983498478, guid: c97bfe769aefea44ab78bf8352a110c3,
         type: 2}
-      propertyPath: Inventory.Array.data[0]
-      value: 
-      objectReference: {fileID: 1000010690206656, guid: 47e5d1908535e1d43a847712bbd36dd0,
-        type: 2}
-    - target: {fileID: 114000011983498478, guid: c97bfe769aefea44ab78bf8352a110c3,
-        type: 2}
-      propertyPath: Inventory.Array.data[1]
+      propertyPath: weapon_prefabs.Array.data[1]
       value: 
       objectReference: {fileID: 1000011314384716, guid: 198c3837c99eee84982db4451c5cc7cc,
         type: 2}
     - target: {fileID: 114000011983498478, guid: c97bfe769aefea44ab78bf8352a110c3,
         type: 2}
-      propertyPath: Inventory.Array.data[2]
+      propertyPath: weapon_prefabs.Array.data[2]
       value: 
       objectReference: {fileID: 1000011072288296, guid: 05db943342c3051429fc8ea8e2d4aad9,
         type: 2}
@@ -715,6 +704,48 @@ Prefab:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 47e5d1908535e1d43a847712bbd36dd0, type: 2}
+  m_IsPrefabParent: 0
+--- !u!1001 &1232948194
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4000010283188546, guid: 198c3837c99eee84982db4451c5cc7cc, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 39.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 4000010283188546, guid: 198c3837c99eee84982db4451c5cc7cc, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 7.85
+      objectReference: {fileID: 0}
+    - target: {fileID: 4000010283188546, guid: 198c3837c99eee84982db4451c5cc7cc, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4000010283188546, guid: 198c3837c99eee84982db4451c5cc7cc, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4000010283188546, guid: 198c3837c99eee84982db4451c5cc7cc, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4000010283188546, guid: 198c3837c99eee84982db4451c5cc7cc, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4000010283188546, guid: 198c3837c99eee84982db4451c5cc7cc, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4000010283188546, guid: 198c3837c99eee84982db4451c5cc7cc, type: 2}
+      propertyPath: m_RootOrder
+      value: 8
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: 198c3837c99eee84982db4451c5cc7cc, type: 2}
   m_IsPrefabParent: 0
 --- !u!1 &1496144760
 GameObject:
@@ -1065,10 +1096,6 @@ MonoBehaviour:
   heart_text: {fileID: 1496144761}
   key_text: {fileID: 703118718}
   bomb_text: {fileID: 2142057541}
-  weapons:
-  - {fileID: 1000010690206656, guid: 47e5d1908535e1d43a847712bbd36dd0, type: 2}
-  - {fileID: 1000011314384716, guid: 198c3837c99eee84982db4451c5cc7cc, type: 2}
-  - {fileID: 1000011072288296, guid: 05db943342c3051429fc8ea8e2d4aad9, type: 2}
   panel: {fileID: 2034062072}
 --- !u!114 &2009197298
 MonoBehaviour:
