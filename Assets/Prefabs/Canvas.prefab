@@ -528,7 +528,7 @@ MonoBehaviour:
   heart_text: {fileID: 114000010484592380}
   key_text: {fileID: 114000013902076970}
   bomb_text: {fileID: 114000010267106380}
-  weapons: []
+  panel: {fileID: 224000011909025042}
 --- !u!114 &114000013902076970
 MonoBehaviour:
   m_ObjectHideFlags: 1
