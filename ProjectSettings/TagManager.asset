@@ -30,7 +30,7 @@ TagManager:
   - Clock
   - BoomerangGoriya
   - BlackTile
-  - EnemyProjectiles
+  - BoomerangReleased
   layers:
   - Default
   - TransparentFX

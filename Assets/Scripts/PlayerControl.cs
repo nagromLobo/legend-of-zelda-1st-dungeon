@@ -92,6 +92,8 @@ public class PlayerControl : MonoBehaviour {
     private float lastInvincibilityStartTime;
     private float invincibilityStartTime;
 
+	public GameObject BIGHEART;
+
     public int enemy_kill_count = 0; //mod 10
     public GameObject[,] ItemDrops; //10 by 3 array
                                     //Item drop chart from here: http://www.zeldaspeedruns.com/loz/generalknowledge/item-drops-chart
@@ -374,6 +376,7 @@ public class PlayerControl : MonoBehaviour {
                 half_heart_count = max_half_heart_count;
                 playerAudio.clip = heartRetrievedAudio;
                 playerAudio.Play();
+                Hud.UpdateLives();
                 break;
             case "Door":
                 if ((current_state == EntityState.NORMAL) || (current_state == EntityState.DAMAGED)) {
@@ -544,6 +547,9 @@ public class PlayerControl : MonoBehaviour {
                 //could do this properly but I won't
             }
         }
+		if (e.name == "Aquamentus(Clone)") {
+			GameObject new_item_drop = Instantiate(BIGHEART, e.gameObject.transform.position, Quaternion.identity) as GameObject;
+		}
     }
 
     public void OnAttack(AttackType attack) {

@@ -67,9 +67,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damage: 0
   stunCoolDown: 3
+  weapon_prefab: {fileID: 1000011314384716}
+  weapon_instance: {fileID: 1000011314384716}
   released: 0
-  duration: 10
-  speed: 5
+  beginPoint: {x: 0, y: 0, z: 0}
 --- !u!212 &212000011502317782
 SpriteRenderer:
   m_ObjectHideFlags: 1

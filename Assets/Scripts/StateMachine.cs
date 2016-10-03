@@ -237,7 +237,9 @@ public class StateLinkAttack : State {
         //weapon_instance = MonoBehaviour.Instantiate(weapon_prefab, pc.transform.position, Quaternion.identity) as GameObject;
 
 		if (weapon_prefab.name == "Boomerang") {
-            weapon_instance = (MonoBehaviour.Instantiate(weapon_prefab, PlayerControl.instance.transform.position, Quaternion.identity) as GameObject);
+            //weapon_instance = (MonoBehaviour.Instantiate(weapon_prefab, PlayerControl.instance.transform.position, Quaternion.identity) as GameObject);
+			weapon_prefab.GetComponent<Boomerang> ().Instantiate ();
+			weapon_instance = GameObject.FindWithTag ("Boomerang").GetComponent<Boomerang> ().weapon_instance;
 
 		} else if (weapon_prefab.name == "Arrow") {
 
@@ -286,8 +288,9 @@ public class StateLinkAttack : State {
 
 			MonoBehaviour.print ("in Boomerang");
 
-			GameObject.FindWithTag ("Boomerang").GetComponent<Boomerang> ().ReleaseBoomerang (duration);
-			GameObject.FindWithTag ("Boomerang").GetComponent<Boomerang> ().released = true;
+			GameObject.FindWithTag ("Boomerang").GetComponent<Boomerang> ().ReleaseBoomerang ();
+			weapon_instance.tag = "BoomerangReleased";
+			GameObject.FindWithTag ("BoomerangReleased").GetComponent<Boomerang> ().released = true;
 		}
 
 		//MonoBehaviour.print("after " + weapon_instance.transform.position);

@@ -122,7 +122,7 @@ AudioSource:
       tangentMode: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
-    m_RotationOrder: 4
+    m_RotationOrder: 0
   spreadCustomCurve:
     serializedVersion: 2
     m_Curve:
@@ -144,7 +144,7 @@ AudioSource:
       tangentMode: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
-    m_RotationOrder: 4
+    m_RotationOrder: 0
 --- !u!114 &114000012626420674
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -170,6 +170,9 @@ MonoBehaviour:
   damageCooldown: 2
   damageDistancePushback: 3
   stunable: 0
+  keyPrefab: {fileID: 0}
+  keyInstance: {fileID: 0}
+  hasKey: 0
   enemyHurtAudio: {fileID: 8300000, guid: eb8ae756a4419384581847aa91089e40, type: 3}
   enemyDiesAudio: {fileID: 8300000, guid: 868213c41352b0a48b342ff24d984a57, type: 3}
   currDirection: 2
