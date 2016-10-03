@@ -336,7 +336,6 @@ MonoBehaviour:
   pushableTileCoords:
   - {x: 23, y: 38, z: 0}
   - {x: 22, y: 60, z: 0}
-  - {x: 39, y: 4, z: 0}
   pushableTilePrefab: {fileID: 1000012912163634, guid: 102bd2c809d038e499d5aab9d5a58de4,
     type: 2}
   slideableBlocksPrefab: {fileID: 1000013177599788, guid: c3d5b51ab1d27c6418f35aad171478d6,
@@ -349,6 +348,8 @@ MonoBehaviour:
   flamePrefab: {fileID: 1000010660467810, guid: edba1c1d4278e7f45bf265882dbec22e,
     type: 2}
   NPCprefab: {fileID: 1000012669693750, guid: 85629f8c84941d243ad9a1a569e92188, type: 2}
+  triforcePrefab: {fileID: 0}
+  triforceLocation: {x: 0, y: 0, z: 0}
   eventCoords:
   - {x: 0, y: 0, z: 0}
   - {x: 26, y: 2, z: 0}
