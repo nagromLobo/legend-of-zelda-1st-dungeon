@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using System;
+using UnityEditor;
 
 public class Hud : MonoBehaviour {
 
@@ -135,6 +136,7 @@ public class Hud : MonoBehaviour {
 				//print (weapons [0].name);
 //				print(canSelect [spot].name);
 				PlayerControl.instance.Select( spot);
+				selected.text = "B: " + PlayerControl.instance.selected_weapon_prefab.name;
 				//print (pc.selected_weapon_prefab.name);
 			}
 		}
