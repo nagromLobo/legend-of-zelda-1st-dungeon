@@ -4,8 +4,15 @@ using System.Collections;
 public class BladeTrap : Enemy {
     public enum BladeTrapState { FOREWARDS, BACKWARDS, PAUSED }
     public GameObject bladeTrapTriggerPrefab;
+    public float trigerRatioToTravel = 0.5f; // how much of the trigger to travel over
     private RoomSizedTrigger[] triggers = new RoomSizedTrigger[2];
     public BladeTrapState bladeTrapState = BladeTrapState.PAUSED;
+    float vertTriggerSize = 0.0f;
+    float horizTriggerSize = 0.0f;
+    Vector3 startPos;
+
+    public delegate void OnBlackTileTriger(GameObject bladeTrap);
+    public OnBlackTileTriger onBlackTileTriger;
 
     protected override void Start() {
         base.Start();
@@ -15,6 +22,43 @@ public class BladeTrap : Enemy {
         triggers[1].SetTriggerType(RoomSizedTrigger.TriggerType.VERTICAL);
         triggers[0].OnTriggered += OnTriggered;
         triggers[1].OnTriggered += OnTriggered;
+        horizTriggerSize = (((float)triggers[0].horizontialSize) * trigerRatioToTravel);
+        vertTriggerSize = (((float)triggers[1].verticalSize) * trigerRatioToTravel);
+        startPos = transform.position;
+    }
+
+    protected override void Update() {
+        base.Update();
+        bool turn = false;
+        // cut foreward movement at half of the triggersize
+        if(bladeTrapState == BladeTrapState.FOREWARDS) {
+            switch (currDirection) {
+                case Direction.NORTH:
+                    if(transform.position.y >=  startPos.y + (vertTriggerSize / 2)) {
+                        turn = true;
+                    }
+                    break;
+                case Direction.EAST:
+                    if (transform.position.x >= startPos.x + (horizTriggerSize / 2)) {
+                        turn = true;
+                    }
+                    break;
+                case Direction.SOUTH:
+                    if (transform.position.y <= startPos.y - (vertTriggerSize / 2)) {
+                        turn = true;
+                    }
+                    break;
+                case Direction.WEST:
+                    if (transform.position.x <= startPos.x - (horizTriggerSize / 2)) {
+                        turn = true;
+                    }
+                    break;
+            }
+            if (turn) {
+                bladeTrapState = BladeTrapState.BACKWARDS;
+                StartEnemyMovementReverse();
+            }
+        }
     }
 
     protected override void OnCollisionEnter(Collision other) {
@@ -28,7 +72,9 @@ public class BladeTrap : Enemy {
            other.gameObject.tag == "Link") {
             switch (bladeTrapState) {
                 case BladeTrapState.FOREWARDS:
-                    bladeTrapState = BladeTrapState.BACKWARDS;
+                    if((Mathf.Abs(transform.position.x - startPos.x) > 0.5) || ((Mathf.Abs(transform.position.y - startPos.y)) > 0.5)){
+                        bladeTrapState = BladeTrapState.BACKWARDS;
+                    }
                      // this.transform.position = adjustBackToGrid(currDirection, this.transform.position); 
                     StartEnemyMovementReverse();
                     break;
@@ -50,6 +96,7 @@ public class BladeTrap : Enemy {
                     }
                     triggers[0].transform.position = transform.position;
                     triggers[1].transform.position = transform.position;
+                    startPos = transform.position;
                     control_statemachine.Reset();
                     break;
             }
@@ -128,6 +175,13 @@ public class BladeTrap : Enemy {
         //    }
         //    // if not destroyed animate enemy
         //}
+    }
+
+    protected override void OnTriggerEnter(Collider other) {
+        base.OnTriggerEnter(other);
+        if(other.gameObject.tag == "BlackTile") {
+            onBlackTileTriger(this.gameObject);
+        }
     }
 
     void OnDestroy() {

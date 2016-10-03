@@ -89,6 +89,7 @@
     <Compile Include="Assets\Scripts\RoomSizedTrigger.cs" />
     <Compile Include="Assets\Scripts\ShowMap.cs" />
     <Compile Include="Assets\Scripts\ShowMapOnCamera.cs" />
+    <Compile Include="Assets\Scripts\SlideableBlocks.cs" />
     <Compile Include="Assets\Scripts\StateMachine.cs" />
     <Compile Include="Assets\Scripts\TextEngine.cs" />
     <Compile Include="Assets\Scripts\Tile.cs" />

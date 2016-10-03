@@ -23,6 +23,7 @@ GameObject:
   - 54: {fileID: 54000013847636114}
   - 65: {fileID: 65000014174192704}
   - 114: {fileID: 114000011983498478}
+  - 82: {fileID: 82000012425400610}
   m_Layer: 0
   m_Name: Link
   m_TagString: Link
@@ -37,7 +38,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000011019179270}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 39.5, y: 1.283, z: 0}
+  m_LocalPosition: {x: 39.5, y: 2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
@@ -70,6 +71,80 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.66, y: 0.3, z: 0.2}
   m_Center: {x: 0, y: -0.24, z: 0}
+--- !u!82 &82000012425400610
+AudioSource:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000011019179270}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
 --- !u!114 &114000011983498478
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -84,11 +159,11 @@ MonoBehaviour:
   walkingVelocity: 4
   LinkDamageColor: {r: 0.9117647, g: 0.23464532, b: 0.23464532, a: 1}
   damageCooldown: 1.5
-  damageFlashLength: 0.1
+  flashLength: 0.2
   timeToEnterThreshold: 0.5
   delayInThreshold: 1.5
   timeToLeaveThreshold: 1
-  distanceToLeaveThreshold: 1.5
+  distanceToLeaveThreshold: 2.5
   distanceToEnterThreshold: 1
   rupee_count: 0
   bomb_count: 0
@@ -100,6 +175,10 @@ MonoBehaviour:
   triforce_retrieved: 0
   bow_retrieved: 0
   boomerang_retrieved: 0
+  invincibleCheat: 0
+  invincible: 0
+  invincablityCooldown: 2
+  invincablityColor: {r: 0, g: 0, b: 0, a: 0}
   threshold_width: 4
   link_run_down:
   - {fileID: 21300000, guid: 45afd34443b96473598b76e2b1778b4e, type: 3}
@@ -113,17 +192,35 @@ MonoBehaviour:
   link_run_left:
   - {fileID: 21300002, guid: 45afd34443b96473598b76e2b1778b4e, type: 3}
   - {fileID: 21300026, guid: 45afd34443b96473598b76e2b1778b4e, type: 3}
-  northDoorLeft: {fileID: 21300184, guid: f0f45c808d9a24081b7e4914ba46fb1f, type: 3}
-  northDoorRight: {fileID: 21300186, guid: f0f45c808d9a24081b7e4914ba46fb1f, type: 3}
-  eastDoor: {fileID: 21300102, guid: f0f45c808d9a24081b7e4914ba46fb1f, type: 3}
-  westDoor: {fileID: 0}
   current_state: 0
   current_direction: 0
   Inventory: []
   Sword_prefab: {fileID: 1000012755623840, guid: dde012012b86747cabe96058f1e2424d,
     type: 2}
-  selected_weapon_prefab: {fileID: 1000012755623840, guid: dde012012b86747cabe96058f1e2424d,
+  selected_weapon_prefab: {fileID: 1000013872525264, guid: 213a0da10235c40b29a3110c930b64e9,
     type: 2}
+  ________________________: 0
+  rupee_prefab: {fileID: 1000013996505824, guid: b6f36fa3f01f3af4283c53d830a454a7,
+    type: 2}
+  bomb_prefab: {fileID: 1000010690206656, guid: 47e5d1908535e1d43a847712bbd36dd0,
+    type: 2}
+  heart_prefab: {fileID: 1000010487066540, guid: bcd4c86912591a14c97ab134f636d640,
+    type: 2}
+  clock_prefab: {fileID: 1000011643158080, guid: 3d8c5c0c72ef87f41a5d65928c809cf8,
+    type: 2}
+  ___________________: 0
+  _____________________: 0
+  heartRetrievedAudio: {fileID: 8300000, guid: 78d40f9d338c82544a3c56e3fdaeeca3, type: 3}
+  itemRetrievedAudio: {fileID: 8300000, guid: cec63163f488bab49835783959f5f0e6, type: 3}
+  ruppeeRetrievedAudio: {fileID: 8300000, guid: b51b71a221495c949b2c12e425f3e1f7,
+    type: 3}
+  linkHurtAudio: {fileID: 8300000, guid: 2fb4c3bdec27a1345b3d330163cad9d4, type: 3}
+  projectileAudio: {fileID: 8300000, guid: 11ec03e3ee5a1c54c8f856541c37ede1, type: 3}
+  dropingBombAudio: {fileID: 8300000, guid: 2c5d773cfc7d162499d22c875228f816, type: 3}
+  projectileSwordAudio: {fileID: 8300000, guid: 25552bcefd2493d4c99b3d91f54951e4,
+    type: 3}
+  swordSlashAudio: {fileID: 8300000, guid: abdedc2ce303bfa439bbfe7f0ed5441e, type: 3}
+  enemy_kill_count: 0
 --- !u!212 &212000013295226446
 SpriteRenderer:
   m_ObjectHideFlags: 1

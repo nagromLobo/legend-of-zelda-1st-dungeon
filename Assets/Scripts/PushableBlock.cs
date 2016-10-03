@@ -11,6 +11,8 @@ public class PushableBlock : MonoBehaviour {
     public int roomNumber;
     public delegate void OnBlockPushed(PushableBlock pushableBlock);
     public OnBlockPushed onBlockPushed;
+    public delegate void OnBlackTIleTrigered(GameObject pushableBlock);
+    public OnBlackTIleTrigered onBlackTileTrigered;
 
     public enum PushableBlockState {NORMAL, LINK_PUSHING, PUSHED, DONE}
     public PushableBlockState currState = PushableBlockState.NORMAL;
@@ -117,6 +119,12 @@ public class PushableBlock : MonoBehaviour {
             if(onBlockPushed != null) {
                 onBlockPushed(this);
             }
+        }
+    }
+
+    void OnTriggerEnter(Collider other) {
+        if(other.gameObject.tag == "BlackTile") {
+            onBlackTileTrigered(this.gameObject);
         }
     }
 

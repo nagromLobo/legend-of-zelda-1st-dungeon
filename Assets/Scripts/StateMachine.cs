@@ -237,9 +237,7 @@ public class StateLinkAttack : State {
         //weapon_instance = MonoBehaviour.Instantiate(weapon_prefab, pc.transform.position, Quaternion.identity) as GameObject;
 
 		if (weapon_prefab.name == "Boomerang") {
-
-			weapon_prefab.GetComponent<Boomerang> ().Instantiate ();
-			weapon_instance = GameObject.FindWithTag ("Boomerang").GetComponent<Boomerang> ().weapon_instance;
+            weapon_instance = (MonoBehaviour.Instantiate(weapon_prefab, PlayerControl.instance.transform.position, Quaternion.identity) as GameObject);
 
 		} else if (weapon_prefab.name == "Arrow") {
 
@@ -312,8 +310,8 @@ public class StateLinkAttack : State {
 			pc.rupee_count -= 1;
 			Hud.UpdateRupees ();
 			MonoBehaviour.print ("decrement rupee");
-			//MonoBehaviour.Destroy (BowInstance);
-		} else if (weapon_prefab.name != "Boomerang") {
+            MonoBehaviour.Destroy(BowInstance);
+        } else if (weapon_prefab.name != "Boomerang") {
 
 			GameObject.FindWithTag ("Sword").GetComponent<WoodenSword> ().ReleaseSword ();
 			GameObject.FindWithTag ("Sword").GetComponent<WoodenSword> ().released = true;
@@ -321,10 +319,13 @@ public class StateLinkAttack : State {
 			if (pc.half_heart_count != pc.max_half_heart_count) {
 				//MonoBehaviour.print ("if full you should not be here");
 				MonoBehaviour.Destroy (weapon_instance);
-			} 
+                pc.OnAttack(AttackType.MAGIC_SWORD);
+			} else {
+                pc.OnAttack(AttackType.SWORD);
+            }
 		} else {
 			MonoBehaviour.print ("Arrow should not be in here");
-			MonoBehaviour.Destroy (weapon_instance);
+			// MonoBehaviour.Destroy (weapon_instance);
 		}
 
 		MonoBehaviour.print ("conclude the damn state"); 
@@ -512,14 +513,17 @@ public class StateLinkStunnedSprite : State {
         //handle no weapon selection
         if (Input.GetKeyDown(KeyCode.S)) {
 			if(pc.selected_weapon_prefab != null) {
-				if ((pc.selected_weapon_prefab.name == "Bomb") && (pc.bomb_count > 0))
-					state_machine.ChangeState (new StateLinkBombAttack (pc, pc.selected_weapon_prefab, 6));
-				else if (pc.selected_weapon_prefab.name == "Boomerang")
-					state_machine.ChangeState (new StateLinkAttack (pc, pc.selected_weapon_prefab, 30));
-				else if (pc.selected_weapon_prefab.name == "Arrow" && pc.rupee_count > 0) {
-					MonoBehaviour.print ("hello???");
-					state_machine.ChangeState (new StateLinkAttack (pc, pc.selected_weapon_prefab, 30));
-				}
+                if ((pc.selected_weapon_prefab.name == "Bomb") && (pc.bomb_count > 0)) {
+                    pc.OnAttack(AttackType.BOMB);
+                    state_machine.ChangeState(new StateLinkBombAttack(pc, pc.selected_weapon_prefab, 6));
+                } else if (pc.selected_weapon_prefab.name == "Boomerang") {
+                    state_machine.ChangeState(new StateLinkAttack(pc, pc.selected_weapon_prefab, 30));
+                    pc.OnAttack(AttackType.PROJECTILE);
+                } else if (pc.selected_weapon_prefab.name == "Arrow" && pc.rupee_count > 0) {
+                    MonoBehaviour.print("hello???");
+                    state_machine.ChangeState(new StateLinkAttack(pc, pc.selected_weapon_prefab, 30));
+                    pc.OnAttack(AttackType.PROJECTILE);
+                }
 			}
         }
 
@@ -711,12 +715,8 @@ public class StateGoriyaMovement : StateEnemyMovement {
         // instantiate boomerang
         // throw boomerang
         state_machine.ChangeState(new StateEnemyStunned(enemy, direction, turnProbability, boomerangCooldown));
-        
+        enemy.OnEnemyAttack();
     }
-
-
-
-
 }
 
 public class StateEnemyStunned : State {

@@ -25,11 +25,11 @@ public class RoomSizedTrigger : MonoBehaviour {
     public void SetTriggerType(TriggerType type) {
         this.type = type;
         switch (type) {
-            case TriggerType.VERTICAL:
-                transform.localScale = new Vector3(transform.localScale.x * verticalSize, transform.localScale.y, transform.localScale.z);
-                break;
             case TriggerType.HORIZONTIAL:
-                transform.localScale = new Vector3(transform.localScale.x, transform.localScale.y * horizontialSize, transform.localScale.z);
+                transform.localScale = new Vector3(transform.localScale.x * horizontialSize, transform.localScale.y, transform.localScale.z);
+                break;
+            case TriggerType.VERTICAL:
+                transform.localScale = new Vector3(transform.localScale.x, transform.localScale.y * verticalSize, transform.localScale.z);
                 break;
         }
     }

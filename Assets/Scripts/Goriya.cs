@@ -4,10 +4,12 @@ using System.Collections;
 public class Goriya : Enemy {
     public float throwBoomerangProbability = 0.1f;
     public float boomerangCoolDown = 3.0f;
+    public GameObject boomerangPrefab;
     public Sprite[] goriya_up_prefabs;
     public Sprite[] goriya_down_prefabs;
     public Sprite[] goriya_left_prefabs;
     public Sprite[] goriya_right_prefabs;
+    private Boomerang releasedBoomerang;
 
     public override void StartEnemyMovement(bool disallowCurrentDirection) {
         Direction turnDirection;
@@ -48,4 +50,14 @@ public class Goriya : Enemy {
         base.OnEnemyTurned(d);
         StartEnemyAnimation(d);
     }
+
+    public override void OnEnemyAttack() {
+        releasedBoomerang = Instantiate(boomerangPrefab, transform.position, Quaternion.identity) as Boomerang;
+        releasedBoomerang.gameObject.tag = "BoomerangGoriya";
+        releasedBoomerang.ReleaseBoomerang(boomerangCoolDown);
+        releasedBoomerang.released = true;
+        
+    }
+
+
 }

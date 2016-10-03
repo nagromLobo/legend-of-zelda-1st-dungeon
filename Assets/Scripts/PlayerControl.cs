@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 
 public enum Direction {NORTH, EAST, SOUTH, WEST};
 public enum EntityState {NORMAL, ATTACKING, DAMAGED, CAMERA_TRANSITION, ENTERING_ROOM, GAME_OVER, GRABBED};
+public enum AttackType { SWORD, MAGIC_SWORD, PROJECTILE, BOMB}
 
 public class PlayerControl : MonoBehaviour {
 
@@ -41,34 +42,41 @@ public class PlayerControl : MonoBehaviour {
     public Sprite[] link_run_right;
     public Sprite[] link_run_left;
 
-    public Sprite northDoorLeft;
-    public Sprite northDoorRight;
-    public Sprite eastDoor;
-    public Sprite westDoor;
-
     StateMachine animation_state_machine;
-	StateMachine control_state_machine;
+    StateMachine control_state_machine;
 
-	public EntityState current_state = EntityState.NORMAL;
-	public Direction current_direction = Direction.SOUTH;
+    public EntityState current_state = EntityState.NORMAL;
+    public Direction current_direction = Direction.SOUTH;
 
-	public GameObject[] Inventory; // 0 Boomerang, 2 Bomb, 3 Bow
+    public GameObject[] Inventory; // 0 Boomerang, 2 Bomb, 3 Bow
 
-	public GameObject Sword_prefab;
+    public GameObject Sword_prefab;
 
-	public GameObject selected_weapon_prefab;
+    public GameObject selected_weapon_prefab;
 
-	public bool ________________________;
-	public GameObject rupee_prefab; // set prefab
-	public GameObject bomb_prefab; //set
-	public GameObject heart_prefab;
-	public GameObject clock_prefab;
-	public bool ___________________;
+    public bool ________________________;
+    public GameObject rupee_prefab; // set prefab
+    public GameObject bomb_prefab; //set
+    public GameObject heart_prefab;
+    public GameObject clock_prefab;
+    public bool ___________________;
 
     //public GameObject BowPrefab;
     public delegate void PlayerInRoom();
     public PlayerInRoom playerInRoom;
 
+    public bool _____________________;
+
+    public AudioClip heartRetrievedAudio;
+    public AudioClip itemRetrievedAudio;
+    public AudioClip ruppeeRetrievedAudio;
+    public AudioClip linkHurtAudio;
+    public AudioClip projectileAudio;
+    public AudioClip dropingBombAudio;
+    public AudioClip projectileSwordAudio;
+    public AudioClip swordSlashAudio;
+
+    private AudioSource playerAudio;
     private Direction link_doorway_direction;
     private float timeStartDelay = 0.0f;
     private float timeStartTransition;
@@ -84,35 +92,36 @@ public class PlayerControl : MonoBehaviour {
     private float lastInvincibilityStartTime;
     private float invincibilityStartTime;
 
-	public int enemy_kill_count = 0; //mod 10
-	public GameObject[,] ItemDrops; //10 by 3 array
-	//Item drop chart from here: http://www.zeldaspeedruns.com/loz/generalknowledge/item-drops-chart
+    public int enemy_kill_count = 0; //mod 10
+    public GameObject[,] ItemDrops; //10 by 3 array
+                                    //Item drop chart from here: http://www.zeldaspeedruns.com/loz/generalknowledge/item-drops-chart
     public static PlayerControl instance;
 
     // runs before any start function gets called
     void Awake() {
-		ItemDrops = new GameObject[10,3];
+        playerAudio = GetComponent<AudioSource>();
+        ItemDrops = new GameObject[10, 3];
         if (instance != null) {
             Debug.LogError("Mutiple Link objects detected:");
         }
         instance = this;
         //print("in start");
-		for(int i = 0; i < 10; i++) {
-			for(int j = 1; j < 3; j++) {
-				ItemDrops[i,j] = rupee_prefab;
-			}
-		}
-		ItemDrops [1, 1] = bomb_prefab;
-		//ItemDrops [1] [0] = heart_prefab;
-		ItemDrops [2, 2] = heart_prefab;
-		ItemDrops [3, 1] = clock_prefab;
-		ItemDrops [5, 1] = heart_prefab;
-		ItemDrops [5, 2] = heart_prefab;
-		ItemDrops [6, 1] = bomb_prefab;
-		ItemDrops [6, 2] = clock_prefab;
-		ItemDrops [8, 1] = bomb_prefab;
-		ItemDrops [9, 1] = heart_prefab;
-		ItemDrops [0, 1] = heart_prefab;
+        for (int i = 0; i < 10; i++) {
+            for (int j = 1; j < 3; j++) {
+                ItemDrops[i, j] = rupee_prefab;
+            }
+        }
+        ItemDrops[1, 1] = bomb_prefab;
+        //ItemDrops [1] [0] = heart_prefab;
+        ItemDrops[2, 2] = heart_prefab;
+        ItemDrops[3, 1] = clock_prefab;
+        ItemDrops[5, 1] = heart_prefab;
+        ItemDrops[5, 2] = heart_prefab;
+        ItemDrops[6, 1] = bomb_prefab;
+        ItemDrops[6, 2] = clock_prefab;
+        ItemDrops[8, 1] = bomb_prefab;
+        ItemDrops[9, 1] = heart_prefab;
+        ItemDrops[0, 1] = heart_prefab;
 
     }
 
@@ -158,23 +167,23 @@ public class PlayerControl : MonoBehaviour {
             case EntityState.ENTERING_ROOM:
                 handleTransitionMovement();
                 break;
-			case EntityState.DAMAGED:
-				if (half_heart_count <= 0) {
-					//animate death sequence
-					SceneManager.LoadScene ("Dungeon");
-				}
-	            handleDamaged();
+            case EntityState.DAMAGED:
+                if (half_heart_count <= 0) {
+                    //animate death sequence
+                    SceneManager.LoadScene("Dungeon");
+                }
+                handleDamaged();
                 break;
             case EntityState.GRABBED:
                 handleGrabbed();
                 break;
         }
 
-        if(invincible) {
+        if (invincible) {
             handleLinkInvincable();
         }
-        
-		animation_state_machine.Update ();
+
+        animation_state_machine.Update();
         control_state_machine.Update();
 
         if (control_state_machine.IsFinished()) {
@@ -185,11 +194,11 @@ public class PlayerControl : MonoBehaviour {
     private void handleTransitionMovement() {
         float u = (Time.time - timeStartTransition) / transitionTime;
         if (u > 1) {
-            if(timeStartDelay == 0.0f) {
+            if (timeStartDelay == 0.0f) {
                 // then we start delaying now
                 timeStartDelay = Time.time;
             }
-            if(((Time.time - timeStartDelay) / delayInThreshold) < 1) {
+            if (((Time.time - timeStartDelay) / delayInThreshold) < 1) {
                 // then we have to wait
                 return;
             }
@@ -215,7 +224,7 @@ public class PlayerControl : MonoBehaviour {
                 current_state = EntityState.ENTERING_ROOM;
             } else {
                 current_state = EntityState.NORMAL;
-                if(playerInRoom != null) {
+                if (playerInRoom != null) {
                     playerInRoom();
                 }
                 // have to set this back to zero so we know if we've started waiting the next time
@@ -242,25 +251,25 @@ public class PlayerControl : MonoBehaviour {
 
     private void handleDamaged() {
         // then we should show damaged color in the flash
-        if((Time.time - lastDamageFlashTime) < (flashLength)) {
+        if ((Time.time - lastDamageFlashTime) < (flashLength)) {
             spriteRenderer.color = LinkDamageColor;
-          // else if the amount of time passed is less than 2 times the flash rate, stay normal
-        } else if((Time.time - lastDamageFlashTime) < (2* flashLength)) {
+            // else if the amount of time passed is less than 2 times the flash rate, stay normal
+        } else if ((Time.time - lastDamageFlashTime) < (2 * flashLength)) {
             spriteRenderer.color = normalColor;
-        // else start the cycle over
+            // else start the cycle over
         } else {
             lastDamageFlashTime = Time.time;
             spriteRenderer.color = LinkDamageColor;
         }
-        if((Time.time - damageStartTime) > damageCooldown) {
+        if ((Time.time - damageStartTime) > damageCooldown) {
             current_state = EntityState.NORMAL;
             spriteRenderer.color = normalColor;
         }
-        
+
     }
 
     private void handleLinkInvincable() {
-        if((Time.time - lastInvincibilityStartTime) < flashLength) {
+        if ((Time.time - lastInvincibilityStartTime) < flashLength) {
             spriteRenderer.color = invincablityColor;
         } else if ((Time.time - lastInvincibilityStartTime) < (2 * flashLength)) {
             spriteRenderer.color = normalColor;
@@ -268,7 +277,7 @@ public class PlayerControl : MonoBehaviour {
             lastInvincibilityStartTime = Time.time;
             spriteRenderer.color = invincablityColor;
         }
-        if((Time.time - invincibilityStartTime) > invincablityCooldown) {
+        if ((Time.time - invincibilityStartTime) > invincablityCooldown) {
             invincible = false;
             spriteRenderer.color = normalColor;
         }
@@ -276,55 +285,72 @@ public class PlayerControl : MonoBehaviour {
 
     void OnTriggerEnter(Collider coll) {
 
-		//add arrows to this list
+        //add arrows to this list
 
         switch (coll.gameObject.tag) {
             // General Collectables
             case "Rupee":
                 Destroy(coll.gameObject);
                 rupee_count++;
-				//print ("rupees: "+ rupee_count); 
-				Hud.UpdateRupees();
+                //print ("rupees: "+ rupee_count); 
+                Hud.UpdateRupees();
+                playerAudio.clip = ruppeeRetrievedAudio;
+                playerAudio.Play();
                 break;
             case "Heart":
                 Destroy(coll.gameObject);
                 if (half_heart_count < max_half_heart_count) {
                     half_heart_count += 2;
-					if (half_heart_count > max_half_heart_count)
-						half_heart_count = max_half_heart_count;
+                    if (half_heart_count > max_half_heart_count)
+                        half_heart_count = max_half_heart_count;
                 }
-				Hud.UpdateLives ();
+                playerAudio.clip = heartRetrievedAudio;
+                playerAudio.Play();
+                Hud.UpdateLives();
                 break;
             case "Fairy":
                 Destroy(coll.gameObject);
                 half_heart_count = max_half_heart_count;
-				Hud.UpdateLives ();
+                Hud.UpdateLives();
+                playerAudio.clip = itemRetrievedAudio;
+                playerAudio.Play();
                 break;
-			case "SmallKey":
-				Destroy (coll.gameObject);
-				small_key_count++;
-				Hud.UpdateKeys();
-				break;
+            case "SmallKey":
+                Destroy(coll.gameObject);
+                small_key_count++;
+                Hud.UpdateKeys();
+                playerAudio.clip = heartRetrievedAudio;
+                playerAudio.Play();
+                break;
             case "Clock":
                 MakePlayerInvincible();
                 Destroy(coll.gameObject);
+                playerAudio.clip = itemRetrievedAudio;
+                playerAudio.Play();
                 break;
             // Weapon Collectables
             case "Bow":
-				//cannot use bow unless you have arrows 
+                //cannot use bow unless you have arrows 
                 Destroy(coll.gameObject);
                 bow_retrieved = true;
+                playerAudio.clip = itemRetrievedAudio;
+                playerAudio.Play();
                 break;
             case "Boomerang":
                 Destroy(coll.gameObject);
+                MonoBehaviour.print("Detroy collect Boomerang");
                 boomerang_retrieved = true;
+                playerAudio.clip = itemRetrievedAudio;
+                playerAudio.Play();
                 break;
             case "Bomb":
                 Destroy(coll.gameObject);
                 bomb_count++;
-				//update weapon selection
-				//if(bomb_count>=1) ; //add to weapons list
-				Hud.UpdateBombs ();
+                playerAudio.clip = itemRetrievedAudio;
+                playerAudio.Play();
+                //update weapon selection
+                //if(bomb_count>=1) ; //add to weapons list
+                Hud.UpdateBombs();
                 break;
             // Dungeon State Collectables
             case "Map":
@@ -340,29 +366,33 @@ public class PlayerControl : MonoBehaviour {
                 // FIXME need animation here
                 Destroy(coll.gameObject);
                 triforce_retrieved = true;
+                playerAudio.clip = itemRetrievedAudio;
+                playerAudio.Play();
                 break;
             case "HeartContainer":
                 Destroy(coll.gameObject);
                 max_half_heart_count += 2;
                 half_heart_count = max_half_heart_count;
+                playerAudio.clip = heartRetrievedAudio;
+                playerAudio.Play();
                 break;
             case "Door":
                 if ((current_state == EntityState.NORMAL) || (current_state == EntityState.DAMAGED)) {
                     CameraControl.S.MoveCamera(current_direction);
                 }
                 break;
-                // dont let link get damaged into a door
+            // dont let link get damaged into a door
             case "Threshold":
-                if(current_state == EntityState.DAMAGED) {
+                if (current_state == EntityState.DAMAGED) {
                     GetComponent<Rigidbody>().velocity = Vector3.zero;
                 }
                 break;
-			case "EnemyProjectiles":
-				//TO DO: Test me!!
-				Vector3 EnemyProjectilePos = coll.gameObject.transform.position.normalized;
-				if(current_direction == UtilityFunctions.DirectionFromNormal(EnemyProjectilePos)) //LOL!!
-					Destroy (coll.gameObject); 
-				break;
+            case "EnemyProjectiles":
+                //TO DO: Test me!!
+                Vector3 EnemyProjectilePos = coll.gameObject.transform.position.normalized;
+                if (current_direction == UtilityFunctions.DirectionFromNormal(EnemyProjectilePos)) //LOL!!
+                    Destroy(coll.gameObject);
+                break;
             default:
                 break;
         }
@@ -371,7 +401,7 @@ public class PlayerControl : MonoBehaviour {
     void OnTriggerStay(Collider coll) {
         switch (coll.gameObject.tag) {
             case "Threshold":
-                if(current_state == EntityState.DAMAGED) {
+                if (current_state == EntityState.DAMAGED) {
                     GetComponent<Rigidbody>().velocity = Vector3.zero;
                 }
                 break;
@@ -387,7 +417,9 @@ public class PlayerControl : MonoBehaviour {
 
 
     public void linkDamaged(int damage, Vector3 normal) {
-        if(!invincibleCheat && !invincible) {
+        if (!invincibleCheat && !invincible) {
+            playerAudio.clip = linkHurtAudio;
+            playerAudio.Play();
             normal = Vector3.Normalize(normal);
             // turns off player control
             control_state_machine.ChangeState(new StateLinkStunnedMovement(this, damageCooldown / 2, normal));
@@ -417,7 +449,7 @@ public class PlayerControl : MonoBehaviour {
 
             damageStartTime = Time.time;
             lastDamageFlashTime = damageStartTime;
-        } 
+        }
     }
 
     public void CameraMoved(Direction d, float cameraTransitionTime) {
@@ -458,7 +490,7 @@ public class PlayerControl : MonoBehaviour {
     void OnCollisionEnter(Collision other) {
         switch (other.gameObject.tag) {
             case "LockedDoor":
-                if(small_key_count > 0) {
+                if (small_key_count > 0) {
                     Tile tile = other.gameObject.GetComponent<Tile>();
                     tile.openDoor();
                     small_key_count--;
@@ -496,19 +528,40 @@ public class PlayerControl : MonoBehaviour {
         current_state = EntityState.NORMAL;
     }
 
-	public void KillCount(Enemy e) {
-		enemy_kill_count = (enemy_kill_count + 1) % 10;
+    public void KillCount(Enemy e) {
+        enemy_kill_count = (enemy_kill_count + 1) % 10;
 
-	}
+    }
 
-	public void EnemyDestroyed(Enemy e) {
-		//enemy 0 doesn't drop any items
-		if (e.kill_type != 0) {
-			if (UnityEngine.Random.value <= e.ItemDropFrequency) {
-				GameObject prefab = ItemDrops [enemy_kill_count, e.kill_type];
-				GameObject new_item_drop = Instantiate (prefab, e.gameObject.transform.position, Quaternion.identity) as GameObject;
-				//could do this properly but I won't
-			}
-		}
-	}
+    public void EnemyDestroyed(Enemy e) {
+        //enemy 0 doesn't drop any items
+        if (e.kill_type != 0) {
+            if (UnityEngine.Random.value <= e.ItemDropFrequency) {
+                GameObject prefab = ItemDrops[enemy_kill_count, e.kill_type];
+                GameObject new_item_drop = Instantiate(prefab, e.gameObject.transform.position, Quaternion.identity) as GameObject;
+                //could do this properly but I won't
+            }
+        }
+    }
+
+    public void OnAttack(AttackType attack) {
+        switch (attack) {
+            case AttackType.SWORD:
+                playerAudio.clip = swordSlashAudio;
+                playerAudio.Play();
+                break;
+            case AttackType.MAGIC_SWORD:
+                playerAudio.clip = projectileSwordAudio;
+                playerAudio.Play();
+                break;
+            case AttackType.BOMB:
+                playerAudio.clip = dropingBombAudio;
+                playerAudio.Play();
+                break;
+            case AttackType.PROJECTILE:
+                playerAudio.clip = projectileAudio;
+                playerAudio.Play();
+                break;
+        }
+    }
 }

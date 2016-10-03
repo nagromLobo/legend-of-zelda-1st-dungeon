@@ -139,4 +139,34 @@ public class UtilityFunctions : MonoBehaviour {
                 return Direction.EAST;
         }
     }
+    Vector3 SnapTo(Vector3 v3, float snapAngle) {
+        float angle = Vector3.Angle(v3, Vector3.up);
+        if (angle < 45.0f)      
+            return Vector3.up * v3.magnitude; 
+        if (angle > 180.0f - 45.05)
+            return Vector3.down * v3.magnitude;
+
+        float t = Mathf.Round(angle / snapAngle);
+        float deltaAngle = (t * snapAngle) - angle;
+
+        Vector3 axis = Vector3.Cross(Vector3.up, v3);
+        Quaternion q = Quaternion.AngleAxis(deltaAngle, axis);
+        return q * v3;
+    }
+
+    public static Vector3 roundToNearestAxis(Vector3 vec) {
+        float posXAngle = Vector3.Angle(vec, Vector3.right);
+        float negXAngle = Vector3.Angle(vec, Vector3.left);
+        float posYAngle = Vector3.Angle(vec, Vector3.up);
+        // then we are close to the pos x axis
+        if (posXAngle <= 45.0f) {
+            return Vector3.right;
+        } else if(posYAngle <= 45.0f) {
+            return Vector3.up;
+        } else if(negXAngle <= 45.0f) {
+            return Vector3.left;
+        } else {
+            return Vector3.down;
+        }
+    }
 }

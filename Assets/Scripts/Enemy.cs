@@ -12,11 +12,19 @@ public class Enemy : MonoBehaviour {
     public Sprite[] spriteAnimation;
     public Color enemyDamageColor = Color.red;
     public float damageCooldown = 2.0f;
-    public float damageDistancePushback = 3.0f;
+    public float damageDistancePushback = 4.0f;
     public bool stunable = false;
+    public GameObject keyPrefab;
+    public GameObject keyInstance;
+    public bool hasKey = false;
 
     public delegate void onEnemyDestroyed(GameObject enemy);
     public onEnemyDestroyed OnEnemyDestroyed;
+
+    private AudioSource enemyAudio;
+    public AudioClip enemyHurtAudio;
+    public AudioClip enemyDiesAudio;
+
 
     protected Color normalColor;
     protected float damageStartTime = 0.0f;
@@ -45,16 +53,20 @@ public class Enemy : MonoBehaviour {
 	protected virtual void Start () {
         StartEnemyAnimation(currDirection);
         StartEnemyMovement(false);
+        enemyAudio = GetComponent<AudioSource>();
     }
 	
 	// Update is called once per frame
-	void Update () {
+	protected virtual void Update () {
         animation_statemachine.Update();
         control_statemachine.Update();
         if(current_state == EntityState.DAMAGED) {
             handleDamaged();
         } else if(current_state == EntityState.ATTACKING) {
             handleAttack();
+        }
+        if (hasKey) {
+            keyInstance.transform.position = this.transform.position;
         }
 	}
 
@@ -153,12 +165,19 @@ public class Enemy : MonoBehaviour {
 				PlayerControl.instance.KillCount (this);
 				PlayerControl.instance.EnemyDestroyed (this);
                 Destroy(this.gameObject);
+                enemyAudio.clip = enemyDiesAudio;
+                enemyAudio.Play();
                 return;
             }
+                
             else {
-                Vector3 pushback = (this.transform.position - other.transform.position).normalized;
+                // find the nearest axis for pushback
+                Vector3 pushback = UtilityFunctions.roundToNearestAxis((this.transform.position - other.transform.position).normalized);
                 pushback.Set(Mathf.Round(pushback.x), Mathf.Round(pushback.y), Mathf.Round(pushback.z));
+                currDirection = UtilityFunctions.DirectionFromNormal(pushback);
                 control_statemachine.ChangeState(new StateEnemyDamaged(this, currDirection, turnProbability, damageCooldown / 2,  damageDistancePushback, pushback));
+                enemyAudio.clip = enemyHurtAudio;
+                enemyAudio.Play();
             }
         }
     }
@@ -180,6 +199,13 @@ public class Enemy : MonoBehaviour {
             spriteRenderer.color = normalColor;
         }
 
+    }
+
+    public void giveKey() {
+        if (!hasKey) {
+            hasKey = true;
+        }
+        keyInstance = Instantiate(keyPrefab, transform.position, Quaternion.identity) as GameObject;
     }
 
 
