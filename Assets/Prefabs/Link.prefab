@@ -169,11 +169,11 @@ MonoBehaviour:
   bomb_count: 1
   max_half_heart_count: 6
   half_heart_count: 6
-  small_key_count: 4
+  small_key_count: 3
   map_retrieved: 0
   compass_retrieved: 0
   triforce_retrieved: 0
-  bow_retrieved: 0
+  bow_retrieved: 1
   boomerang_retrieved: 0
   invincibleCheat: 0
   invincible: 0
