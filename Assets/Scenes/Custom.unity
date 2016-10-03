@@ -314,11 +314,6 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 114000010072219278, guid: 42b152bcb9cc5224c9c8ae884547c623,
-        type: 2}
-      propertyPath: pushableTileCoords.Array.size
-      value: 10
-      objectReference: {fileID: 0}
     - target: {fileID: 4000012192658660, guid: 42b152bcb9cc5224c9c8ae884547c623, type: 2}
       propertyPath: m_LocalPosition.x
       value: 39.51
@@ -353,93 +348,13 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 114000010072219278, guid: 42b152bcb9cc5224c9c8ae884547c623,
         type: 2}
-      propertyPath: pushableTileCoords.Array.data[3].x
+      propertyPath: eventCoords.Array.data[13].x
       value: 39
       objectReference: {fileID: 0}
     - target: {fileID: 114000010072219278, guid: 42b152bcb9cc5224c9c8ae884547c623,
         type: 2}
-      propertyPath: pushableTileCoords.Array.data[3].y
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 114000010072219278, guid: 42b152bcb9cc5224c9c8ae884547c623,
-        type: 2}
-      propertyPath: pushableTileCoords.Array.data[4].x
-      value: 39
-      objectReference: {fileID: 0}
-    - target: {fileID: 114000010072219278, guid: 42b152bcb9cc5224c9c8ae884547c623,
-        type: 2}
-      propertyPath: pushableTileCoords.Array.data[4].y
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 114000010072219278, guid: 42b152bcb9cc5224c9c8ae884547c623,
-        type: 2}
-      propertyPath: pushableTileCoords.Array.data[5].x
-      value: 39
-      objectReference: {fileID: 0}
-    - target: {fileID: 114000010072219278, guid: 42b152bcb9cc5224c9c8ae884547c623,
-        type: 2}
-      propertyPath: pushableTileCoords.Array.data[5].y
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 114000010072219278, guid: 42b152bcb9cc5224c9c8ae884547c623,
-        type: 2}
-      propertyPath: pushableTileCoords.Array.data[6].x
-      value: 39
-      objectReference: {fileID: 0}
-    - target: {fileID: 114000010072219278, guid: 42b152bcb9cc5224c9c8ae884547c623,
-        type: 2}
-      propertyPath: pushableTileCoords.Array.data[6].y
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 114000010072219278, guid: 42b152bcb9cc5224c9c8ae884547c623,
-        type: 2}
-      propertyPath: pushableTileCoords.Array.data[7].x
-      value: 39
-      objectReference: {fileID: 0}
-    - target: {fileID: 114000010072219278, guid: 42b152bcb9cc5224c9c8ae884547c623,
-        type: 2}
-      propertyPath: pushableTileCoords.Array.data[7].y
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 114000010072219278, guid: 42b152bcb9cc5224c9c8ae884547c623,
-        type: 2}
-      propertyPath: pushableTileCoords.Array.data[8].x
-      value: 39
-      objectReference: {fileID: 0}
-    - target: {fileID: 114000010072219278, guid: 42b152bcb9cc5224c9c8ae884547c623,
-        type: 2}
-      propertyPath: pushableTileCoords.Array.data[8].y
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 114000010072219278, guid: 42b152bcb9cc5224c9c8ae884547c623,
-        type: 2}
-      propertyPath: pushableTileCoords.Array.data[9].x
-      value: 39
-      objectReference: {fileID: 0}
-    - target: {fileID: 114000010072219278, guid: 42b152bcb9cc5224c9c8ae884547c623,
-        type: 2}
-      propertyPath: pushableTileCoords.Array.data[9].y
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 114000010072219278, guid: 42b152bcb9cc5224c9c8ae884547c623,
-        type: 2}
-      propertyPath: pushableTileCoords.Array.data[0].x
-      value: 44
-      objectReference: {fileID: 0}
-    - target: {fileID: 114000010072219278, guid: 42b152bcb9cc5224c9c8ae884547c623,
-        type: 2}
-      propertyPath: pushableTileCoords.Array.data[1].x
-      value: 35
-      objectReference: {fileID: 0}
-    - target: {fileID: 114000010072219278, guid: 42b152bcb9cc5224c9c8ae884547c623,
-        type: 2}
-      propertyPath: pushableTileCoords.Array.data[0].y
-      value: 16
-      objectReference: {fileID: 0}
-    - target: {fileID: 114000010072219278, guid: 42b152bcb9cc5224c9c8ae884547c623,
-        type: 2}
-      propertyPath: pushableTileCoords.Array.data[1].y
-      value: 16
+      propertyPath: eventCoords.Array.data[13].y
+      value: 46
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 42b152bcb9cc5224c9c8ae884547c623, type: 2}

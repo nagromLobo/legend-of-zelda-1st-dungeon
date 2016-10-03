@@ -257,7 +257,7 @@ public class EnemyFabrication : MonoBehaviour {
         }
     }
 
-    void OnBlackTileTrigered(PushableBlock pushedBlock) {
+    void OnBlackTileTrigered(GameObject pushedBlock) {
         if (customLevel) {
             numBlackTilesTrigered++;
         }
@@ -269,6 +269,33 @@ public class EnemyFabrication : MonoBehaviour {
                     lockedBlocks[currentRoom].MoveBlocks();
                     PuzzleSolved();
                 }
+                break;
+            case 7:
+                lockedBlocks[currentRoom].MoveBlocks();
+                PuzzleSolved();
+                break;
+            case 8:
+                ShowMapOnCamera.MAP_TILES[Mathf.RoundToInt(eventCoords[currentRoom].x), Mathf.RoundToInt(eventCoords[currentRoom].y)].openEventDoor(Direction.EAST);
+                PuzzleSolved();
+                break;
+            case 10:
+                // then we are in the test block puzzle room
+                if(numBlackTilesTrigered == 2) {
+                    lockedBlocks[currentRoom].MoveBlocks();
+                    PuzzleSolved();
+                }
+                break;
+            case 11:
+                // diamond puzzle room
+                if(numBlackTilesTrigered == 8) {
+                    ShowMapOnCamera.MAP_TILES[Mathf.RoundToInt(eventCoords[currentRoom].x), Mathf.RoundToInt(eventCoords[currentRoom].y)].openEventDoor(Direction.WEST);
+                    PuzzleSolved();
+                }
+                break;
+            case 13:
+                // wallmaster room
+                PuzzleSolved();
+                lockedBlocks[currentRoom].MoveBlocks();
                 break;
         }
     }
@@ -322,20 +349,31 @@ public class EnemyFabrication : MonoBehaviour {
                     if (numEnemiesInRooms[prevRoom] == 0) {
                         pushable = true;
                     }
-                    pushableBlocks[0].SetUpPushableTile(true, true, true, true, pushableTileCoords[0], 7, pushable);
-                    pushableBlocks[1].SetUpPushableTile(true, true, true, true, pushableTileCoords[1], 7, pushable);
+                    pushableBlocks[0].SetUpPushableTile(true, true, true, true, pushableTileCoords[0], 1, pushable);
+                    pushableBlocks[1].SetUpPushableTile(true, true, true, true, pushableTileCoords[1], 1, pushable);
                     break;
                 case 7:
                     lockedBlocks[prevRoom].RestBlocksToOpen();
                     break;
-                case 13:
-                    lockedBlocks[prevRoom].RestBlocksToOpen();
-                    break;
-                case 14:
-                    lockedBlocks[prevRoom].RestBlocksToOpen();
+                case 8:
+                    pushableBlocks[12].SetUpPushableTile(true, true, true, true, pushableTileCoords[12], 8, true);
+                    pushableBlocks[13].SetUpPushableTile(true, true, true, true, pushableTileCoords[13], 8, true);
                     break;
                 case 10:
                     lockedBlocks[prevRoom].RestBlocksToOpen();
+                    pushableBlocks[2].SetUpPushableTile(true, true, true, true, pushableTileCoords[2], 10, true);
+                    pushableBlocks[3].SetUpPushableTile(true, true, true, true, pushableTileCoords[3], 10, true);
+                    break;
+                case 11:
+                    for(int i = 0; i <= 11; ++i) {
+                        pushableBlocks[i].SetUpPushableTile(true, true, true, true, pushableTileCoords[i], 11, true);
+                    }
+                    break;
+                case 13:
+                    pushableBlocks[14].SetUpPushableTile(true, true, true, true, pushableTileCoords[14], 8, true);
+                    lockedBlocks[prevRoom].RestBlocksToOpen();
+                    break;
+                case 14:
                     break;
             }
         }
@@ -350,6 +388,9 @@ public class EnemyFabrication : MonoBehaviour {
             enemy_instances.Add(Instantiate(currEnemy, currSpawnGrid[i], transform.rotation) as GameObject);
             if (enemy_instances[i].GetComponent<Enemy>() != null) {
                 enemy_instances[i].GetComponent<Enemy>().OnEnemyDestroyed += OnEnemyDestroyed;
+                if(enemy_instances[i].GetComponent<BladeTrap>() != null) {
+                    enemy_instances[i].GetComponent<BladeTrap>().onBlackTileTriger += OnBlackTileTrigered;
+                }
             }
         }
         if (!customLevel) {
@@ -364,6 +405,9 @@ public class EnemyFabrication : MonoBehaviour {
                 case 7:
                     ShowMapOnCamera.MAP_TILES[Mathf.RoundToInt(eventCoords[currentRoom].x), Mathf.RoundToInt(eventCoords[currentRoom].y)].closeEventDoor();
                     break;
+                case 8:
+                    ShowMapOnCamera.MAP_TILES[Mathf.RoundToInt(eventCoords[currentRoom].x), Mathf.RoundToInt(eventCoords[currentRoom].y)].closeEventDoor();
+                    break;
                 case 15:
                     // then we entered the room with the text engine. have to start it
                     room15TextEngine.GetComponent<TextEngine>().AnimateText();
@@ -375,6 +419,35 @@ public class EnemyFabrication : MonoBehaviour {
                 case 1:
                     // gel and water room
                     lockedBlocks[currentRoom].CloseBlocks();
+                    DoorStateChanged();
+                    break;
+                case 2:
+                    // lockedBlocks[currentRoom].CloseBlocks();
+                   // DoorStateChanged();
+                    break;
+                case 7:
+                    lockedBlocks[currentRoom].CloseBlocks();
+                    DoorStateChanged();
+                    break;
+                case 8:
+                    ShowMapOnCamera.MAP_TILES[Mathf.RoundToInt(eventCoords[currentRoom].x), Mathf.RoundToInt(eventCoords[currentRoom].y)].closeEventDoor();
+                    DoorStateChanged();
+                    break;
+                case 10:
+                    lockedBlocks[currentRoom].CloseBlocks();
+                    DoorStateChanged();
+                    break;
+                case 13:
+                    lockedBlocks[currentRoom].CloseBlocks();
+                    DoorStateChanged();
+                    break;
+                case 11:
+                    ShowMapOnCamera.MAP_TILES[Mathf.RoundToInt(eventCoords[currentRoom].x), Mathf.RoundToInt(eventCoords[currentRoom].y)].closeEventDoor();
+                    DoorStateChanged();
+                    break;
+                case 14:
+                    lockedBlocks[currentRoom].CloseBlocks();
+                    DoorStateChanged();
                     break;
             }
         }

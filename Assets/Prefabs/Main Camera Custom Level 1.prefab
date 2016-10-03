@@ -64,9 +64,9 @@ Camera:
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0
-    y: 0
+    y: 0.03333333
     width: 1
-    height: 1
+    height: 0.93333334
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 68.3
@@ -101,7 +101,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: 13be2bcb6af16bd48a1171d8cee8132a, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -175,8 +175,8 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 0
+  m_audioClip: {fileID: 8300000, guid: 9492996a332b7d94cbb910b486c8df59, type: 3}
+  m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
   Loop: 1
@@ -275,7 +275,7 @@ MonoBehaviour:
   - {x: 55.51, y: 50.41, z: -10}
   - {x: 39.51, y: 50.41, z: -10}
   - {x: 39.51, y: 39.41, z: -10}
-  numEnemiesInRooms: 000000000400000005000000050000000300000005000000030000000200000001000000040000000000000002000000050000000400000001000000
+  numEnemiesInRooms: 000000000400000005000000040000000300000005000000030000000200000001000000040000000000000002000000050000000400000001000000
   enemy_prefabs:
   - {fileID: 1000014059354290, guid: 997b551be0ad7864c913270cc97f6161, type: 2}
   - {fileID: 1000011065228070, guid: 377af18adf1535e4db2154724e72c781, type: 2}
@@ -284,8 +284,8 @@ MonoBehaviour:
   - {fileID: 1000013314918266, guid: 51b87dbfcca53d848b093b4766b03685, type: 2}
   - {fileID: 1000013893029978, guid: e3ff8794e4ad4e6478f49c107f63a31c, type: 2}
   - {fileID: 1000013314918266, guid: 51b87dbfcca53d848b093b4766b03685, type: 2}
-  - {fileID: 1000013954072722, guid: 2d41e70fe449dc243afc88e2d83f4e1f, type: 2}
-  - {fileID: 1000013954072722, guid: 2d41e70fe449dc243afc88e2d83f4e1f, type: 2}
+  - {fileID: 1000014242509704, guid: c30da05aa14bc5148a89e9da7eba5a07, type: 2}
+  - {fileID: 1000014242509704, guid: c30da05aa14bc5148a89e9da7eba5a07, type: 2}
   - {fileID: 1000012233601454, guid: 8ebbf67e20b339e49947a3c50aef4770, type: 2}
   - {fileID: 0}
   - {fileID: 1000012053100012, guid: 472e2daafbce35644ae7ecef9de5e05b, type: 2}
@@ -296,9 +296,21 @@ MonoBehaviour:
   timeBetweenWallMasterSpawnDoor: 0.5
   doorWaitDuration: 2
   pushableTileCoords:
-  - {x: 23, y: 38, z: 0}
-  - {x: 22, y: 60, z: 0}
-  - {x: 39, y: 4, z: 0}
+  - {x: 44, y: 16, z: 0}
+  - {x: 35, y: 16, z: 0}
+  - {x: 71, y: 38, z: 0}
+  - {x: 72, y: 38, z: 0}
+  - {x: 71, y: 51, z: 0}
+  - {x: 73, y: 51, z: 0}
+  - {x: 69, y: 51, z: 0}
+  - {x: 70, y: 50, z: 0}
+  - {x: 72, y: 50, z: 0}
+  - {x: 71, y: 49, z: 0}
+  - {x: 70, y: 48, z: 0}
+  - {x: 72, y: 48, z: 0}
+  - {x: 9, y: 49, z: 0}
+  - {x: 3, y: 47, z: 0}
+  - {x: 43, y: 52, z: 0}
   pushableTilePrefab: {fileID: 1000012912163634, guid: 102bd2c809d038e499d5aab9d5a58de4,
     type: 2}
   slideableBlocksPrefab: {fileID: 1000013177599788, guid: c3d5b51ab1d27c6418f35aad171478d6,
@@ -325,7 +337,7 @@ MonoBehaviour:
   - {x: 71, y: 41, z: 0}
   - {x: 65, y: 49, z: 0}
   - {x: 60, y: 51, z: 0}
-  - {x: 0, y: 0, z: 0}
+  - {x: 39, y: 46, z: 0}
   - {x: 39, y: 35, z: 0}
   puzzleSolvedAudio: {fileID: 8300000, guid: e16687a1b11c20143b742a3fab7ebd41, type: 3}
   doorClosedAudio: {fileID: 8300000, guid: 13be2bcb6af16bd48a1171d8cee8132a, type: 3}
@@ -400,14 +412,14 @@ MonoBehaviour:
   tilePrefab: {fileID: 184960, guid: 15833c75680f54e658e96c3d2791956c, type: 2}
   stopPoints: []
   ________________: 0
-  w: 0
-  h: 0
-  collisionS: 
-  destructibleS: 
-  screenW: 0
-  screenH: 0
-  screenW2: 0
-  screenH2: 0
+  w: 96
+  h: 66
+  collisionS: _SSSS__SSSDSSSSSSSSSSSSSSSTTS_S_SSSSMM_SSDDSPS_STDDTS_SSDDSS_SSSSSSSSSSSSSSSSSSSLLSSSSSSSSSDTT______SLMS_SL_____SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSB
+  destructibleS: ________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
+  screenW: 20
+  screenH: 19
+  screenW2: 10
+  screenH2: 9
   mapAnchor: {fileID: 0}
   spriteSheetW: 0
 --- !u!124 &124000011873842162

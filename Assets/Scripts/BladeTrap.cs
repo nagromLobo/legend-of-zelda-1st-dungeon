@@ -11,6 +11,9 @@ public class BladeTrap : Enemy {
     float horizTriggerSize = 0.0f;
     Vector3 startPos;
 
+    public delegate void OnBlackTileTriger(GameObject bladeTrap);
+    public OnBlackTileTriger onBlackTileTriger;
+
     protected override void Start() {
         base.Start();
         triggers[0] = (Instantiate(bladeTrapTriggerPrefab, transform.position, Quaternion.identity) as GameObject).GetComponent<RoomSizedTrigger>();
@@ -69,7 +72,9 @@ public class BladeTrap : Enemy {
            other.gameObject.tag == "Link") {
             switch (bladeTrapState) {
                 case BladeTrapState.FOREWARDS:
-                    bladeTrapState = BladeTrapState.BACKWARDS;
+                    if((Mathf.Abs(transform.position.x - startPos.x) > 0.5) || ((Mathf.Abs(transform.position.y - startPos.y)) > 0.5)){
+                        bladeTrapState = BladeTrapState.BACKWARDS;
+                    }
                      // this.transform.position = adjustBackToGrid(currDirection, this.transform.position); 
                     StartEnemyMovementReverse();
                     break;
@@ -170,6 +175,13 @@ public class BladeTrap : Enemy {
         //    }
         //    // if not destroyed animate enemy
         //}
+    }
+
+    protected override void OnTriggerEnter(Collider other) {
+        base.OnTriggerEnter(other);
+        if(other.gameObject.tag == "BlackTile") {
+            onBlackTileTriger(this.gameObject);
+        }
     }
 
     void OnDestroy() {
