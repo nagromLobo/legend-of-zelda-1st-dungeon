@@ -99,6 +99,9 @@ public class PlayerControl : MonoBehaviour {
                                     //Item drop chart from here: http://www.zeldaspeedruns.com/loz/generalknowledge/item-drops-chart
     public static PlayerControl instance;
 
+    public delegate void AquamentusIsDead();
+    public AquamentusIsDead aquamentusIsDead;
+
     // runs before any start function gets called
     void Awake() {
         playerAudio = GetComponent<AudioSource>();
@@ -549,6 +552,9 @@ public class PlayerControl : MonoBehaviour {
         }
 		if (e.name == "Aquamentus(Clone)") {
 			GameObject new_item_drop = Instantiate(BIGHEART, e.gameObject.transform.position, Quaternion.identity) as GameObject;
+            if(aquamentusIsDead != null) {
+                aquamentusIsDead();
+            }
 		}
     }
 

@@ -22,6 +22,8 @@ public class EnemyFabrication : MonoBehaviour {
     public GameObject room15TextEngine;
     public GameObject flamePrefab;
     public GameObject NPCprefab;
+    public GameObject triforcePrefab;
+    public Vector3 triforceLocation;
     public Vector3[] eventCoords; // index is roomnumber
     public bool[] enemyHasKey;
 
@@ -48,6 +50,7 @@ public class EnemyFabrication : MonoBehaviour {
     void Start() {
         // set up audio
         AudioSource[] audioSources = GetComponents<AudioSource>();
+        PlayerControl.instance.aquamentusIsDead += OnAquamentusDeath;
         dungeonMusicSrc = audioSources[0];
         roomEventAudioSrc = audioSources[1];
         dungeonMusicSrc.clip = dungeonMusic;
@@ -216,6 +219,10 @@ public class EnemyFabrication : MonoBehaviour {
             lockedBlocks[1] = (Instantiate(slideableBlocksPrefab, eventCoords[1], Quaternion.identity) as GameObject).GetComponent<SlideableBlocks>();
             lockedBlocks[1].InitBlocks(eventCoords[1]);
             lockedBlocks[1].RestBlocksToOpen();
+            // room 2
+            lockedBlocks[2] = (Instantiate(slideableBlocksPrefab, new Vector3(39.0f, 30.0f, 0.0f), Quaternion.identity) as GameObject).GetComponent<SlideableBlocks>();
+            lockedBlocks[2].InitBlocks(new Vector3(39.0f, 30.0f, 0.0f));
+
             // room 7
             lockedBlocks[7] = (Instantiate(slideableBlocksPrefab, eventCoords[7], Quaternion.identity) as GameObject).GetComponent<SlideableBlocks>();
             lockedBlocks[7].InitBlocks(eventCoords[7]);
@@ -227,7 +234,7 @@ public class EnemyFabrication : MonoBehaviour {
             // room 14
             lockedBlocks[14] = (Instantiate(slideableBlocksPrefab, eventCoords[14], Quaternion.identity) as GameObject).GetComponent<SlideableBlocks>();
             lockedBlocks[14].InitBlocks(eventCoords[14]);
-            lockedBlocks[14].RestBlocksToOpen();
+
             // room 10
             lockedBlocks[10] = (Instantiate(slideableBlocksPrefab, eventCoords[10], Quaternion.identity) as GameObject).GetComponent<SlideableBlocks>();
             lockedBlocks[10].InitBlocks(eventCoords[10]);
@@ -305,6 +312,12 @@ public class EnemyFabrication : MonoBehaviour {
                 lockedBlocks[currentRoom].MoveBlocks();
                 break;
         }
+    }
+
+    void OnAquamentusDeath() {
+        lockedBlocks[14].MoveBlocks();
+        lockedBlocks[2].MoveBlocks();
+        Instantiate(triforcePrefab, eventCoords[2], Quaternion.identity);
     }
 
     void CameraMoveComplete(Vector3 pos) {
@@ -452,10 +465,6 @@ public class EnemyFabrication : MonoBehaviour {
                     break;
                 case 11:
                     ShowMapOnCamera.MAP_TILES[Mathf.RoundToInt(eventCoords[currentRoom].x), Mathf.RoundToInt(eventCoords[currentRoom].y)].closeEventDoor();
-                    DoorStateChanged();
-                    break;
-                case 14:
-                    lockedBlocks[currentRoom].CloseBlocks();
                     DoorStateChanged();
                     break;
             }

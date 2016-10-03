@@ -22,6 +22,7 @@ GameObject:
   - 212: {fileID: 212000010635496446}
   - 54: {fileID: 54000012536936772}
   - 65: {fileID: 65000010666256702}
+  - 114: {fileID: 114000010744390090}
   m_Layer: 0
   m_Name: phantomBow
   m_TagString: Untagged
@@ -69,6 +70,38 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.5, y: 1, z: 0.2}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &114000010744390090
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000013314918266}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f77303fa5915be4a9ca7b6e3900bfaa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  current_state: 0
+  damage: 1
+  movementFramesPerSecond: 4
+  timeToCrossTile: 0
+  turnProbability: 0.02
+  heartCount: 1
+  damageFlashLength: 1
+  spriteAnimation:
+  - {fileID: 21300014, guid: 078235c018feb6d48a55354614f6419e, type: 3}
+  enemyDamageColor: {r: 1, g: 0, b: 0, a: 1}
+  damageCooldown: 2
+  damageDistancePushback: 4
+  stunable: 0
+  keyPrefab: {fileID: 0}
+  keyInstance: {fileID: 0}
+  hasKey: 0
+  enemyHurtAudio: {fileID: 0}
+  enemyDiesAudio: {fileID: 0}
+  currDirection: 2
+  kill_type: 0
+  ItemDropFrequency: 0.3
 --- !u!212 &212000010635496446
 SpriteRenderer:
   m_ObjectHideFlags: 1

@@ -323,6 +323,9 @@ MonoBehaviour:
   flamePrefab: {fileID: 1000010660467810, guid: edba1c1d4278e7f45bf265882dbec22e,
     type: 2}
   NPCprefab: {fileID: 1000012669693750, guid: 85629f8c84941d243ad9a1a569e92188, type: 2}
+  triforcePrefab: {fileID: 1000012402915216, guid: 40b1472211e9b1841824678d2b042287,
+    type: 2}
+  triforceLocation: {x: 0, y: 0, z: 0}
   eventCoords:
   - {x: 0, y: 0, z: 0}
   - {x: 39, y: 19, z: 0}
