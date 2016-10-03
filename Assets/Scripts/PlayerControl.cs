@@ -134,6 +134,7 @@ public class PlayerControl : MonoBehaviour {
 
     // Use this for initialization
     void Start() {
+		
         // Launch Idle State
         startPosition = transform.position;
         animation_state_machine = new StateMachine();
@@ -149,7 +150,11 @@ public class PlayerControl : MonoBehaviour {
         control_state_machine.ChangeState(new StateLinkNormalMovement(this));
         half_heart_count = max_half_heart_count;
         spriteRenderer = GetComponent<SpriteRenderer>();
-
+		Hud.AddWeapon (weapon_prefabs [2]);
+		Inventory.Add (weapon_prefabs [2]);
+		Inventory.Add (weapon_prefabs [0]);
+		Hud.UpdateBombs ();
+		Hud.AddWeapon (weapon_prefabs [0]);
 
     }
 
@@ -347,10 +352,10 @@ public class PlayerControl : MonoBehaviour {
                 playerAudio.Play();
                 break;
             // Weapon Collectables
-            case "Bow":
+		case "Bow":
 
-				/*Hud.AddWeapon (coll.gameObject);
-				if (Inventory.Count == 0) {
+				//Hud.AddWeapon (weapon_prefabs [2]);
+				/*if (Inventory.Count == 0) {
 					for (int i = 0; i < weapon_prefabs.Length; ++i) {
 						if (weapon_prefabs [i].name == coll.gameObject.name) {
 							selected_weapon_prefab = weapon_prefabs [i];
@@ -366,6 +371,7 @@ public class PlayerControl : MonoBehaviour {
 						}
 					}
 				}*/
+				Inventory.Add (weapon_prefabs [2]);
 				//cannot use bow unless you have arrows 
                 Destroy(coll.gameObject);
                 bow_retrieved = true;
@@ -378,14 +384,17 @@ public class PlayerControl : MonoBehaviour {
 					for (int i = 0; i < weapon_prefabs.Length; ++i) {
 						if (weapon_prefabs [i].name == coll.gameObject.name) {
 							selected_weapon_prefab = weapon_prefabs [i];
+							//Hud.AddWeapon (weapon_prefabs [i]);	
 							Inventory.Add (weapon_prefabs [i]);
 						}
 					}
 				} else  {
 					for (int i = 0; i < weapon_prefabs.Length; ++i) {
 						if (weapon_prefabs [i].name == coll.gameObject.name) {
-							if(!Inventory.Contains (coll.gameObject))
+							if (!Inventory.Contains (coll.gameObject)) {
+								//Hud.AddWeapon (weapon_prefabs [i]);
 								Inventory.Add (weapon_prefabs [i]);
+							}
 
 						}
 					}
@@ -396,11 +405,11 @@ public class PlayerControl : MonoBehaviour {
                 playerAudio.clip = itemRetrievedAudio;
                 playerAudio.Play();
                 break;
-			case "Bomb":
-				bomb_count++;
+		case "Bomb":
+			bomb_count++;
 					//update weapon selection
 					//if(bomb_count>=1) ; //add to weapons list
-				if (Inventory.Count == 0) {
+				/*if (Inventory.Count == 0) {
 					for (int i = 0; i < weapon_prefabs.Length; ++i) {
 						if (weapon_prefabs [i].name == coll.gameObject.name) {
 							selected_weapon_prefab = weapon_prefabs [i];
@@ -415,9 +424,10 @@ public class PlayerControl : MonoBehaviour {
 							
 						}
 					}
-				}
+				}*/
+				//Inventory.Add (weapon_prefabs [0]);
 				Hud.UpdateBombs ();
-				Hud.AddWeapon (coll.gameObject);
+				//Hud.AddWeapon (weapon_prefabs [0]);
 				Destroy(coll.gameObject);
                 break;
             // Dungeon State Collectables

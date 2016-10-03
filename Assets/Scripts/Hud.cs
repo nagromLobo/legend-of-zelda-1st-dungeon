@@ -13,6 +13,7 @@ public class Hud : MonoBehaviour {
 	public Text heart_text;
 	public Text key_text;
 	public Text bomb_text;
+	public Text selected;
 	//public List<GameObject> weapons = new List<GameObject> (); //these are prefabs
 	//static List<GameObject> canSelect = new List<GameObject> ();
 	//public static List<GameObject> weapon_instances = new List<GameObject> ();
@@ -121,12 +122,12 @@ public class Hud : MonoBehaviour {
 			if (Input.GetKeyDown (KeyCode.RightArrow)) {
 				print ("no here yet");
 				slots [spot].color = Color.white;
-				spot = (spot + 1) % slots.Length;
+				spot = (spot + 1) % PlayerControl.instance.Inventory.Count;
 				//slots [spot].color = Color.red;
 			} else if (Input.GetKeyDown (KeyCode.LeftArrow) && spot > 0) {
 				print ("no not here either");
 				slots [spot].color = Color.white;
-				spot = (spot - 1) % slots.Length;
+				spot = (spot - 1) % PlayerControl.instance.Inventory.Count;
 				//slots [spot].color = Color.red;
 			} else if (Input.GetKeyDown (KeyCode.A)) {
 				print (spot);
@@ -236,6 +237,7 @@ public class Hud : MonoBehaviour {
 //					canSelect.Add (weapon);
 //				}
 //			}
+			//print (); 
 			weapon_sprites.Add (weapon_prefab.GetComponent<SpriteRenderer> ().sprite);
 			//print (weapon_prefab.name); 
 			//print ("actually though " + instance.weapons [0]);
@@ -249,6 +251,7 @@ public class Hud : MonoBehaviour {
 			if (i >= slots.Length)
 				break;
 			else {
+				print ("rendering");
 				Color color = slots [i].color;
 				color.a = 255.0f;
 				slots [i].color = color;
