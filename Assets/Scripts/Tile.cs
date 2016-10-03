@@ -115,7 +115,14 @@ public class Tile : MonoBehaviour {
                 bc.enabled = true;
                 bc.isTrigger = false;
                 break;
-
+            case 'B': // Black trigger tile
+                bc.tag = "BlackTile";
+                rend.sortingOrder = 0;
+                bc.enabled = true;
+                bc.isTrigger = true;
+                bc.size = new Vector3(0.9f, 0.9f, 1.0f);
+                gameObject.layer = LayerMask.NameToLayer("Tiles");
+                break;
             case 'D': // Doorway
                 bc.enabled = true;
                 bc.isTrigger = true;

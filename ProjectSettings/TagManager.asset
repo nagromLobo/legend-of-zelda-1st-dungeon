@@ -29,6 +29,7 @@ TagManager:
   - Wallmaster
   - Clock
   - BoomerangGoriya
+  - BlackTile
   layers:
   - Default
   - TransparentFX

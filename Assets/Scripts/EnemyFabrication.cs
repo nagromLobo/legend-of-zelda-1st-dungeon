@@ -16,6 +16,7 @@ public class EnemyFabrication : MonoBehaviour {
 
     public Vector3[] pushableTileCoords; // order of increasing room numbers
     public GameObject pushableTilePrefab;
+    public GameObject slideableBlocksPrefab;
     public GameObject smallKeyPrefab;
     public GameObject boomerangPrefab;
     public GameObject room15TextEngine;
@@ -38,6 +39,8 @@ public class EnemyFabrication : MonoBehaviour {
     private List<GameObject> enemy_instances = new List<GameObject>();// instances in a give room
     private int currentRoom = 0;
     private int prevRoom = 0;
+    private int numBlackTilesTrigered = 0;
+    private SlideableBlocks[] lockedBlocks;
 
 
     // Use this for initialization
@@ -198,11 +201,35 @@ public class EnemyFabrication : MonoBehaviour {
             pushableBlocks[i] = (Instantiate(pushableTilePrefab, coords, transform.rotation) as GameObject).GetComponent<PushableBlock>();
             pushableBlocks[i].SetUpPushableTile(true, true, true, true, coords, 0, true);
             pushableBlocks[i].onBlockPushed += OnBlockPushed;
+            pushableBlocks[i].onBlackTileTrigered += OnBlackTileTrigered;
         }
         // need to defeat all enemies in room to push tile
         pushableBlocks[0].SetUpPushableTile(true, true, true, true, pushableTileCoords[0], 7, false);
-        // pushable in every direction besides from the west
-        pushableBlocks[1].SetUpPushableTile(true, true, true, false, pushableTileCoords[1], 0, true);
+        pushableBlocks[1].SetUpPushableTile(true, true, true, true, pushableTileCoords[1], 0, false);
+
+
+        // set up locked blocks in rooms
+        lockedBlocks = new SlideableBlocks[numEnemiesInRooms.Length];
+        // room 1
+        lockedBlocks[1] = (Instantiate(slideableBlocksPrefab, eventCoords[1], Quaternion.identity) as GameObject).GetComponent<SlideableBlocks>();
+        lockedBlocks[1].InitBlocks(eventCoords[1]);
+        lockedBlocks[1].RestBlocksToOpen();
+        // room 7
+        lockedBlocks[7] = (Instantiate(slideableBlocksPrefab, eventCoords[7], Quaternion.identity) as GameObject).GetComponent<SlideableBlocks>();
+        lockedBlocks[7].InitBlocks(eventCoords[7]);
+        lockedBlocks[7].RestBlocksToOpen();
+        // room 13
+        lockedBlocks[13] = (Instantiate(slideableBlocksPrefab, eventCoords[13], Quaternion.identity) as GameObject).GetComponent<SlideableBlocks>();
+        lockedBlocks[13].InitBlocks(eventCoords[13]);
+        lockedBlocks[13].RestBlocksToOpen();
+        // room 14
+        lockedBlocks[14] = (Instantiate(slideableBlocksPrefab, eventCoords[14], Quaternion.identity) as GameObject).GetComponent<SlideableBlocks>();
+        lockedBlocks[14].InitBlocks(eventCoords[14]);
+        lockedBlocks[14].RestBlocksToOpen();
+        // room 10
+        lockedBlocks[10] = (Instantiate(slideableBlocksPrefab, eventCoords[10], Quaternion.identity) as GameObject).GetComponent<SlideableBlocks>();
+        lockedBlocks[10].InitBlocks(eventCoords[10]);
+        lockedBlocks[10].RestBlocksToOpen();
     }
 
     void Update() {
@@ -227,6 +254,22 @@ public class EnemyFabrication : MonoBehaviour {
                     PuzzleSolved();
                     break;
             }
+        }
+    }
+
+    void OnBlackTileTrigered(PushableBlock pushedBlock) {
+        if (customLevel) {
+            numBlackTilesTrigered++;
+        }
+        switch (currentRoom) {
+            case 1:
+                // then we are in the water/gel room
+                if(numBlackTilesTrigered == 2) {
+                    // unlock slideable blocks
+                    lockedBlocks[currentRoom].MoveBlocks();
+                    PuzzleSolved();
+                }
+                break;
         }
     }
 
@@ -267,6 +310,34 @@ public class EnemyFabrication : MonoBehaviour {
                         break;
                 }
             }
+        } else {
+            if(currentRoom != prevRoom) {
+                numBlackTilesTrigered = 0;
+            }
+            switch (prevRoom) {
+                case 1:
+                    // then in room with gels, rest locked door
+                    lockedBlocks[prevRoom].RestBlocksToOpen();
+                    bool pushable = false;
+                    if (numEnemiesInRooms[prevRoom] == 0) {
+                        pushable = true;
+                    }
+                    pushableBlocks[0].SetUpPushableTile(true, true, true, true, pushableTileCoords[0], 7, pushable);
+                    pushableBlocks[1].SetUpPushableTile(true, true, true, true, pushableTileCoords[1], 7, pushable);
+                    break;
+                case 7:
+                    lockedBlocks[prevRoom].RestBlocksToOpen();
+                    break;
+                case 13:
+                    lockedBlocks[prevRoom].RestBlocksToOpen();
+                    break;
+                case 14:
+                    lockedBlocks[prevRoom].RestBlocksToOpen();
+                    break;
+                case 10:
+                    lockedBlocks[prevRoom].RestBlocksToOpen();
+                    break;
+            }
         }
     }
 
@@ -298,6 +369,14 @@ public class EnemyFabrication : MonoBehaviour {
                     room15TextEngine.GetComponent<TextEngine>().AnimateText();
                     break;
             }
+        } else {
+            // then we are in the custom level
+            switch (currentRoom) {
+                case 1:
+                    // gel and water room
+                    lockedBlocks[currentRoom].CloseBlocks();
+                    break;
+            }
         }
     }
 
@@ -305,6 +384,7 @@ public class EnemyFabrication : MonoBehaviour {
         // reduce the amount of enemies in the current room
         --numEnemiesInRooms[currentRoom];
         if (!customLevel) {
+            // then we are in the 1st dungeon
             if (numEnemiesInRooms[currentRoom] == 0) {
                 switch (currentRoom) {
                     // handle room specific enemy killing events
@@ -342,6 +422,37 @@ public class EnemyFabrication : MonoBehaviour {
                         // Unlock door
                         ShowMapOnCamera.MAP_TILES[Mathf.RoundToInt(eventCoords[currentRoom].x), Mathf.RoundToInt(eventCoords[currentRoom].y)].openEventDoor(Direction.EAST);
                         DoorStateChanged();
+                        break;
+                }
+            }
+        } else {
+            // then we are in the custom level
+            if(numEnemiesInRooms[currentRoom] == 0) {
+                switch (currentRoom) {
+                    case 1:
+                        // then we are in the first gel room with pushable blocks
+                        pushableBlocks[0].pushable = true;
+                        pushableBlocks[1].pushable = true;
+                        break;
+                    case 2:
+                        // then we are in triforce room
+                        Instantiate(smallKeyPrefab, eventCoords[currentRoom], Quaternion.identity);
+                        KeyAppeared();
+                        break;
+                    case 4:
+                        // then we are in the left bow room
+                        Instantiate(smallKeyPrefab, eventCoords[currentRoom], Quaternion.identity);
+                        KeyAppeared();
+                        break;
+                    case 6:
+                        // then we are in the right bow room
+                        Instantiate(smallKeyPrefab, eventCoords[currentRoom], Quaternion.identity);
+                        KeyAppeared();
+                        break;
+                    case 12:
+                        // then we are in the right goriya room
+                        Instantiate(smallKeyPrefab, eventCoords[currentRoom], Quaternion.identity);
+                        KeyAppeared();
                         break;
                 }
             }

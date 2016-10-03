@@ -301,6 +301,8 @@ MonoBehaviour:
   - {x: 39, y: 4, z: 0}
   pushableTilePrefab: {fileID: 1000012912163634, guid: 102bd2c809d038e499d5aab9d5a58de4,
     type: 2}
+  slideableBlocksPrefab: {fileID: 1000013177599788, guid: c3d5b51ab1d27c6418f35aad171478d6,
+    type: 2}
   smallKeyPrefab: {fileID: 1000011815822468, guid: 34251d4bbf2821c4db490834030f5683,
     type: 2}
   boomerangPrefab: {fileID: 1000011314384716, guid: 198c3837c99eee84982db4451c5cc7cc,
@@ -311,21 +313,20 @@ MonoBehaviour:
   NPCprefab: {fileID: 1000012669693750, guid: 85629f8c84941d243ad9a1a569e92188, type: 2}
   eventCoords:
   - {x: 0, y: 0, z: 0}
-  - {x: 26, y: 2, z: 0}
+  - {x: 39, y: 19, z: 0}
+  - {x: 39.5, y: 27, z: 0}
   - {x: 0, y: 0, z: 0}
+  - {x: 4, y: 25, z: 0}
   - {x: 0, y: 0, z: 0}
-  - {x: 40, y: 29, z: 0}
-  - {x: 30, y: 27, z: 0}
+  - {x: 76, y: 25, z: 0}
+  - {x: 7, y: 41, z: 0}
+  - {x: 14, y: 49, z: 0}
   - {x: 0, y: 0, z: 0}
-  - {x: 17, y: 38, z: 0}
+  - {x: 71, y: 41, z: 0}
+  - {x: 65, y: 49, z: 0}
+  - {x: 60, y: 51, z: 0}
   - {x: 0, y: 0, z: 0}
-  - {x: 0, y: 0, z: 0}
-  - {x: 40, y: 62, z: 0}
-  - {x: 0, y: 0, z: 0}
-  - {x: 56, y: 40, z: 0}
-  - {x: 0, y: 0, z: 0}
-  - {x: 78, y: 49, z: 0}
-  - {x: 7, y: 37.5, z: 0}
+  - {x: 39, y: 35, z: 0}
   puzzleSolvedAudio: {fileID: 8300000, guid: e16687a1b11c20143b742a3fab7ebd41, type: 3}
   doorClosedAudio: {fileID: 8300000, guid: 13be2bcb6af16bd48a1171d8cee8132a, type: 3}
   keyAppearedAudio: {fileID: 8300000, guid: acf03f0043cba054f9213e358f1a09fc, type: 3}
