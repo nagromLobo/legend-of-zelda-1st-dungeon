@@ -61,7 +61,17 @@ public class Boomerang : Weapon {
 
 		u = (Time.time - StartTime) / half_duration;
 
-		weapon_instance.transform.position = Vector3.Lerp (beginPoint, FinalDest, u);
+		//weapon_instance.transform.position = Vector3.Lerp (beginPoint, FinalDest, u);
+		GameObject[] rupees = GameObject.FindGameObjectsWithTag ("Rupee");
+		if (rupees.Length >= 1) {
+			for(int i = 0; i < rupees.Length; ++i){
+				if (Vector3.Distance (rupees [i].transform.position, weapon_instance.transform.position) <= 0.5) {
+					PlayerControl.instance.rupee_count += 1;
+					Hud.UpdateRupees ();
+					Destroy (rupees [i]);
+				}
+			}
+		}
 
 		if(_isLerping)
 		{
@@ -181,21 +191,26 @@ public class Boomerang : Weapon {
 		//weapon_instance.transform.position = beginPoint;
 	}
 
-	//	void OnTriggernEnter(Collider coll)
-	//	{
-	//		//if(coll.gameObject.tag == "Enemy") 
-	//			//call damage?? IDK
-	//
-	//		//does it bounce back if it is an enemy
-	//		//making it 
-	//		if (this.state == BoomerangState.COMEBACK && coll.gameObject.tag != "Enemy") { //Right??
-	//			print("destroyed when I leave");
-	//			//Destroy (weapon_instance);
-	//		} else if (this.state == BoomerangState.RELEASED && coll.gameObject.tag != "Enemy") {
-	//			FinalDest = weapon_instance.transform.position;
-	//			u = 1.0f;
-	//			//timer = 0;
-	//		}
-	//	}
+		void OnTriggernEnter(Collider coll)
+		{
+			//if(coll.gameObject.tag == "Enemy") 
+				//call damage?? IDK
+			//does it bounce back if it is an enemy
+			//making it 
+			if (this.state == BoomerangState.COMEBACK && coll.gameObject.tag != "Enemy") { //Right??
+				print("enemy hit");
+				//Destroy (weapon_instance);
+			} else if (this.state == BoomerangState.RELEASED && coll.gameObject.tag != "Enemy") {
+				FinalDest = weapon_instance.transform.position;
+				u = 1.0f;
+				//timer = 0;
+			}
+		}
+//		void OnCollisionEnter(Collision coll) {
+//		print ("ive collided"); 
+//			if (coll.gameObject.layer == 6 || coll.gameObject.tag == "Bomb") {
+//				print ("item pick up");
+//			}
+//		}
 
 }

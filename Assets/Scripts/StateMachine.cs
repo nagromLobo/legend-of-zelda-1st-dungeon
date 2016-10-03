@@ -238,6 +238,7 @@ public class StateLinkAttack : State {
 
 		if (weapon_prefab.name == "Boomerang") {
             //weapon_instance = (MonoBehaviour.Instantiate(weapon_prefab, PlayerControl.instance.transform.position, Quaternion.identity) as GameObject);
+			//weapon_prefab.GetComponent<Boomerang> ().Position (pc.transform.position);
 			weapon_prefab.GetComponent<Boomerang> ().Instantiate ();
 			weapon_instance = GameObject.FindWithTag ("Boomerang").GetComponent<Boomerang> ().weapon_instance;
 
@@ -270,7 +271,6 @@ public class StateLinkAttack : State {
             direction_eulerangle = new Vector3(0, 0, 180);
         }
 			
-
         // move and rotate weapon
 		//MonoBehaviour.print("before " + weapon_instance.transform.position);
         weapon_instance.transform.position += direction_offset;
@@ -287,8 +287,9 @@ public class StateLinkAttack : State {
 		if (weapon_instance.tag == "Boomerang") {
 
 			MonoBehaviour.print ("in Boomerang");
+			//weapon_instance.GetComponent<Boomerang> ().DirectionGo (pc.current_direction);
 
-			GameObject.FindWithTag ("Boomerang").GetComponent<Boomerang> ().ReleaseBoomerang ();
+			weapon_instance.GetComponent<Boomerang> ().ReleaseBoomerang ();
 			weapon_instance.tag = "BoomerangReleased";
 			GameObject.FindWithTag ("BoomerangReleased").GetComponent<Boomerang> ().released = true;
 		}
@@ -314,7 +315,7 @@ public class StateLinkAttack : State {
 			Hud.UpdateRupees ();
 			MonoBehaviour.print ("decrement rupee");
             MonoBehaviour.Destroy(BowInstance);
-        } else if (weapon_prefab.name != "Boomerang") {
+        } else if (weapon_prefab.name == "Wooden Sword") {
 
 			GameObject.FindWithTag ("Sword").GetComponent<WoodenSword> ().ReleaseSword ();
 			GameObject.FindWithTag ("Sword").GetComponent<WoodenSword> ().released = true;
