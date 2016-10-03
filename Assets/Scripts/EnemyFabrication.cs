@@ -575,8 +575,10 @@ public class EnemyFabrication : MonoBehaviour {
         // destroy all of the enemy instances when offscreen
         foreach (GameObject enemy in enemy_instances) {
             if(enemy != null) {
-                if (enemy.GetComponent<Enemy>().hasKey) {
-                    enemy.GetComponent<Enemy>().takeKey();
+                if(enemy.GetComponent<Enemy>() != null) {
+                    if (enemy.GetComponent<Enemy>().hasKey) {
+                        enemy.GetComponent<Enemy>().takeKey();
+                    }
                 }
             }
             Destroy(enemy);
