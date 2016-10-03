@@ -23,6 +23,7 @@ public class EnemyFabrication : MonoBehaviour {
     public GameObject flamePrefab;
     public GameObject NPCprefab;
     public Vector3[] eventCoords; // index is roomnumber
+    public bool[] enemyHasKey;
 
     // room based audio events
     public AudioClip puzzleSolvedAudio;
@@ -59,8 +60,6 @@ public class EnemyFabrication : MonoBehaviour {
             spawnGrid[i] = new List<Vector3>();
         }
         // for testing wall masters
-        //spawnGrid[0] = new List<Vector3> { new Vector3(39.5f, 6.0f, 0.0f)
-        //};
         if (!customLevel) {
             spawnGrid[1] = new List<Vector3> { new Vector3(19.0f, 7.0f, 0.0f),
                                             new Vector3(18.0f, 5.0f, 0.0f),
@@ -391,6 +390,11 @@ public class EnemyFabrication : MonoBehaviour {
                 if(enemy_instances[i].GetComponent<BladeTrap>() != null) {
                     enemy_instances[i].GetComponent<BladeTrap>().onBlackTileTriger += OnBlackTileTrigered;
                 }
+            }
+        }
+        if(numEnemiesInRooms[currentRoom] > 0) {
+            if (enemyHasKey[currentRoom]) {
+                enemy_instances[0].GetComponent<Enemy>().giveKey();
             }
         }
         if (!customLevel) {

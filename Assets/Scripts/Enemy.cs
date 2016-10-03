@@ -14,6 +14,9 @@ public class Enemy : MonoBehaviour {
     public float damageCooldown = 2.0f;
     public float damageDistancePushback = 4.0f;
     public bool stunable = false;
+    public GameObject keyPrefab;
+    public GameObject keyInstance;
+    public bool hasKey = false;
 
     public delegate void onEnemyDestroyed(GameObject enemy);
     public onEnemyDestroyed OnEnemyDestroyed;
@@ -61,6 +64,9 @@ public class Enemy : MonoBehaviour {
             handleDamaged();
         } else if(current_state == EntityState.ATTACKING) {
             handleAttack();
+        }
+        if (hasKey) {
+            keyInstance.transform.position = this.transform.position;
         }
 	}
 
@@ -193,6 +199,13 @@ public class Enemy : MonoBehaviour {
             spriteRenderer.color = normalColor;
         }
 
+    }
+
+    public void giveKey() {
+        if (!hasKey) {
+            hasKey = true;
+        }
+        keyInstance = Instantiate(keyPrefab, transform.position, Quaternion.identity) as GameObject;
     }
 
 

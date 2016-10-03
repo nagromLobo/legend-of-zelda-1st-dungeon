@@ -170,6 +170,9 @@ MonoBehaviour:
   damageCooldown: 2
   damageDistancePushback: 4
   stunable: 0
+  keyPrefab: {fileID: 1000011815822468, guid: 34251d4bbf2821c4db490834030f5683, type: 2}
+  keyInstance: {fileID: 0}
+  hasKey: 0
   enemyHurtAudio: {fileID: 8300000, guid: eb8ae756a4419384581847aa91089e40, type: 3}
   enemyDiesAudio: {fileID: 8300000, guid: 868213c41352b0a48b342ff24d984a57, type: 3}
   currDirection: 2

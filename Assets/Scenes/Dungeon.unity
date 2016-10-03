@@ -134,6 +134,11 @@ Prefab:
       propertyPath: room15TextEngine
       value: 
       objectReference: {fileID: 452120868}
+    - target: {fileID: 114000012568473420, guid: 7feb558bd6ecec046ba0006fd192aa0c,
+        type: 2}
+      propertyPath: customLevel
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 7feb558bd6ecec046ba0006fd192aa0c, type: 2}
   m_IsPrefabParent: 0

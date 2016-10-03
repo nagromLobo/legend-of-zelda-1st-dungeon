@@ -339,6 +339,8 @@ MonoBehaviour:
   - {x: 39, y: 4, z: 0}
   pushableTilePrefab: {fileID: 1000012912163634, guid: 102bd2c809d038e499d5aab9d5a58de4,
     type: 2}
+  slideableBlocksPrefab: {fileID: 1000013177599788, guid: c3d5b51ab1d27c6418f35aad171478d6,
+    type: 2}
   smallKeyPrefab: {fileID: 1000011815822468, guid: 34251d4bbf2821c4db490834030f5683,
     type: 2}
   boomerangPrefab: {fileID: 1000011314384716, guid: 198c3837c99eee84982db4451c5cc7cc,
@@ -364,6 +366,7 @@ MonoBehaviour:
   - {x: 0, y: 0, z: 0}
   - {x: 78, y: 49, z: 0}
   - {x: 7, y: 37.5, z: 0}
+  enemyHasKey: 00000100000000000001000000000000
   puzzleSolvedAudio: {fileID: 8300000, guid: e16687a1b11c20143b742a3fab7ebd41, type: 3}
   doorClosedAudio: {fileID: 8300000, guid: 13be2bcb6af16bd48a1171d8cee8132a, type: 3}
   keyAppearedAudio: {fileID: 8300000, guid: acf03f0043cba054f9213e358f1a09fc, type: 3}
@@ -395,7 +398,7 @@ MonoBehaviour:
   screenSizeOverage: 2
   tileClearOverage: 4
   mapSprites: {fileID: 2800000, guid: f0f45c808d9a24081b7e4914ba46fb1f, type: 3}
-  mapData: {fileID: 4900000, guid: 9f1be0d91fcce974cb318e3e5344eb83, type: 3}
+  mapData: {fileID: 4900000, guid: 2d13d337ed3814232bc4ad460f8573c4, type: 3}
   collisionData: {fileID: 4900000, guid: 3a5b0c0583d7e4ca2a6e18be51cc9615, type: 3}
   destructibleData: {fileID: 4900000, guid: 7389a3d58ffa549f5a6d61c4ae0f9861, type: 3}
   tilePrefab: {fileID: 184960, guid: 15833c75680f54e658e96c3d2791956c, type: 2}
