@@ -37,7 +37,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000011019179270}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 39.5, y: 1.283, z: 0}
+  m_LocalPosition: {x: 39.5, y: 2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
@@ -84,7 +84,7 @@ MonoBehaviour:
   walkingVelocity: 4
   LinkDamageColor: {r: 0.9117647, g: 0.23464532, b: 0.23464532, a: 1}
   damageCooldown: 1.5
-  damageFlashLength: 0.1
+  flashLength: 0.2
   timeToEnterThreshold: 0.5
   delayInThreshold: 1.5
   timeToLeaveThreshold: 1
@@ -100,6 +100,10 @@ MonoBehaviour:
   triforce_retrieved: 0
   bow_retrieved: 0
   boomerang_retrieved: 0
+  invincibleCheat: 0
+  invincible: 0
+  invincablityCooldown: 2
+  invincablityColor: {r: 0, g: 0, b: 0, a: 0}
   threshold_width: 4
   link_run_down:
   - {fileID: 21300000, guid: 45afd34443b96473598b76e2b1778b4e, type: 3}
@@ -122,8 +126,19 @@ MonoBehaviour:
   Inventory: []
   Sword_prefab: {fileID: 1000012755623840, guid: dde012012b86747cabe96058f1e2424d,
     type: 2}
-  selected_weapon_prefab: {fileID: 1000012755623840, guid: dde012012b86747cabe96058f1e2424d,
+  selected_weapon_prefab: {fileID: 1000013872525264, guid: 213a0da10235c40b29a3110c930b64e9,
     type: 2}
+  ________________________: 0
+  rupee_prefab: {fileID: 1000013996505824, guid: b6f36fa3f01f3af4283c53d830a454a7,
+    type: 2}
+  bomb_prefab: {fileID: 1000010690206656, guid: 47e5d1908535e1d43a847712bbd36dd0,
+    type: 2}
+  heart_prefab: {fileID: 1000010487066540, guid: bcd4c86912591a14c97ab134f636d640,
+    type: 2}
+  clock_prefab: {fileID: 1000012044755550, guid: bcd7c3a9a07c90e45a660714cade5423,
+    type: 2}
+  ___________________: 0
+  enemy_kill_count: 0
 --- !u!212 &212000013295226446
 SpriteRenderer:
   m_ObjectHideFlags: 1

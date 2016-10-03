@@ -3,7 +3,9 @@
 //
 //public class GameManager : MonoBehaviour {
 //
-//	public UIManager UI;
+//	public Hud hud;
+//
+//	public GameManager instance;
 //
 //	// Use this for initialization
 //	/*void Start () {
@@ -15,19 +17,11 @@
 //	
 //	}*/
 //
-//	public void TogglePauseMenu()
+//	public void TogglePauseMenu() // fix this later
 //	{
-//		// not the optimal way but for the sake of readability
-//		if (UI.GetComponentsInChildren<Canvas>().enabled)
-//		{
-//			UI.GetComponentsInChildren<Canvas>().enabled = false;
-//			Time.timeScale = 1.0f;
-//		}
-//		else
-//		{
-//			UI.GetComponentsInChildren<Canvas>().enabled = true;
-//			Time.timeScale = 0f;
-//		}
+//		
+//		Time.timeScale = 0f;
+//		//set back to 1 after done toggling
 //
 //		Debug.Log("GAMEMANAGER:: TimeScale: " + Time.timeScale);
 //	}

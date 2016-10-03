@@ -66,12 +66,22 @@ public class Bomb: Weapon {
 		if(timer <= 0) {
 
 			//print ("timer " + timer);
-			SphereCollider myCollider = weapon_instance.transform.GetComponent<SphereCollider> ();
-			myCollider.radius = 1.0f; // or whatever radius you want.
-			//print ("hello"); 
-			Destroy (weapon_instance);
+			SphereCollider myCollider = weapon_instance.GetComponent<SphereCollider> ();
+			myCollider.radius = 2.0f; // or whatever radius you want.
+			//print ("hello");
+			Destroy (weapon_instance, 3);
+			//Destroy (weapon_instance, sound clip length);
 		}
 		//}
 		//}
+	}
+	void OnTriggerEnter(Collider coll) {
+		if (coll.gameObject.tag == "Enemy") {
+			SphereCollider myCollider = weapon_instance.GetComponent<SphereCollider> ();
+			myCollider.radius = 2.0f; // or whatever radius you want.
+			//print ("hello"); 
+			Destroy (weapon_instance, 3);
+			//Destroy (weapon_instance, sound clip length);
+		}
 	}
 } 

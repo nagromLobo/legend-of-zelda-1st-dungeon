@@ -182,6 +182,13 @@ public class PlayerControl : MonoBehaviour {
         }
     }
 
+	public void Select(String weapon) {
+		foreach(GameObject item in Inventory) {
+			if (item.name == weapon)
+				selected_weapon_prefab = item;
+		}
+	}
+
     private void handleTransitionMovement() {
         float u = (Time.time - timeStartTransition) / transitionTime;
         if (u > 1) {
@@ -253,7 +260,7 @@ public class PlayerControl : MonoBehaviour {
             spriteRenderer.color = LinkDamageColor;
         }
         if((Time.time - damageStartTime) > damageCooldown) {
-            current_state = EntityState.NORMAL;
+			current_state = EntityState.NORMAL;
             spriteRenderer.color = normalColor;
         }
         
@@ -318,6 +325,7 @@ public class PlayerControl : MonoBehaviour {
             case "Boomerang":
                 Destroy(coll.gameObject);
                 boomerang_retrieved = true;
+				Hud.AddWeapon (coll.gameObject);
                 break;
             case "Bomb":
                 Destroy(coll.gameObject);
@@ -325,6 +333,7 @@ public class PlayerControl : MonoBehaviour {
 				//update weapon selection
 				//if(bomb_count>=1) ; //add to weapons list
 				Hud.UpdateBombs ();
+				Hud.AddWeapon (coll.gameObject);
                 break;
             // Dungeon State Collectables
             case "Map":

@@ -506,11 +506,11 @@ public class StateLinkStunnedSprite : State {
         pc.transform.position = UtilityFunctions.fixToGrid(pc.transform.position, pc.current_direction, prevDirection);
 
         //link attack
-        if (Input.GetKeyDown(KeyCode.A)) {
+		if (Input.GetKeyDown(KeyCode.A) && !Hud.DisableWeapons) {
             state_machine.ChangeState(new StateLinkAttack(pc, pc.Sword_prefab, 15));
         }
         //handle no weapon selection
-        if (Input.GetKeyDown(KeyCode.S)) {
+		if (Input.GetKeyDown(KeyCode.S) && !Hud.DisableWeapons) {
 			if(pc.selected_weapon_prefab != null) {
 				if ((pc.selected_weapon_prefab.name == "Bomb") && (pc.bomb_count > 0))
 					state_machine.ChangeState (new StateLinkBombAttack (pc, pc.selected_weapon_prefab, 6));
