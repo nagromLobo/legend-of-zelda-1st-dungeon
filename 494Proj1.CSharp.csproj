@@ -95,7 +95,6 @@
     <Compile Include="Assets\Scripts\StateMachine.cs" />
     <Compile Include="Assets\Scripts\TextEngine.cs" />
     <Compile Include="Assets\Scripts\Tile.cs" />
-    <Compile Include="Assets\Scripts\UIManager.cs" />
     <Compile Include="Assets\Scripts\UtilityFunctions.cs" />
     <Compile Include="Assets\Scripts\WallMasterManager.cs" />
     <Compile Include="Assets\Scripts\WallMasterTrigger.cs" />
