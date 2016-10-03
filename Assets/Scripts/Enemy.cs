@@ -208,6 +208,12 @@ public class Enemy : MonoBehaviour {
         keyInstance = Instantiate(keyPrefab, transform.position, Quaternion.identity) as GameObject;
     }
 
+    public void takeKey() {
+        if (hasKey) {
+            Destroy(keyInstance);
+        }
+    }
+
 
 
     void DestroyEnemy() {

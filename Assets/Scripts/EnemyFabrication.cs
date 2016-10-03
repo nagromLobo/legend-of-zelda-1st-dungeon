@@ -202,34 +202,41 @@ public class EnemyFabrication : MonoBehaviour {
             pushableBlocks[i].onBlockPushed += OnBlockPushed;
             pushableBlocks[i].onBlackTileTrigered += OnBlackTileTrigered;
         }
-        // need to defeat all enemies in room to push tile
-        pushableBlocks[0].SetUpPushableTile(true, true, true, true, pushableTileCoords[0], 7, false);
-        pushableBlocks[1].SetUpPushableTile(true, true, true, true, pushableTileCoords[1], 0, false);
 
 
-        // set up locked blocks in rooms
-        lockedBlocks = new SlideableBlocks[numEnemiesInRooms.Length];
-        // room 1
-        lockedBlocks[1] = (Instantiate(slideableBlocksPrefab, eventCoords[1], Quaternion.identity) as GameObject).GetComponent<SlideableBlocks>();
-        lockedBlocks[1].InitBlocks(eventCoords[1]);
-        lockedBlocks[1].RestBlocksToOpen();
-        // room 7
-        lockedBlocks[7] = (Instantiate(slideableBlocksPrefab, eventCoords[7], Quaternion.identity) as GameObject).GetComponent<SlideableBlocks>();
-        lockedBlocks[7].InitBlocks(eventCoords[7]);
-        lockedBlocks[7].RestBlocksToOpen();
-        // room 13
-        lockedBlocks[13] = (Instantiate(slideableBlocksPrefab, eventCoords[13], Quaternion.identity) as GameObject).GetComponent<SlideableBlocks>();
-        lockedBlocks[13].InitBlocks(eventCoords[13]);
-        lockedBlocks[13].RestBlocksToOpen();
-        // room 14
-        lockedBlocks[14] = (Instantiate(slideableBlocksPrefab, eventCoords[14], Quaternion.identity) as GameObject).GetComponent<SlideableBlocks>();
-        lockedBlocks[14].InitBlocks(eventCoords[14]);
-        lockedBlocks[14].RestBlocksToOpen();
-        // room 10
-        lockedBlocks[10] = (Instantiate(slideableBlocksPrefab, eventCoords[10], Quaternion.identity) as GameObject).GetComponent<SlideableBlocks>();
-        lockedBlocks[10].InitBlocks(eventCoords[10]);
-        lockedBlocks[10].RestBlocksToOpen();
-    }
+        if (customLevel) {
+            // need to defeat all enemies in room to push tile
+            pushableBlocks[0].SetUpPushableTile(true, true, true, true, pushableTileCoords[0], 7, false);
+            pushableBlocks[1].SetUpPushableTile(true, true, true, true, pushableTileCoords[1], 0, false);
+
+            // set up locked blocks in rooms
+            lockedBlocks = new SlideableBlocks[numEnemiesInRooms.Length];
+            // room 1
+            lockedBlocks[1] = (Instantiate(slideableBlocksPrefab, eventCoords[1], Quaternion.identity) as GameObject).GetComponent<SlideableBlocks>();
+            lockedBlocks[1].InitBlocks(eventCoords[1]);
+            lockedBlocks[1].RestBlocksToOpen();
+            // room 7
+            lockedBlocks[7] = (Instantiate(slideableBlocksPrefab, eventCoords[7], Quaternion.identity) as GameObject).GetComponent<SlideableBlocks>();
+            lockedBlocks[7].InitBlocks(eventCoords[7]);
+            lockedBlocks[7].RestBlocksToOpen();
+            // room 13
+            lockedBlocks[13] = (Instantiate(slideableBlocksPrefab, eventCoords[13], Quaternion.identity) as GameObject).GetComponent<SlideableBlocks>();
+            lockedBlocks[13].InitBlocks(eventCoords[13]);
+            lockedBlocks[13].RestBlocksToOpen();
+            // room 14
+            lockedBlocks[14] = (Instantiate(slideableBlocksPrefab, eventCoords[14], Quaternion.identity) as GameObject).GetComponent<SlideableBlocks>();
+            lockedBlocks[14].InitBlocks(eventCoords[14]);
+            lockedBlocks[14].RestBlocksToOpen();
+            // room 10
+            lockedBlocks[10] = (Instantiate(slideableBlocksPrefab, eventCoords[10], Quaternion.identity) as GameObject).GetComponent<SlideableBlocks>();
+            lockedBlocks[10].InitBlocks(eventCoords[10]);
+            lockedBlocks[10].RestBlocksToOpen();
+        } else {
+            // then we are in regular dungeon
+            pushableBlocks[0].SetUpPushableTile(true, true, true, true, pushableTileCoords[0], 7, false);
+            pushableBlocks[1].SetUpPushableTile(true, true, true, false, pushableTileCoords[1], 0, false);
+        }
+    } 
 
     void Update() {
         if (Input.GetKeyDown("f5")) {
@@ -321,7 +328,7 @@ public class EnemyFabrication : MonoBehaviour {
                         pushableBlocks[0].SetUpPushableTile(true, true, true, true, pushableTileCoords[0], 7, pushable);
                         // reset door
                         if (currentRoom != 15) {
-                            ShowMapOnCamera.MAP_TILES[Mathf.RoundToInt(eventCoords[currentRoom].x), Mathf.RoundToInt(eventCoords[currentRoom].y)].closeEventDoor();
+                            //ShowMapOnCamera.MAP_TILES[Mathf.RoundToInt(eventCoords[currentRoom].x), Mathf.RoundToInt(eventCoords[currentRoom].y)].closeEventDoor();
                         }
                         break;
                     case 11:
@@ -409,9 +416,6 @@ public class EnemyFabrication : MonoBehaviour {
                 case 7:
                     ShowMapOnCamera.MAP_TILES[Mathf.RoundToInt(eventCoords[currentRoom].x), Mathf.RoundToInt(eventCoords[currentRoom].y)].closeEventDoor();
                     break;
-                case 8:
-                    ShowMapOnCamera.MAP_TILES[Mathf.RoundToInt(eventCoords[currentRoom].x), Mathf.RoundToInt(eventCoords[currentRoom].y)].closeEventDoor();
-                    break;
                 case 15:
                     // then we entered the room with the text engine. have to start it
                     room15TextEngine.GetComponent<TextEngine>().AnimateText();
@@ -460,6 +464,10 @@ public class EnemyFabrication : MonoBehaviour {
     private void OnEnemyDestroyed(GameObject enemy) {
         // reduce the amount of enemies in the current room
         --numEnemiesInRooms[currentRoom];
+        Enemy currEnemy = enemy.GetComponent<Enemy>();
+        if (currEnemy.hasKey) {
+            enemyHasKey[currentRoom] = false;
+        }
         if (!customLevel) {
             // then we are in the 1st dungeon
             if (numEnemiesInRooms[currentRoom] == 0) {
@@ -556,6 +564,11 @@ public class EnemyFabrication : MonoBehaviour {
     private void OnStartCameraMovement(Direction d, float transitionTime) {
         // destroy all of the enemy instances when offscreen
         foreach (GameObject enemy in enemy_instances) {
+            if(enemy != null) {
+                if (enemy.GetComponent<Enemy>().hasKey) {
+                    enemy.GetComponent<Enemy>().takeKey();
+                }
+            }
             Destroy(enemy);
         }
         enemy_instances.Clear();

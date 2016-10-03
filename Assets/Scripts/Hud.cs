@@ -3,7 +3,6 @@ using System.Collections;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using System;
-using UnityEditor;
 
 public class Hud : MonoBehaviour {
 
