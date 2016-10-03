@@ -55,9 +55,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damage: 3
   stunCoolDown: 0
-  timer: 5
+  timer: 3
   weapon_prefab: {fileID: 1000010690206656}
-  weapon_instance: {fileID: 1000010690206656}
+  weapon_instance: {fileID: 0}
 --- !u!135 &135000010786721758
 SphereCollider:
   m_ObjectHideFlags: 1

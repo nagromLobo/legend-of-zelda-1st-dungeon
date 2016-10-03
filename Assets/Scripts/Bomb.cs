@@ -63,7 +63,6 @@ public class Bomb: Weapon {
 		//if (weapon_instance.gameObject.tag == "BombReleased") { 
 		//print ("released"); 
 		if(timer <= 0) {
-
 //			//print ("timer " + timer);
 //			SphereCollider myCollider = weapon_instance.transform.GetComponent<SphereCollider> ();
 //			myCollider.radius = 1.0f; 

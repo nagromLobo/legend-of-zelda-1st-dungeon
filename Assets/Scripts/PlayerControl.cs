@@ -3,6 +3,7 @@ using System.Collections;
 using System;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
+using UnityEditorInternal.VersionControl;
 
 public enum Direction {NORTH, EAST, SOUTH, WEST};
 public enum EntityState {NORMAL, ATTACKING, DAMAGED, CAMERA_TRANSITION, ENTERING_ROOM, GAME_OVER, GRABBED};
@@ -47,8 +48,9 @@ public class PlayerControl : MonoBehaviour {
 
     public EntityState current_state = EntityState.NORMAL;
     public Direction current_direction = Direction.SOUTH;
+	public GameObject[] weapon_prefabs;
 
-    public GameObject[] Inventory; // 0 Boomerang, 2 Bomb, 3 Bow
+	public List<GameObject> Inventory = new List<GameObject>(); // 0 Boomerang, 2 Bomb, 3 Bow
 
     public GameObject Sword_prefab;
 
@@ -195,6 +197,17 @@ public class PlayerControl : MonoBehaviour {
         }
     }
 
+//	public void Select(String weapon) {
+//		foreach(GameObject item in Inventory) {
+//			if (item.name == weapon)
+//				selected_weapon_prefab = item;
+//		}
+//	}
+
+	public void Select(int index) {
+		selected_weapon_prefab = Inventory[index];
+	}
+
     private void handleTransitionMovement() {
         float u = (Time.time - timeStartTransition) / transitionTime;
         if (u > 1) {
@@ -265,8 +278,9 @@ public class PlayerControl : MonoBehaviour {
             lastDamageFlashTime = Time.time;
             spriteRenderer.color = LinkDamageColor;
         }
-        if ((Time.time - damageStartTime) > damageCooldown) {
-            current_state = EntityState.NORMAL;
+
+        if((Time.time - damageStartTime) > damageCooldown) {
+			current_state = EntityState.NORMAL;
             spriteRenderer.color = normalColor;
         }
 
@@ -334,27 +348,77 @@ public class PlayerControl : MonoBehaviour {
                 break;
             // Weapon Collectables
             case "Bow":
-                //cannot use bow unless you have arrows 
+
+				/*Hud.AddWeapon (coll.gameObject);
+				if (Inventory.Count == 0) {
+					for (int i = 0; i < weapon_prefabs.Length; ++i) {
+						if (weapon_prefabs [i].name == coll.gameObject.name) {
+							selected_weapon_prefab = weapon_prefabs [i];
+							Inventory.Add (weapon_prefabs [i]);
+						}
+					}
+				} else  {
+					for (int i = 0; i < weapon_prefabs.Length; ++i) {
+						if (weapon_prefabs [i].name == coll.gameObject.name) {
+							if(!Inventory.Contains (coll.gameObject))
+								Inventory.Add (weapon_prefabs [i]);
+
+						}
+					}
+				}*/
+				//cannot use bow unless you have arrows 
                 Destroy(coll.gameObject);
                 bow_retrieved = true;
                 playerAudio.clip = itemRetrievedAudio;
                 playerAudio.Play();
                 break;
             case "Boomerang":
+				Hud.AddWeapon (coll.gameObject);
+				if (Inventory.Count == 0) {
+					for (int i = 0; i < weapon_prefabs.Length; ++i) {
+						if (weapon_prefabs [i].name == coll.gameObject.name) {
+							selected_weapon_prefab = weapon_prefabs [i];
+							Inventory.Add (weapon_prefabs [i]);
+						}
+					}
+				} else  {
+					for (int i = 0; i < weapon_prefabs.Length; ++i) {
+						if (weapon_prefabs [i].name == coll.gameObject.name) {
+							if(!Inventory.Contains (coll.gameObject))
+								Inventory.Add (weapon_prefabs [i]);
+
+						}
+					}
+				}
                 Destroy(coll.gameObject);
                 MonoBehaviour.print("Detroy collect Boomerang");
                 boomerang_retrieved = true;
                 playerAudio.clip = itemRetrievedAudio;
                 playerAudio.Play();
                 break;
-            case "Bomb":
-                Destroy(coll.gameObject);
-                bomb_count++;
-                playerAudio.clip = itemRetrievedAudio;
-                playerAudio.Play();
-                //update weapon selection
-                //if(bomb_count>=1) ; //add to weapons list
-                Hud.UpdateBombs();
+			case "Bomb":
+				bomb_count++;
+					//update weapon selection
+					//if(bomb_count>=1) ; //add to weapons list
+				if (Inventory.Count == 0) {
+					for (int i = 0; i < weapon_prefabs.Length; ++i) {
+						if (weapon_prefabs [i].name == coll.gameObject.name) {
+							selected_weapon_prefab = weapon_prefabs [i];
+							Inventory.Add (weapon_prefabs [i]);
+						}
+					}
+				} else  {
+					for (int i = 0; i < weapon_prefabs.Length; ++i) {
+						if (weapon_prefabs [i].name == coll.gameObject.name) {
+							if(!Inventory.Contains (coll.gameObject))
+								Inventory.Add (weapon_prefabs [i]);
+							
+						}
+					}
+				}
+				Hud.UpdateBombs ();
+				Hud.AddWeapon (coll.gameObject);
+				Destroy(coll.gameObject);
                 break;
             // Dungeon State Collectables
             case "Map":
