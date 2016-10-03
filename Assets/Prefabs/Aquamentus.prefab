@@ -95,6 +95,9 @@ MonoBehaviour:
   damageCooldown: 2
   damageDistancePushback: 3
   stunable: 0
+  keyPrefab: {fileID: 0}
+  keyInstance: {fileID: 0}
+  hasKey: 0
   enemyHurtAudio: {fileID: 8300000, guid: eb8ae756a4419384581847aa91089e40, type: 3}
   enemyDiesAudio: {fileID: 8300000, guid: 868213c41352b0a48b342ff24d984a57, type: 3}
   currDirection: 2
@@ -105,6 +108,10 @@ MonoBehaviour:
   - {fileID: 21300004, guid: 41c64873aaf27c1488ec3ee32b8e9bee, type: 3}
   - {fileID: 21300006, guid: 41c64873aaf27c1488ec3ee32b8e9bee, type: 3}
   attackWarningTime: 0.5
+  fireballPrefab: {fileID: 1000013086689328, guid: 3c4f3c049d439e444bb75a7ee83a11e0,
+    type: 2}
+  fireballDistance: 7
+  timeToThrowFireball: 1
 --- !u!212 &212000011644200586
 SpriteRenderer:
   m_ObjectHideFlags: 1

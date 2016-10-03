@@ -339,6 +339,7 @@ MonoBehaviour:
   - {x: 60, y: 51, z: 0}
   - {x: 39, y: 46, z: 0}
   - {x: 39, y: 35, z: 0}
+  enemyHasKey: 000000000000000000000000000000
   puzzleSolvedAudio: {fileID: 8300000, guid: e16687a1b11c20143b742a3fab7ebd41, type: 3}
   doorClosedAudio: {fileID: 8300000, guid: 13be2bcb6af16bd48a1171d8cee8132a, type: 3}
   keyAppearedAudio: {fileID: 8300000, guid: acf03f0043cba054f9213e358f1a09fc, type: 3}

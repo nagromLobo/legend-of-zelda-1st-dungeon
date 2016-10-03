@@ -76,6 +76,7 @@
     <Compile Include="Assets\Scripts\EmptyClass.cs" />
     <Compile Include="Assets\Scripts\Enemy.cs" />
     <Compile Include="Assets\Scripts\EnemyFabrication.cs" />
+    <Compile Include="Assets\Scripts\Fireball.cs" />
     <Compile Include="Assets\Scripts\FixedRatio.cs" />
     <Compile Include="Assets\Scripts\Flame.cs" />
     <Compile Include="Assets\Scripts\GameManager.cs" />
@@ -84,6 +85,7 @@
     <Compile Include="Assets\Scripts\Hud.cs" />
     <Compile Include="Assets\Scripts\Keese.cs" />
     <Compile Include="Assets\Scripts\ParseZeldaMap.cs" />
+    <Compile Include="Assets\Scripts\PhantomBow.cs" />
     <Compile Include="Assets\Scripts\PlayerControl.cs" />
     <Compile Include="Assets\Scripts\PushableBlock.cs" />
     <Compile Include="Assets\Scripts\RoomSizedTrigger.cs" />

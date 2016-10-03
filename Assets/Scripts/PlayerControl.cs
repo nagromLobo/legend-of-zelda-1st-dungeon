@@ -129,7 +129,6 @@ public class PlayerControl : MonoBehaviour {
 
     // Use this for initialization
     void Start() {
-
         // Launch Idle State
         startPosition = transform.position;
         animation_state_machine = new StateMachine();
@@ -392,8 +391,11 @@ public class PlayerControl : MonoBehaviour {
             case "EnemyProjectiles":
                 //TO DO: Test me!!
                 Vector3 EnemyProjectilePos = coll.gameObject.transform.position.normalized;
-                if (current_direction == UtilityFunctions.DirectionFromNormal(EnemyProjectilePos)) //LOL!!
+                if (current_direction == UtilityFunctions.reverseDirection(UtilityFunctions.DirectionFromNormal(EnemyProjectilePos))) //LOL!!
                     Destroy(coll.gameObject);
+                else {
+                    linkDamaged(1, EnemyProjectilePos);
+                }
                 break;
             default:
                 break;
