@@ -61,6 +61,7 @@ public class EnemyFabrication : MonoBehaviour {
         }
         // for testing wall masters
         if (!customLevel) {
+            spawnGrid[0] = new List<Vector3> { new Vector3(39.0f, 6.0f, 0.0f) };
             spawnGrid[1] = new List<Vector3> { new Vector3(19.0f, 7.0f, 0.0f),
                                             new Vector3(18.0f, 5.0f, 0.0f),
                                             new Vector3(26.0f, 2.0f, 0.0f)

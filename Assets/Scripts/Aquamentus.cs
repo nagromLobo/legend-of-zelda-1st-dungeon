@@ -6,7 +6,9 @@ public class Aquamentus : Enemy {
     public float attackProbability = 0.5f;
     public Sprite[] attackAnimation;
     public float attackWarningTime = 0.5f;
-
+    public GameObject fireballPrefab;
+    public float fireballDistance = 7;
+    public float timeToThrowFireball = 2.0f;
     private float attackStartTime = 0.0f;
 
 
@@ -34,7 +36,12 @@ public class Aquamentus : Enemy {
         current_state = EntityState.ATTACKING;
         attackStartTime = Time.time;
         animation_statemachine.ChangeState(new StateEnemyMovementAnimation(GetComponent<SpriteRenderer>(), attackAnimation, movementFramesPerSecond));
-        
+        Fireball fireball = (Instantiate(fireballPrefab, transform.position, Quaternion.identity) as GameObject).GetComponent<Fireball>();
+        fireball.StartFireball(new Vector3(Mathf.Cos(Mathf.Deg2Rad * 135), Mathf.Sin(Mathf.Deg2Rad * 135), 0.0f), fireballDistance, timeToThrowFireball);
+        fireball = (Instantiate(fireballPrefab, transform.position, Quaternion.identity) as GameObject).GetComponent<Fireball>();
+        fireball.StartFireball(new Vector3(Mathf.Cos(Mathf.Deg2Rad * 180), Mathf.Sin(Mathf.Deg2Rad * 180), 0.0f), fireballDistance, timeToThrowFireball);
+        fireball = (Instantiate(fireballPrefab, transform.position, Quaternion.identity) as GameObject).GetComponent<Fireball>();
+        fireball.StartFireball(new Vector3(Mathf.Cos(Mathf.Deg2Rad * 225), Mathf.Sin(Mathf.Deg2Rad * 225), 0.0f), fireballDistance, timeToThrowFireball);
     }
 
     public override void OnEnemyTurned(Direction d) {
