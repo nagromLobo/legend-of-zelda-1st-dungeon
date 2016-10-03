@@ -46,7 +46,7 @@ public class Bomb: Weapon {
 			Invoke ("ReleaseBomb", 1);
 			//onUpdate = false;
 		} else if (bomb_dropped) {
-			print ("bomb dropped"); 
+			//print ("bomb dropped"); 
 			timer -= Time.fixedDeltaTime;
 		}
 		//print (timer); 
@@ -61,16 +61,41 @@ public class Bomb: Weapon {
 
 		//if (weapon_instance != null) {
 		//if (weapon_instance.gameObject.tag == "BombReleased") { 
-		print ("released"); 
+		//print ("released"); 
 		if(timer <= 0) {
 
-			//print ("timer " + timer);
-			SphereCollider myCollider = weapon_instance.transform.GetComponent<SphereCollider> ();
-			myCollider.radius = 1.0f; // or whatever radius you want.
-			//print ("hello"); 
-			Destroy (weapon_instance);
+//			//print ("timer " + timer);
+//			SphereCollider myCollider = weapon_instance.transform.GetComponent<SphereCollider> ();
+//			myCollider.radius = 1.0f; 
+//			//print ("hello"); 
+			Collider[] hitColliders = Physics.OverlapSphere(weapon_instance.transform.position, 1.0f);
+			int i = 0;
+			while (i < hitColliders.Length) {
+				//hitColliders [i].EnemyDamaged( weapon_instance.transform.GetComponent<SphereCollider> ());
+				i++;
+			}
+			Destroy (weapon_instance, 3.0f);
 		}
 		//}
 		//}
+	}
+
+	void OnTriggerEnter(Collider coll) {
+
+		if (coll.gameObject.tag == "Enemy") {
+
+			Collider[] hitColliders = Physics.OverlapSphere(weapon_instance.transform.position, 1.0f);
+			int i = 0;
+			while (i < hitColliders.Length) {
+				//hitColliders [i].SendMessage ("EnemyDamaged", weapon_instance.transform.GetComponent<SphereCollider> ());
+				i++;
+			}
+
+//			SphereCollider myCollider = weapon_instance.transform.GetComponent<SphereCollider> ();
+//			myCollider.radius = 1.0f; 
+//			//print ("hello"); 
+//			Destroy (weapon_instance, 3.0f);
+//			//Destroy (coll.gameObject);
+		}
 	}
 } 

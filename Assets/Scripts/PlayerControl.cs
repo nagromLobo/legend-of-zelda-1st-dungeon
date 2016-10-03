@@ -453,6 +453,8 @@ public class PlayerControl : MonoBehaviour {
             Hud.UpdateLives();
             if (half_heart_count <= 0) {
                 current_state = EntityState.GAME_OVER;
+				half_heart_count = max_half_heart_count;
+				CameraControl.S.ReturnToStart();
             }
 
             damageStartTime = Time.time;
@@ -534,6 +536,7 @@ public class PlayerControl : MonoBehaviour {
         animation_state_machine.ChangeState(new StateIdleWithSprite(this, GetComponent<SpriteRenderer>(), link_run_up[0]));
         control_state_machine.ChangeState(new StateLinkNormalMovement(this));
         current_state = EntityState.NORMAL;
+		Hud.UpdateLives ();
     }
 
     public void KillCount(Enemy e) {

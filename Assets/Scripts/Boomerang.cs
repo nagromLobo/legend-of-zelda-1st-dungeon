@@ -11,7 +11,7 @@ public class Boomerang : Weapon {
 	public GameObject weapon_instance;
 	public bool released;
 
-	private bool startAgain = false;
+	//private bool startAgain = false;
 	private Vector3 FinalDest;
 	public Vector3 beginPoint;
 
@@ -19,7 +19,8 @@ public class Boomerang : Weapon {
 	float duration;
 	float half_duration;
 	float u = 0.0f;
-
+	private bool _isLerping;
+	//private float _timeStartedLerping;
 	//float timer;
 
 	//float second_timer;
@@ -30,7 +31,7 @@ public class Boomerang : Weapon {
 		print ("I am awake");
 		weapon_instance = weapon_prefab;
 		released = false;
-		duration = 15.0f;
+		duration = 1.0f;
 		half_duration = duration / 2.0f;
 		//timer = half_duration; 
 		//second_timer = -1.0f;
@@ -44,11 +45,11 @@ public class Boomerang : Weapon {
 		return PlayerControl.instance.current_direction;
 	}
 
-	void Start () {
-		print ("start was called");
+	void StartLerp () {
+		//print ("start was called");
+		_isLerping = true;
 		StartTime = Time.time;
 		beginPoint = Position();
-		half_duration = duration / 2.0f;
 	}
 
 	public void Instantiate () {
@@ -62,7 +63,38 @@ public class Boomerang : Weapon {
 
 		weapon_instance.transform.position = Vector3.Lerp (beginPoint, FinalDest, u);
 
+		if(_isLerping)
+		{
+			if(state == BoomerangState.RELEASED) {
 
+				float timeSinceStarted = Time.time - StartTime;
+				float percentageComplete = timeSinceStarted / half_duration;
+
+				transform.position = Vector3.Lerp (beginPoint, FinalDest, percentageComplete);
+
+				if(percentageComplete >= 1.0f)
+				{
+					//_isLerping = false;
+					StartTime = Time.time;
+					state = BoomerangState.COMEBACK;
+				}
+			}
+			if (state == BoomerangState.COMEBACK) {
+				
+				float timeSinceStarted = Time.time - StartTime;
+				float percentageComplete = timeSinceStarted / half_duration;
+
+				transform.position = Vector3.Lerp (FinalDest, PlayerControl.instance.transform.position, percentageComplete);
+
+				if(percentageComplete >= 1.0f)
+				{
+					_isLerping = false;
+					state = BoomerangState.COMEBACK;
+					Destroy (weapon_instance);
+				}
+			}
+		}
+			
 
 
 		//		if (released) {
@@ -121,28 +153,28 @@ public class Boomerang : Weapon {
 
 	public void ReleaseBoomerang () {
 		released = true;
-		startAgain = true;
+		//startAgain = true;
 		half_duration = duration / 2.0f;
 		state = BoomerangState.RELEASED;
 
 		print ("released");
-
+		StartLerp ();
 		//if (startAgain) Start ();
 
 		//Vector3 offset = Vector3.zero;
 		Vector3 weapon_pos = Vector3.zero;
 		if (DirectionGo() == Direction.NORTH) {
 			//offset = new Vector3(0, 1, 0);
-			weapon_pos = new Vector3(0, 3, 0);
+			weapon_pos = new Vector3(0, 4, 0);
 		} else if (DirectionGo() == Direction.EAST) {
 			//offset = new Vector3(1, 0, 0);
-			weapon_pos = new Vector3(3, 0, 0);
+			weapon_pos = new Vector3(4, 0, 0);
 		} else if (DirectionGo() == Direction.SOUTH) {
 			//offset = new Vector3(0, -1, 0);
-			weapon_pos = new Vector3(0, -3, 0);
+			weapon_pos = new Vector3(0, -4, 0);
 		} else if (DirectionGo() == Direction.WEST) {
 			//offset = new Vector3(-1, 0, 0);
-			weapon_pos = new Vector3(-3, 0, 0);
+			weapon_pos = new Vector3(-4, 0, 0);
 		}
 		//beginPoint += offset;
 		FinalDest = beginPoint + weapon_pos;

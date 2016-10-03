@@ -146,6 +146,7 @@ public class Enemy : MonoBehaviour {
     }
 
     public virtual void EnemyDamaged(Collider other) {
+		print ("I've been hurt");
         Weapon w = other.GetComponent<Weapon>();
         int damageHalfHearts = w.damage;
         float stunCoolDown = w.stunCoolDown;
