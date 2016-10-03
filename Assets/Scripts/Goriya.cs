@@ -54,7 +54,7 @@ public class Goriya : Enemy {
     public override void OnEnemyAttack() {
         releasedBoomerang = Instantiate(boomerangPrefab, transform.position, Quaternion.identity) as Boomerang;
         releasedBoomerang.gameObject.tag = "BoomerangGoriya";
-        releasedBoomerang.ReleaseBoomerang(boomerangCoolDown);
+        releasedBoomerang.ReleaseBoomerang();
         releasedBoomerang.released = true;
         
     }

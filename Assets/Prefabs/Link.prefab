@@ -197,7 +197,7 @@ MonoBehaviour:
   Inventory: []
   Sword_prefab: {fileID: 1000012755623840, guid: dde012012b86747cabe96058f1e2424d,
     type: 2}
-  selected_weapon_prefab: {fileID: 1000013872525264, guid: 213a0da10235c40b29a3110c930b64e9,
+  selected_weapon_prefab: {fileID: 1000011314384716, guid: 198c3837c99eee84982db4451c5cc7cc,
     type: 2}
   ________________________: 0
   rupee_prefab: {fileID: 1000013996505824, guid: b6f36fa3f01f3af4283c53d830a454a7,
@@ -220,6 +220,7 @@ MonoBehaviour:
   projectileSwordAudio: {fileID: 8300000, guid: 25552bcefd2493d4c99b3d91f54951e4,
     type: 3}
   swordSlashAudio: {fileID: 8300000, guid: abdedc2ce303bfa439bbfe7f0ed5441e, type: 3}
+  BIGHEART: {fileID: 1000010491678284, guid: f6282cef1cc7c124786ba087dd4e1f71, type: 2}
   enemy_kill_count: 0
 --- !u!212 &212000013295226446
 SpriteRenderer:
