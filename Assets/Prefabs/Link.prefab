@@ -169,7 +169,7 @@ MonoBehaviour:
   bomb_count: 3
   max_half_heart_count: 6
   half_heart_count: 6
-  small_key_count: 3
+  small_key_count: 0
   map_retrieved: 0
   compass_retrieved: 0
   triforce_retrieved: 0

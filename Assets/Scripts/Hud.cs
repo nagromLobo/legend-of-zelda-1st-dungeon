@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using System;
-using UnityEditor;
+//using UnityEditor;
 
 public class Hud : MonoBehaviour {
 
@@ -71,10 +71,10 @@ public class Hud : MonoBehaviour {
 			print ("instance not enabled");
 //			print (panel.localPosition.y);
 //			print (panel.localPosition.y - Screen.height); 
-			return panel.localPosition.y + (Screen.height - 50.0f);
+			return panel.localPosition.y + (256.0f - 50.0f);
 		} else { 
 			//print ("instance enabled");
-			return panel.localPosition.y - (Screen.height - 50.0f);
+			return panel.localPosition.y - (256.0f - 50.0f);
 		}
 			
 	}
