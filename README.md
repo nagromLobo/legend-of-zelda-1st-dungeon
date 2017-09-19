@@ -33,6 +33,6 @@ There are two parts:
 
 ## Credits
 
-Most of the credits to this go to the collecting of assets by the 370 staff.
+Most of the credits to this go to the collecting of assets by the *Game Design Course Staff*.
 
 Most or all of the assets come from assets already accumulated by the staff or openly found online. We don't claim rights to any asset used in our recreation of this little piece of Zelda.
