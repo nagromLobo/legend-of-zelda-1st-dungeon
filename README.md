@@ -6,14 +6,14 @@ This was a project the elabraha and I worked on together for our game design cla
 
 There are two parts:
 
-1. The original 1st dungeon from the original legend of zelda, reimplemented.
+1. The original 1st dungeon from the original Legend of Zelda, reimplemented.
 2. Our own personal dungeon, with unique mechanics, but reusing all the assets from the first dungeon.
 
 ## How to Open / Play
 
 ### Windows
 
-1. Download the release 7z and unzip it with all it's contents into the same folder.
+1. Download the release 7z and unzip it with all its contents into the same folder.
 2. Run the .exe and select your resoultion.
 3. Your good to go! If you complete the first dungeon you will then be able to play our custom dungeon.
 
@@ -29,10 +29,10 @@ There are two parts:
 
 * Use the **Arrow Keys** to move.
 
-* Unfortunatly we nevever made a way to close the game, so you'll have to take advantage of your operating system to do that, sorry!
+* •	Unfortunately we never made a way to close the game, so you'll have to take advantage of your operating system to do that, sorry!
 
 ### Credits
 
 Most of the credits to this go to the collecting of assets by the 370 staff.
 
-Most or all of the assets come from assets already acumulated by the staff or openly found online. We don't claim rights to any asset used in our recreation of the this little piece of Zelda.
+Most or all of the assets come from assets already accumulated by the staff or openly found online. We don't claim rights to any asset used in our recreation of this little piece of Zelda.
