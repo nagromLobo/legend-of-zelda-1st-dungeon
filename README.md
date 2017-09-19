@@ -31,7 +31,7 @@ There are two parts:
 
 * •	Unfortunately we never made a way to close the game, so you'll have to take advantage of your operating system to do that, sorry!
 
-### Credits
+## Credits
 
 Most of the credits to this go to the collecting of assets by the 370 staff.
 
