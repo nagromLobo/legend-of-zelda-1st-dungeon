@@ -29,7 +29,7 @@ There are two parts:
 
 * Use the **Arrow Keys** to move.
 
-* •	Unfortunately we never made a way to close the game, so you'll have to take advantage of your operating system to do that, sorry!
+* Unfortunately we never made a way to close the game, so you'll have to take advantage of your operating system to do that, sorry!
 
 ## Credits
 
